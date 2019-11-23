@@ -33,6 +33,6 @@ We are using [Maven][https://maven.apache.org/] as our build system. So, in orde
 * When in doubt, ask, but try to find a solution first.
 * Use the [Clean Code Summary][https://gist.github.com/wojteklu/73c6914cc446146b8b533c0988cf8d29] as a guideline.
 * You should work in at least one feature branch. Changes will only be merged using pull requests.
-* Reuse as much as you can (but pay attention: **None** of the stuff provided in the labs is allowed!)
+* Reuse as much as you can (but pay attention: **None** of the code snippets provided in the labs is allowed in the project description!)
 * Wit beyond measure is man’s greatest treasure. (This is for Yaron)
 * Try to have fun :)
