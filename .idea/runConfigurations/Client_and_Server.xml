@@ -1,0 +1,7 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="Client and Server" type="CompoundRunConfigurationType">
+    <toRun name="lilach-server [javafx:run]" type="MavenRunConfiguration" />
+    <toRun name="lilach-client [javafx:run]" type="MavenRunConfiguration" />
+    <method v="2" />
+  </configuration>
+</component>
