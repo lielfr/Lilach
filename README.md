@@ -7,12 +7,12 @@ The system is splitted into two parts:
 * **lilach-server** The server side, built with MySQL, JavaFX and other libraries (TBA).
 
 ## Requirements
-1. [JDK 13][https://openjdk.java.net/projects/jdk/13/]. We are using OpenJDK but the proprietary one should also work fine.
-2. [Maven][https://maven.apache.org/].
-3. [MySQL][https://www.mysql.com/]. MariaDB should also work fine but is not guaranteed to work.
+1. [JDK 13](https://openjdk.java.net/projects/jdk/13/). We are using OpenJDK but the proprietary one should also work fine.
+2. [Maven](https://maven.apache.org/).
+3. [MySQL](https://www.mysql.com/). MariaDB should also work fine but is not guaranteed to work.
 
 ## Running the project
-We are using [Maven][https://maven.apache.org/] as our build system. So, in order to run the whole project you have three options:
+We are using [Maven](https://maven.apache.org/) as our build system. So, in order to run the whole project you have three options:
 
 1. **Running using IntelliJ IDEA**
 
@@ -31,7 +31,7 @@ We are using [Maven][https://maven.apache.org/] as our build system. So, in orde
 ## Team Guidelines
 
 * When in doubt, ask, but try to find a solution first.
-* Use the [Clean Code Summary][https://gist.github.com/wojteklu/73c6914cc446146b8b533c0988cf8d29] as a guideline.
+* Use the [Clean Code Summary](https://gist.github.com/wojteklu/73c6914cc446146b8b533c0988cf8d29) as a guideline.
 * You should work in at least one feature branch. Changes will only be merged using pull requests.
 * Reuse as much as you can (but pay attention: **None** of the code snippets provided in the labs is allowed in the project description!)
 * Wit beyond measure is man’s greatest treasure. (This is for Yaron)
