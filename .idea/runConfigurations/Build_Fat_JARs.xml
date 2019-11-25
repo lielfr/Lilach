@@ -1,0 +1,7 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="Build Fat JARs" type="CompoundRunConfigurationType">
+    <toRun name="lilach-client [package]" type="MavenRunConfiguration" />
+    <toRun name="lilach-server [package]" type="MavenRunConfiguration" />
+    <method v="2" />
+  </configuration>
+</component>
