@@ -21,6 +21,13 @@ public class App extends Application {
         scene = new Scene(loader.load());
         stage.setScene(scene);
         PrimaryController controller = (PrimaryController)loader.getController();
+        stage.setOnHiding(event -> {
+            try {
+                stop();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
         stage.show();
     }
 
@@ -34,4 +41,8 @@ public class App extends Application {
         launch();
     }
 
+    @Override
+    public void stop() throws Exception {
+        SpringServer.stopServer();
+    }
 }

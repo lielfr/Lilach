@@ -43,7 +43,8 @@ public class SpringServer {
     }
 
     public static void stopServer() {
-        context.close();
+        if (context != null)
+            context.close();
     }
 
     @Bean
