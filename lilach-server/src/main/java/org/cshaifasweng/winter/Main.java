@@ -2,6 +2,6 @@ package org.cshaifasweng.winter;
 
 public class Main {
     public static void main(String[] args) {
-        App.main(args);
+        SpringServer.main(args);
     }
 }
