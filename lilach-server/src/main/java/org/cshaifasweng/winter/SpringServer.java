@@ -1,6 +1,8 @@
 package org.cshaifasweng.winter;
 
 
+import org.cshaifasweng.winter.da.CustomerRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -19,6 +21,9 @@ public class SpringServer {
     static SpringApplicationBuilder builder;
     private static SpringApplication app;
     static Properties properties;
+
+    @Autowired
+    private CustomerRepository customerRepository;
 
     public SpringServer() {
         context = builder.context();
@@ -50,7 +55,7 @@ public class SpringServer {
     @Bean
     CommandLineRunner runner() {
         return args -> {
-
+            // TODO: Initialize the data here (or maybe somewhere else?)
         };
     }
 }
