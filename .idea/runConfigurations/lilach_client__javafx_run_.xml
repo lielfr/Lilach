@@ -1,5 +1,5 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="lilach-client [javafx:run]" type="MavenRunConfiguration" factoryName="Maven" singleton="false" nameIsGenerated="true">
+  <configuration default="false" name="lilach-client [javafx:run]" type="MavenRunConfiguration" factoryName="Maven" activateToolWindowBeforeRun="false" singleton="true" nameIsGenerated="true">
     <MavenSettings>
       <option name="myGeneralSettings" />
       <option name="myRunnerSettings" />
