@@ -1,5 +1,6 @@
 package org.cshaifasweng.winter;
 
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -26,6 +27,7 @@ public class PrimaryController {
 
     public static CatalogItem selectedItem;
 
+
     public void initialize() {
         LilachService service = APIAccess.getService();
         service.getAllItems().enqueue(new Callback<List<CatalogItem>>() {
@@ -35,52 +37,57 @@ public class PrimaryController {
 
                 List<CatalogItem> items = response.body();
 
-                TableColumn idColumn = new TableColumn("Catalog Number");
+                // All the UI updating should be done in the UI thread. Here we enforce that.
+                Platform.runLater(() -> {
+                    TableColumn idColumn = new TableColumn("Catalog Number");
 //                TableColumn pictureColumn = new TableColumn("Picture");
-                TableColumn descriptionColumn = new TableColumn("Description");
-                TableColumn dominantColorColumn = new TableColumn("Dominant Color");
-                TableColumn priceColumn = new TableColumn("Price");
+                    TableColumn descriptionColumn = new TableColumn("Description");
+                    TableColumn dominantColorColumn = new TableColumn("Dominant Color");
+                    TableColumn priceColumn = new TableColumn("Price");
 
-                dataTable.getColumns().addAll(idColumn, descriptionColumn,
-                        dominantColorColumn, priceColumn);
+                    dataTable.getColumns().addAll(idColumn, descriptionColumn,
+                            dominantColorColumn, priceColumn);
 
-                idColumn.setCellValueFactory(new PropertyValueFactory<CatalogItem, Long>("id"));
+                    idColumn.setCellValueFactory(new PropertyValueFactory<CatalogItem, Long>("id"));
 //                pictureColumn.setCellValueFactory(new PropertyValueFactory<CatalogItem, byte[]>("picture"));
-                descriptionColumn.setCellValueFactory(new PropertyValueFactory<CatalogItem, String>("description"));
-                dominantColorColumn.setCellValueFactory(new PropertyValueFactory<CatalogItem, String>("dominantColor"));
-                priceColumn.setCellValueFactory(new PropertyValueFactory<CatalogItem, Double>("price"));
+                    descriptionColumn.setCellValueFactory(new PropertyValueFactory<CatalogItem, String>("description"));
+                    dominantColorColumn.setCellValueFactory(new PropertyValueFactory<CatalogItem, String>("dominantColor"));
+                    priceColumn.setCellValueFactory(new PropertyValueFactory<CatalogItem, Double>("price"));
 
 
-                dataTable.setItems(FXCollections.observableList(items));
+                    dataTable.setItems(FXCollections.observableList(items));
 
-                ContextMenu menu = new ContextMenu();
-                MenuItem item = new MenuItem("Change price");
+                    ContextMenu menu = new ContextMenu();
+                    MenuItem item = new MenuItem("Change price");
 
-                menu.getItems().add(item);
+                    menu.getItems().add(item);
 
-                menu.setOnAction(new EventHandler<ActionEvent>() {
-                    @Override
-                    public void handle(ActionEvent actionEvent) {
-                        int selectedIndex = dataTable.getSelectionModel().getSelectedIndex();
-                        selectedItem = items.get(selectedIndex);
-                        try {
-                            App.setRoot("secondary");
-                        } catch (IOException e) {
-                            e.printStackTrace();
+                    menu.setOnAction(new EventHandler<ActionEvent>() {
+                        @Override
+                        public void handle(ActionEvent actionEvent) {
+                            int selectedIndex = dataTable.getSelectionModel().getSelectedIndex();
+                            selectedItem = items.get(selectedIndex);
+                            try {
+                                App.setRoot("secondary");
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
                         }
-                    }
+                    });
+
+                    dataTable.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
+                        @Override
+                        public void handle(MouseEvent mouseEvent) {
+                            if (mouseEvent.getButton() == MouseButton.SECONDARY) {
+                                menu.show(dataTable, mouseEvent.getScreenX(), mouseEvent.getScreenY());
+                            } else if (mouseEvent.getButton() == MouseButton.PRIMARY) {
+                                menu.hide();
+                            }
+                        }
+                    });
                 });
 
-                dataTable.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
-                    @Override
-                    public void handle(MouseEvent mouseEvent) {
-                        if (mouseEvent.getButton() == MouseButton.SECONDARY) {
-                            menu.show(dataTable, mouseEvent.getScreenX(), mouseEvent.getScreenY());
-                        } else if (mouseEvent.getButton() == MouseButton.PRIMARY) {
-                            menu.hide();
-                        }
-                    }
-                });
+
             }
 
             @Override

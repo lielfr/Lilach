@@ -5,7 +5,7 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="203.0" prefWidth="358.0" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.cshaifasweng.winter.ConnectionController">
+<AnchorPane prefHeight="203.0" prefWidth="358.0" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.cshaifasweng.winter.ConnectionController">
    <children>
       <Label layoutX="39.0" layoutY="51.0" text="Server IP:" />
       <Label layoutX="39.0" layoutY="89.0" text="Server Port:" />
