@@ -32,10 +32,10 @@ public class SpringServer {
         context = builder.context();
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         SpringServer.builder = new SpringApplicationBuilder(SpringServer.class);
         properties = new Properties();
-        App.main(args);
+        runServer();
     }
 
     public static void runServer() throws IOException {
