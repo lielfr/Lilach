@@ -24,6 +24,8 @@ public class PrimaryController {
     @FXML
     private TableView dataTable;
 
+    public static CatalogItem selectedItem;
+
     public void initialize() {
         LilachService service = APIAccess.getService();
         service.getAllItems().enqueue(new Callback<List<CatalogItem>>() {
@@ -59,6 +61,8 @@ public class PrimaryController {
                 menu.setOnAction(new EventHandler<ActionEvent>() {
                     @Override
                     public void handle(ActionEvent actionEvent) {
+                        int selectedIndex = dataTable.getSelectionModel().getSelectedIndex();
+                        selectedItem = items.get(selectedIndex);
                         try {
                             App.setRoot("secondary");
                         } catch (IOException e) {
