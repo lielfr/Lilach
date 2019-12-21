@@ -1,5 +1,5 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="lilach-server [javafx:run]" type="MavenRunConfiguration" factoryName="Maven" singleton="false" nameIsGenerated="true">
+  <configuration default="false" name="lilach-server [spring-boot:run]" type="MavenRunConfiguration" factoryName="Maven" singleton="false" nameIsGenerated="true">
     <MavenSettings>
       <option name="myGeneralSettings" />
       <option name="myRunnerSettings" />
@@ -10,7 +10,7 @@
           </option>
           <option name="goals">
             <list>
-              <option value="javafx:run" />
+              <option value="spring-boot:run" />
             </list>
           </option>
           <option name="pomFileName" />
