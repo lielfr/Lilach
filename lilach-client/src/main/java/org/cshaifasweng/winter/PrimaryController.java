@@ -5,10 +5,7 @@ import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.scene.control.ContextMenu;
-import javafx.scene.control.MenuItem;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
@@ -92,7 +89,15 @@ public class PrimaryController {
 
             @Override
             public void onFailure(Call<List<CatalogItem>> call, Throwable t) {
-
+                Platform.runLater(() -> {
+                    Alert alert = new Alert(Alert.AlertType.ERROR, "Could not connect to server! ", ButtonType.CLOSE);
+                    alert.showAndWait();
+                    try {
+                        App.setRoot("connection");
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                });
             }
         });
     }
