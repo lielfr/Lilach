@@ -11,7 +11,11 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
+import org.cshaifasweng.winter.events.GetEvent;
+import org.cshaifasweng.winter.events.SendEvent;
 import org.cshaifasweng.winter.models.CatalogItem;
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -87,6 +91,7 @@ public class PrimaryController {
                             selectedItem = items.get(selectedIndex);
                             try {
                                 App.setRoot("secondary");
+                                EventBus.getDefault().post(new SendEvent(selectedItem));
                             } catch (IOException e) {
                                 e.printStackTrace();
                             }

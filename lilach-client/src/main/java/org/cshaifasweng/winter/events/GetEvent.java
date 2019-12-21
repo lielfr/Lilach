@@ -1,7 +1,9 @@
 package org.cshaifasweng.winter.events;
 
+import org.cshaifasweng.winter.models.CatalogItem;
+
 public class GetEvent extends MessageEvent {
-    public GetEvent(String message) {
+    public GetEvent(CatalogItem message) {
         super(message);
     }
 }

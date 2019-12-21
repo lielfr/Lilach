@@ -1,9 +1,11 @@
 package org.cshaifasweng.winter.events;
 
-public class MessageEvent {
-    public final String message;
+import org.cshaifasweng.winter.models.CatalogItem;
 
-    public MessageEvent(String message) {
+public class MessageEvent {
+    public final CatalogItem message;
+
+    public MessageEvent(CatalogItem message) {
         this.message = message;
     }
 }
