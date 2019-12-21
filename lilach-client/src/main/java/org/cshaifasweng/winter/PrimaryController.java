@@ -7,6 +7,8 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import org.cshaifasweng.winter.models.CatalogItem;
@@ -14,6 +16,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.util.List;
 
@@ -37,20 +40,38 @@ public class PrimaryController {
                 // All the UI updating should be done in the UI thread. Here we enforce that.
                 Platform.runLater(() -> {
                     TableColumn idColumn = new TableColumn("Catalog Number");
-//                TableColumn pictureColumn = new TableColumn("Picture");
+                    TableColumn pictureColumn = new TableColumn("Picture");
                     TableColumn descriptionColumn = new TableColumn("Description");
                     TableColumn dominantColorColumn = new TableColumn("Dominant Color");
                     TableColumn priceColumn = new TableColumn("Price");
 
-                    dataTable.getColumns().addAll(idColumn, descriptionColumn,
-                            dominantColorColumn, priceColumn);
+
 
                     idColumn.setCellValueFactory(new PropertyValueFactory<CatalogItem, Long>("id"));
-//                pictureColumn.setCellValueFactory(new PropertyValueFactory<CatalogItem, byte[]>("picture"));
+                    pictureColumn.setCellFactory(tableColumn -> {
+                        final ImageView imageView = new ImageView();
+
+                        imageView.setFitHeight(50);
+                        imageView.setFitWidth(50);
+
+                        TableCell<CatalogItem, byte[]> tableCell = new TableCell<>() {
+                            @Override
+                            protected void updateItem(byte[] image, boolean b) {
+                                if (image != null) {
+                                    imageView.setImage(new Image(new ByteArrayInputStream(image)));
+                                }
+                            }
+                        };
+                        tableCell.setGraphic(imageView);
+                        return tableCell;
+                    });
+                    pictureColumn.setCellValueFactory(new PropertyValueFactory<CatalogItem, byte[]>("picture"));
                     descriptionColumn.setCellValueFactory(new PropertyValueFactory<CatalogItem, String>("description"));
                     dominantColorColumn.setCellValueFactory(new PropertyValueFactory<CatalogItem, String>("dominantColor"));
                     priceColumn.setCellValueFactory(new PropertyValueFactory<CatalogItem, Double>("price"));
 
+                    dataTable.getColumns().addAll(idColumn, descriptionColumn,
+                            dominantColorColumn, priceColumn, pictureColumn);
 
                     dataTable.setItems(FXCollections.observableList(items));
 
