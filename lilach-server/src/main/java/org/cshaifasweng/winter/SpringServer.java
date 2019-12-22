@@ -21,9 +21,9 @@ import java.util.Properties;
 public class SpringServer {
 
     private static ConfigurableApplicationContext context = null;
-    static SpringApplicationBuilder builder;
+    private static SpringApplicationBuilder builder;
     private static SpringApplication app;
-    static Properties properties;
+    private static Properties properties;
 
     @Autowired
     private CatalogItemsRepository catalogItemsRepository;
@@ -33,19 +33,14 @@ public class SpringServer {
     }
 
     public static void main(String[] args) throws IOException {
-        SpringServer.builder = new SpringApplicationBuilder(SpringServer.class);
+        builder = new SpringApplicationBuilder(SpringServer.class);
         properties = new Properties();
-        runServer();
-    }
-
-    public static void runServer() throws IOException {
-
         try (InputStream inputStream = SpringServer.class.getResourceAsStream("application.properties")) {
             properties.load(inputStream);
         } catch (IOException e) {
             e.printStackTrace(System.err);
         }
-        SpringServer.app = builder.build();
+        app = builder.build();
         app.setDefaultProperties(properties);
         context = SpringServer.app.run();
     }
