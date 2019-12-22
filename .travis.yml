@@ -1,3 +1,11 @@
 language: java
 jdk: openjdk13
 install: mvn package
+after_success:
+  - wget -c https://github.com/probonopd/uploadtool/raw/master/upload.sh
+  - bash upload.sh lilach-client/target/lilach-client-1.0.jar
+  - bash upload.sh lilach-server/target/lilach-server-1.0.jar
+
+branches:
+  except:
+    - /^(?i:continuous.*)$/
