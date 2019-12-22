@@ -20,6 +20,8 @@ public class CatalogItemController {
 
     @PutMapping("/catalog/{id}")
     public CatalogItem updateItem(@PathVariable("id") long id, @RequestBody CatalogItem item) {
+        // TODO: add validation
+        // TODO: Maybe move all of that stuff into a method in CatalogItem
         CatalogItem dbItem = repository.getOne(id);
         dbItem.setDescription(item.getDescription());
         dbItem.setAvailableCount(item.getAvailableCount());
