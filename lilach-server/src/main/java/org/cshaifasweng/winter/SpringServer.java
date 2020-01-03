@@ -2,7 +2,15 @@ package org.cshaifasweng.winter;
 
 
 import org.cshaifasweng.winter.da.CatalogItemsRepository;
+import org.cshaifasweng.winter.da.CustomerRepository;
+import org.cshaifasweng.winter.da.UserRepository;
 import org.cshaifasweng.winter.models.CatalogItem;
+import org.cshaifasweng.winter.models.Customer;
+import org.cshaifasweng.winter.models.User;
+import org.cshaifasweng.winter.security.SecurityConstants;
+import org.cshaifasweng.winter.security.WebSecurityConfig;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -10,6 +18,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.Bean;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -27,6 +36,14 @@ public class SpringServer {
 
     @Autowired
     private CatalogItemsRepository catalogItemsRepository;
+
+    @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
+    private CustomerRepository customerRepository;
+
+    private static final Logger log = LoggerFactory.getLogger(SpringServer.class);
 
     public SpringServer() {
         context = builder.context();
@@ -77,6 +94,14 @@ public class SpringServer {
                     imageAsBytes("flower5.jpg"),
                     0));
             catalogItemsRepository.saveAll(items);
+
+            User user = new User("test@test.com", new BCryptPasswordEncoder().encode("test"));
+            userRepository.save(user);
+
+            Customer customer = new Customer("moo@moo.com", new BCryptPasswordEncoder().encode("moo"),
+            11, "Israel Israeli");
+            customerRepository.save(customer);
+            log.info("Server is up and running!");
         };
     }
 }

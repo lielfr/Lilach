@@ -90,4 +90,6 @@ public class CatalogItem {
     public void setItemsSold(long itemsSold) {
         this.itemsSold = itemsSold;
     }
+
+
 }

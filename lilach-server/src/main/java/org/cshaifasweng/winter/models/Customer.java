@@ -4,32 +4,19 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 
 @Entity
-public class Customer {
-    @Id
-    private long customerId;
+public class Customer extends User {
 
     private long creditCard;
 
     private String customerName;
 
-    private String password;
-
-    public Customer(long customerId, long creditCard, String customerName, String password) {
-        this.customerId = customerId;
+    public Customer(String email, String password, long creditCard, String customerName) {
+        super(email, password);
         this.creditCard = creditCard;
         this.customerName = customerName;
-        this.password = password;
     }
 
     public Customer() {
-    }
-
-    public long getCustomerId() {
-        return customerId;
-    }
-
-    public void setCustomerId(long customerId) {
-        this.customerId = customerId;
     }
 
     public long getCreditCard() {
@@ -46,14 +33,6 @@ public class Customer {
 
     public void setCustomerName(String customerName) {
         this.customerName = customerName;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
     }
 }
 
