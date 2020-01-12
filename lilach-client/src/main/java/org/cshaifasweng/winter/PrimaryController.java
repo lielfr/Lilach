@@ -28,6 +28,8 @@ public class PrimaryController {
 
     @FXML
     private TableView dataTable;
+    @FXML
+    private Button login_button;
 
     public static CatalogItem selectedItem;
 
@@ -127,4 +129,10 @@ public class PrimaryController {
             }
         });
     }
+    @FXML
+    void show_login(ActionEvent event) throws IOException {
+        App.setRoot("login_screen");
+
+    }
+
 }
