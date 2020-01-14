@@ -31,7 +31,7 @@ public class ConnectionController implements Initializable {
     public void onButtonPressed(ActionEvent actionEvent) {
         APIAccess.setAddress(serverIP.getText(), serverPort.getText());
         try {
-            App.setRoot("primary");
+            App.setRoot("dashboard");
         } catch (IOException e) {
             e.printStackTrace();
         }
