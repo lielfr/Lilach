@@ -5,36 +5,38 @@ import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
-import org.cshaifasweng.winter.events.GetEvent;
+import org.cshaifasweng.winter.events.DashboardSwitchEvent;
 import org.cshaifasweng.winter.events.SendEvent;
 import org.cshaifasweng.winter.models.CatalogItem;
 import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.net.URL;
 import java.util.List;
+import java.util.ResourceBundle;
 
-public class PrimaryController {
+public class PrimaryController implements Refreshable {
 
     @FXML
-    private TableView dataTable;
-    @FXML
-    private Button login_button;
+    private TableView<CatalogItem> dataTable;
 
     public static CatalogItem selectedItem;
 
-
-    public void initialize() {
+    @Override
+    public void refresh() {
+        dataTable.getItems().clear();
+        dataTable.getColumns().clear();
         LilachService service = APIAccess.getService();
         service.getAllItems().enqueue(new Callback<List<CatalogItem>>() {
             @Override
@@ -45,11 +47,11 @@ public class PrimaryController {
 
                 // All the UI updating should be done in the UI thread. Here we enforce that.
                 Platform.runLater(() -> {
-                    TableColumn idColumn = new TableColumn("Catalog Number");
+                    TableColumn<CatalogItem, Long> idColumn = new TableColumn<>("Catalog Number");
                     TableColumn pictureColumn = new TableColumn("Picture");
-                    TableColumn descriptionColumn = new TableColumn("Description");
-                    TableColumn dominantColorColumn = new TableColumn("Dominant Color");
-                    TableColumn priceColumn = new TableColumn("Price");
+                    TableColumn<CatalogItem, String> descriptionColumn = new TableColumn<CatalogItem, String>("Description");
+                    TableColumn<CatalogItem, String> dominantColorColumn = new TableColumn<>("Dominant Color");
+                    TableColumn<CatalogItem, Double> priceColumn = new TableColumn<>("Price");
 
 
 
@@ -91,12 +93,8 @@ public class PrimaryController {
                         public void handle(ActionEvent actionEvent) {
                             int selectedIndex = dataTable.getSelectionModel().getSelectedIndex();
                             selectedItem = items.get(selectedIndex);
-                            try {
-                                App.setRoot("secondary");
-                                EventBus.getDefault().post(new SendEvent(selectedItem));
-                            } catch (IOException e) {
-                                e.printStackTrace();
-                            }
+                            EventBus.getDefault().post(new DashboardSwitchEvent("secondary"));
+                            EventBus.getDefault().post(new SendEvent(selectedItem));
                         }
                     });
 
@@ -129,10 +127,4 @@ public class PrimaryController {
             }
         });
     }
-    @FXML
-    void show_login(ActionEvent event) throws IOException {
-        App.setRoot("login_screen");
-
-    }
-
 }
