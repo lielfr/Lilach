@@ -37,6 +37,9 @@ public class ComplaintController implements Refreshable {
     @FXML
     private TextField orderNumberFild;
 
+
+    private boolean status = true;
+
     @FXML
     void cancelComplaint(MouseEvent event) {
 
@@ -44,6 +47,9 @@ public class ComplaintController implements Refreshable {
 
     @FXML
     void enableOrderNumber(MouseEvent event) {
+        status = !status;
+        orderNumberLable.setDisable(status);
+        orderNumberFild.setDisable(status);
     }
 
     @Override
