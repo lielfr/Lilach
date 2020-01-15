@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Mail from Lilach</title>
+</head>
+<body style="color: #3b3b3b; direction: ltr; text-align: center">
+    <header style="text-align: center">
+        <img src="cid:lilach-logo" alt="Lilach Logo" style="display: inline-block; height: 10vh; width: auto">
+        <h1 th:text="${title}"></h1>
+    </header>
+    <main>
+        <span th:text="${message}"></span>
+    </main>
+</body>
+</html>

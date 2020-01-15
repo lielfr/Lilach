@@ -82,8 +82,6 @@ public class SpringServer {
                     0));
             catalogItemsRepository.saveAll(items);
 
-            mailService.sendMail("lielft@gmail.com", "Mail Test", "Simple Text Mail Test");
-
         };
 
     }
