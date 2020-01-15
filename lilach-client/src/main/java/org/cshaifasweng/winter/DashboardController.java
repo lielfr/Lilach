@@ -41,4 +41,14 @@ public class DashboardController implements Initializable {
         setPage("primary");
         EventBus.getDefault().register(this);
     }
+    @FXML
+    void fileComplaint(ActionEvent event) {
+        setPage("complaint_filing");
+    }
+
+    @FXML
+    void handleComplaint(ActionEvent event) {
+        setPage("complaint_handling");
+    }
+
 }

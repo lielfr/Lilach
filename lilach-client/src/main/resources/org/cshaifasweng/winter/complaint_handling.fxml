@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+
+
+<AnchorPane prefHeight="768.0" prefWidth="904.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.cshaifasweng.winter.HandleComplaintController">
+   <children>
+      <Label layoutX="138.0" layoutY="103.0" text="Complaint number:" />
+      <Label fx:id="complatinNum" layoutX="275.0" layoutY="103.0" prefHeight="16.0" prefWidth="147.0" text="Label" />
+      <Label layoutX="138.0" layoutY="141.0" text="Customer name:" />
+      <Label fx:id="customerName" layoutX="275.0" layoutY="141.0" prefHeight="16.0" prefWidth="147.0" text="Label" />
+      <Label layoutX="138.0" layoutY="181.0" text="Answer to client:" />
+      <TextArea fx:id="answerBox" layoutX="248.0" layoutY="211.0" prefHeight="200.0" prefWidth="488.0" promptText="Enter the answer here" wrapText="true" />
+      <CheckBox fx:id="finComp" layoutX="138.0" layoutY="482.0" mnemonicParsing="false" onMouseClicked="#toggleCompensation" text="Financial compensation" />
+      <Label fx:id="compAmuLable" disable="true" layoutX="174.0" layoutY="518.0" text="Enter a compensation amount:" />
+      <TextField fx:id="compAmountFild" disable="true" layoutX="385.0" layoutY="513.0" />
+      <Button layoutX="316.0" layoutY="629.0" mnemonicParsing="false" onAction="#cancel" text="Cancel" />
+      <Button layoutX="525.0" layoutY="629.0" mnemonicParsing="false" onAction="#sendFrom" text="Send" />
+      <Button layoutX="461.0" layoutY="427.0" mnemonicParsing="false" onAction="#clearText" text="Clear" />
+   </children>
+</AnchorPane>
