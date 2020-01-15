@@ -3,6 +3,7 @@ package org.cshaifasweng.winter;
 
 import org.cshaifasweng.winter.da.CatalogItemsRepository;
 import org.cshaifasweng.winter.models.CatalogItem;
+import org.cshaifasweng.winter.services.MailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -27,6 +28,9 @@ public class SpringServer {
 
     @Autowired
     private CatalogItemsRepository catalogItemsRepository;
+
+    @Autowired
+    private MailService mailService;
 
     public SpringServer() {
         context = builder.context();
@@ -77,6 +81,8 @@ public class SpringServer {
                     imageAsBytes("flower5.jpg"),
                     0));
             catalogItemsRepository.saveAll(items);
+
         };
+
     }
 }
