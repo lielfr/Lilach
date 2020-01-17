@@ -15,6 +15,12 @@ public class User {
 
     private String password;
 
+    private String firstName;
+
+    private String lastName;
+
+    private String phone;
+
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name="users_roles",
@@ -26,10 +32,13 @@ public class User {
     public User() {
     }
 
-    public User(String email, String password, Collection<Role> roles) {
+    public User(String email, String password, String firstName, String lastName, String phone, Collection<Role> roles) {
         this.email = email;
         this.password = password;
         this.roles = roles;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.phone = phone;
     }
 
     public Long getId() {
@@ -62,5 +71,29 @@ public class User {
 
     public void setRoles(Collection<Role> roles) {
         this.roles = roles;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
     }
 }

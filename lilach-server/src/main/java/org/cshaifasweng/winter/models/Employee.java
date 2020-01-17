@@ -9,7 +9,8 @@ public class Employee extends User {
 
     public Employee() {}
 
-    public Employee(String email, String password, Collection<Role> roles) {
-        super(email, password, roles);
+    public Employee(String email, String password, String firstName, String lastName,
+                    String phone, Collection<Role> roles) {
+        super(email, password, firstName, lastName, phone, roles);
     }
 }

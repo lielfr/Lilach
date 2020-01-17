@@ -9,12 +9,10 @@ public class Customer extends User {
 
     private long creditCard;
 
-    private String customerName;
 
-    public Customer(String email, String password, Collection<Role> roles, long creditCard, String customerName) {
-        super(email, password, roles);
+    public Customer(String email, String password, String firstName, String lastName, String phone, Collection<Role> roles, long creditCard) {
+        super(email, password, firstName, lastName, phone, roles);
         this.creditCard = creditCard;
-        this.customerName = customerName;
     }
 
     public Customer() {
@@ -26,14 +24,6 @@ public class Customer extends User {
 
     public void setCreditCard(long creditCard) {
         this.creditCard = creditCard;
-    }
-
-    public String getCustomerName() {
-        return customerName;
-    }
-
-    public void setCustomerName(String customerName) {
-        this.customerName = customerName;
     }
 }
 
