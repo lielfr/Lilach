@@ -3,14 +3,14 @@ package org.cshaifasweng.winter.security;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
-import org.springframework.beans.factory.annotation.Value;
+import org.cshaifasweng.winter.da.UserRepository;
+import org.cshaifasweng.winter.models.User;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import javax.servlet.FilterChain;
@@ -18,17 +18,17 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.security.Key;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
 public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
     private final AuthenticationManager authenticationManager;
+    private final UserRepository userRepository;
 
-    public AuthenticationFilter(AuthenticationManager authenticationManager) {
+    public AuthenticationFilter(AuthenticationManager authenticationManager, UserRepository userRepository) {
         this.authenticationManager = authenticationManager;
-
+        this.userRepository = userRepository;
         setFilterProcessesUrl(SecurityConstants.AUTH_LOGIN_URL);
     }
 
@@ -39,14 +39,26 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
         UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(email, password);
 
-        return authenticationManager.authenticate(token);
+        Authentication authentication = authenticationManager.authenticate(token);
+
+        if (authentication.isAuthenticated()) {
+            User user = ((UserPrincipal) authentication.getPrincipal()).getUser();
+            if (user.getLoginToken() != null) {
+                authentication.setAuthenticated(false);
+                throw new AlreadyLoggedInException("Already logged in");
+            }
+        }
+
+        return authentication;
     }
 
     @Override
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authResult) throws IOException, ServletException {
-        UserPrincipal user = (UserPrincipal) authResult.getPrincipal();
+        UserPrincipal userPrincipal = (UserPrincipal) authResult.getPrincipal();
 
-        List<String> roles = user.getAuthorities()
+
+
+        List<String> roles = userPrincipal.getAuthorities()
                 .stream()
                 .map(GrantedAuthority::getAuthority)
                 .collect(Collectors.toList());
@@ -59,10 +71,15 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
                 .setHeaderParam("typ", SecurityConstants.TOKEN_TYPE)
                 .setIssuer(SecurityConstants.TOKEN_ISSUER)
                 .setAudience(SecurityConstants.TOKEN_AUDIENCE)
-                .setSubject(user.getUsername())
+                .setSubject(userPrincipal.getUsername())
                 .setExpiration(new Date(System.currentTimeMillis() + 864000000))
                 .claim("rol", roles)
                 .compact();
+
+        User userObj = userPrincipal.getUser();
+        userObj.setLoginToken(token);
+        userRepository.save(userObj);
+
         response.addHeader(SecurityConstants.TOKEN_HEADER, SecurityConstants.TOKEN_PREFIX + token);
     }
 

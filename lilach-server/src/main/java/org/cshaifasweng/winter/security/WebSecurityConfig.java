@@ -1,20 +1,24 @@
 package org.cshaifasweng.winter.security;
 
+import org.cshaifasweng.winter.da.UserRepository;
 import org.cshaifasweng.winter.services.UserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.annotation.web.configurers.LogoutConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
+import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
@@ -30,11 +34,20 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     private UserDetailsService userDetailsService;
 
-    @Autowired
-    private DataSource dataSource;
+    private final DataSource dataSource;
 
-    @Autowired
-    private WebApplicationContext applicationContext;
+    private final WebApplicationContext applicationContext;
+
+    private final UserRepository userRepository;
+
+    private final LilachLogoutHandler logoutHandler;
+
+    public WebSecurityConfig(DataSource dataSource, WebApplicationContext applicationContext, UserRepository userRepository, LilachLogoutHandler logoutHandler) {
+        this.dataSource = dataSource;
+        this.applicationContext = applicationContext;
+        this.userRepository = userRepository;
+        this.logoutHandler = logoutHandler;
+    }
 
     @PostConstruct
     public void completeSetup() {
@@ -52,14 +65,16 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .permitAll()
                 .anyRequest().authenticated()
                 .and()
-                .addFilter(new AuthenticationFilter(authenticationManager()))
+                .addFilter(new AuthenticationFilter(authenticationManager(), userRepository))
                 .addFilter(new AuthorizationFilter(authenticationManager()))
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
-                .logout()
-                .logoutUrl(SecurityConstants.AUTH_LOGOUT_URL)
-                .logoutSuccessHandler(logoutSuccessHandler());
+                .logout(httpSecurityLogoutConfigurer -> {
+                    httpSecurityLogoutConfigurer.clearAuthentication(false);
+                    httpSecurityLogoutConfigurer.logoutUrl(SecurityConstants.AUTH_LOGOUT_URL);
+                    httpSecurityLogoutConfigurer.logoutSuccessHandler(logoutHandler);
+                });
     }
 
     @Override
@@ -90,10 +105,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         return authProvider;
     }
 
-    @Bean
-    public LogoutSuccessHandler logoutSuccessHandler() {
-        return (httpServletRequest, httpServletResponse, authentication) -> {
-            httpServletResponse.setStatus(200);
-        };
-    }
+//    @Bean
+//    public LogoutSuccessHandler logoutSuccessHandler() {
+//        return (httpServletRequest, httpServletResponse, authentication) -> {
+//            System.out.println("LOGOUT : " + httpServletRequest.getAttribute("email"));
+//            httpServletResponse.setStatus(200);
+//        };
+//    }
 }

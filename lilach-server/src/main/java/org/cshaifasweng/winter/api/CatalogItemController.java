@@ -10,8 +10,11 @@ import java.util.List;
 @RestController()
 public class CatalogItemController {
 
-    @Autowired
-    private CatalogItemsRepository repository;
+    private final CatalogItemsRepository repository;
+
+    public CatalogItemController(CatalogItemsRepository repository) {
+        this.repository = repository;
+    }
 
     @GetMapping("/catalog")
     public List<CatalogItem> getItems() {
