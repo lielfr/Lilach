@@ -2,6 +2,7 @@ package org.cshaifasweng.winter.models;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import java.util.Collection;
 
 @Entity
 public class Customer extends User {
@@ -10,8 +11,8 @@ public class Customer extends User {
 
     private String customerName;
 
-    public Customer(String email, String password, long creditCard, String customerName) {
-        super(email, password);
+    public Customer(String email, String password, Collection<Role> roles, long creditCard, String customerName) {
+        super(email, password, roles);
         this.creditCard = creditCard;
         this.customerName = customerName;
     }

@@ -1,12 +1,13 @@
 package org.cshaifasweng.winter.models;
 
 import javax.persistence.*;
+import java.util.Collection;
 
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
 public class User {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(nullable = false, unique = true)
@@ -14,12 +15,21 @@ public class User {
 
     private String password;
 
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+            name="users_roles",
+            joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id")
+    )
+    private Collection<Role> roles;
+
     public User() {
     }
 
-    public User(String email, String password) {
+    public User(String email, String password, Collection<Role> roles) {
         this.email = email;
         this.password = password;
+        this.roles = roles;
     }
 
     public Long getId() {
@@ -44,5 +54,13 @@ public class User {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public Collection<Role> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(Collection<Role> roles) {
+        this.roles = roles;
     }
 }

@@ -9,7 +9,7 @@ import javax.persistence.Id;
 @Entity
 public class Complaint {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 //    private boolean perchesed;
     private String description;

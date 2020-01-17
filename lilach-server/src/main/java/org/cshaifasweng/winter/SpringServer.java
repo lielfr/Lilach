@@ -99,12 +99,7 @@ public class SpringServer {
                     0));
             catalogItemsRepository.saveAll(items);
 
-            User user = new User("test@test.com", new BCryptPasswordEncoder().encode("test"));
-            userRepository.save(user);
 
-            Customer customer = new Customer("moo@moo.com", new BCryptPasswordEncoder().encode("moo"),
-            11, "Israel Israeli");
-            customerRepository.save(customer);
             log.info("Server is up and running!");
 
         };

@@ -1,7 +1,10 @@
 package org.cshaifasweng.winter.security;
 
+import org.cshaifasweng.winter.models.Privilege;
+import org.cshaifasweng.winter.models.Role;
 import org.cshaifasweng.winter.models.User;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.ArrayList;
@@ -18,8 +21,7 @@ public class UserPrincipal implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        List authorities = new ArrayList<GrantedAuthority>();
-        return authorities;
+        return getAuthorities(getPrivileges(user.getRoles()));
     }
 
     @Override
@@ -50,5 +52,28 @@ public class UserPrincipal implements UserDetails {
     @Override
     public boolean isEnabled() {
         return true;
+    }
+
+    private List<String> getPrivileges(Collection<Role> roles) {
+        List<String> privileges = new ArrayList<>();
+        List<Privilege> privilegeObjects = new ArrayList<>();
+        for (Role role : roles) {
+            privilegeObjects.addAll(role.getPrivileges());
+        }
+
+        for (Privilege privilege : privilegeObjects) {
+            privileges.add(privilege.getName());
+        }
+
+        return privileges;
+    }
+
+    private List<GrantedAuthority> getAuthorities(List<String> privileges) {
+        List<GrantedAuthority> authorities = new ArrayList<>();
+        for (String privilege : privileges) {
+            authorities.add(new SimpleGrantedAuthority(privilege));
+        }
+
+        return authorities;
     }
 }
