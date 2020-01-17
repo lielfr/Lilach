@@ -3,16 +3,29 @@ package org.cshaifasweng.winter.models;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import java.util.Collection;
+import java.util.Date;
 
 @Entity
 public class Customer extends User {
 
-    private long creditCard;
+    private String address;
+
+    private Long creditCard;
+
+    private Date dateOfBirth;
+
+    private SubscriberType subscriberType;
+
+    private Date subscriptionEnd;
+
+    private Double totalBalance;
 
 
-    public Customer(String email, String password, String firstName, String lastName, String phone, Collection<Role> roles, long creditCard) {
+    public Customer(String email, String password, String firstName, String lastName, String phone, Collection<Role> roles, long creditCard, Date dateOfBirth) {
         super(email, password, firstName, lastName, phone, roles);
         this.creditCard = creditCard;
+        this.totalBalance = 0.0;
+        this.dateOfBirth = dateOfBirth;
     }
 
     public Customer() {
@@ -24,6 +37,50 @@ public class Customer extends User {
 
     public void setCreditCard(long creditCard) {
         this.creditCard = creditCard;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public void setCreditCard(Long creditCard) {
+        this.creditCard = creditCard;
+    }
+
+    public Date getDateOfBirth() {
+        return dateOfBirth;
+    }
+
+    public void setDateOfBirth(Date dateOfBirth) {
+        this.dateOfBirth = dateOfBirth;
+    }
+
+    public SubscriberType getSubscriberType() {
+        return subscriberType;
+    }
+
+    public void setSubscriberType(SubscriberType subscriberType) {
+        this.subscriberType = subscriberType;
+    }
+
+    public Date getSubscriptionEnd() {
+        return subscriptionEnd;
+    }
+
+    public void setSubscriptionEnd(Date subscriptionEnd) {
+        this.subscriptionEnd = subscriptionEnd;
+    }
+
+    public Double getTotalBalance() {
+        return totalBalance;
+    }
+
+    public void setTotalBalance(Double totalBalance) {
+        this.totalBalance = totalBalance;
     }
 }
 

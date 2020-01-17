@@ -12,9 +12,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
+import java.util.*;
 
 @Component
 public class SecurityDataLoader implements ApplicationListener<ContextRefreshedEvent> {
@@ -69,11 +67,12 @@ public class SecurityDataLoader implements ApplicationListener<ContextRefreshedE
             complaintHandlePrivilege
         ));
 
-
+        Calendar customerBirth = Calendar.getInstance();
+        customerBirth.set(2000, 1, 1);
 
         Customer customer = createOrReturnCustomer("customer@lilach.com", "moo",
                 Collections.singletonList(customerRole),"Lilach", "Customer", "0509999999",
-                11);
+                11, customerBirth.getTime());
 
         Employee admin = createOrReturnEmployee("lielft@gmail.com", "AdminBaby!",
                 "Liel", "Fridman", "0509999999",
@@ -108,11 +107,11 @@ public class SecurityDataLoader implements ApplicationListener<ContextRefreshedE
     @Transactional
     Customer createOrReturnCustomer(String email, String password, Collection<Role> roles,
                                     String firstName, String lastName, String phone,
-                                    long creditCard) {
+                                    long creditCard, Date dateOfBirth) {
         Customer customer = customerRepository.findByEmail(email);
         if (customer == null) {
             customer = new Customer(email, new BCryptPasswordEncoder().encode(password),
-                    firstName, lastName, phone, roles, creditCard);
+                    firstName, lastName, phone, roles, creditCard, dateOfBirth);
             customerRepository.save(customer);
         }
 
@@ -126,7 +125,7 @@ public class SecurityDataLoader implements ApplicationListener<ContextRefreshedE
         Employee employee = employeeRepository.findByEmail(email);
         if (employee == null) {
             employee = new Employee(email, new BCryptPasswordEncoder().encode(password), firstName,
-                    lastName, phone, roles);
+                    lastName, phone, roles, new Date());
             employeeRepository.save(employee);
         }
 
