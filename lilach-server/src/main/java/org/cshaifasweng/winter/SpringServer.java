@@ -5,6 +5,7 @@ import org.cshaifasweng.winter.da.CatalogItemsRepository;
 import org.cshaifasweng.winter.da.CustomerRepository;
 import org.cshaifasweng.winter.da.UserRepository;
 import org.cshaifasweng.winter.models.CatalogItem;
+import org.cshaifasweng.winter.services.MailService;
 import org.cshaifasweng.winter.models.Customer;
 import org.cshaifasweng.winter.models.User;
 import org.cshaifasweng.winter.security.SecurityConstants;
@@ -36,6 +37,9 @@ public class SpringServer {
 
     @Autowired
     private CatalogItemsRepository catalogItemsRepository;
+
+    @Autowired
+    private MailService mailService;
 
     @Autowired
     private UserRepository userRepository;
@@ -102,6 +106,8 @@ public class SpringServer {
             11, "Israel Israeli");
             customerRepository.save(customer);
             log.info("Server is up and running!");
+
         };
+
     }
 }
