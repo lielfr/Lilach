@@ -2,12 +2,9 @@ package org.cshaifasweng.winter.models;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
 import java.util.Collection;
 import java.util.Date;
 
-@Entity
 public class Customer extends User {
 
     private String address;
