@@ -5,6 +5,9 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
 import org.cshaifasweng.winter.da.UserRepository;
 import org.cshaifasweng.winter.models.User;
+import org.cshaifasweng.winter.services.UserService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -12,6 +15,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
@@ -25,10 +29,14 @@ import java.util.stream.Collectors;
 public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
     private final AuthenticationManager authenticationManager;
     private final UserRepository userRepository;
+    private final UserService userService;
+    private static final Logger log = LoggerFactory.getLogger(AuthorizationFilter.class);
 
-    public AuthenticationFilter(AuthenticationManager authenticationManager, UserRepository userRepository) {
+
+    public AuthenticationFilter(AuthenticationManager authenticationManager, UserRepository userRepository, UserService userService) {
         this.authenticationManager = authenticationManager;
         this.userRepository = userRepository;
+        this.userService = userService;
         setFilterProcessesUrl(SecurityConstants.AUTH_LOGIN_URL);
     }
 
@@ -41,9 +49,10 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
         Authentication authentication = authenticationManager.authenticate(token);
 
-        if (authentication.isAuthenticated()) {
+        if (authentication != null && authentication.isAuthenticated()) {
             User user = ((UserPrincipal) authentication.getPrincipal()).getUser();
-            if (user.getLoginToken() != null) {
+            if (user != null && user.getLoggedIn()) {
+                log.debug("User {} tried to log in more than once and blocked.", user.getEmail());
                 authentication.setAuthenticated(false);
                 throw new AlreadyLoggedInException("Already logged in");
             }
@@ -56,7 +65,11 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authResult) throws IOException, ServletException {
         UserPrincipal userPrincipal = (UserPrincipal) authResult.getPrincipal();
 
+        User user = userPrincipal.getUser();
 
+        userService.setUserLoggedIn(user.getId(), true);
+
+        log.debug("User {} logged in successfuly. It cannot log in again unless logged out.", user.getEmail());
 
         List<String> roles = userPrincipal.getAuthorities()
                 .stream()
@@ -76,15 +89,11 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
                 .claim("rol", roles)
                 .compact();
 
-        User userObj = userPrincipal.getUser();
-        userObj.setLoginToken(token);
-        userRepository.save(userObj);
-
         response.addHeader(SecurityConstants.TOKEN_HEADER, SecurityConstants.TOKEN_PREFIX + token);
     }
 
     @Override
     protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response, AuthenticationException failed) throws IOException, ServletException {
-        response.sendError(403, "Authentication failed");
+        response.sendError(403, "Authentication failed: " + failed.getLocalizedMessage());
     }
 }

@@ -2,6 +2,7 @@ package org.cshaifasweng.winter.security;
 
 import org.cshaifasweng.winter.da.UserRepository;
 import org.cshaifasweng.winter.services.UserDetailsService;
+import org.cshaifasweng.winter.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -34,6 +35,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     private UserDetailsService userDetailsService;
 
+    private UserService userService;
+
     private final DataSource dataSource;
 
     private final WebApplicationContext applicationContext;
@@ -52,6 +55,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @PostConstruct
     public void completeSetup() {
         userDetailsService = applicationContext.getBean(UserDetailsService.class);
+        userService = applicationContext.getBean(UserService.class);
     }
 
     @Override
@@ -65,7 +69,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .permitAll()
                 .anyRequest().authenticated()
                 .and()
-                .addFilter(new AuthenticationFilter(authenticationManager(), userRepository))
+                .addFilter(new AuthenticationFilter(authenticationManager(), userRepository, userService))
                 .addFilter(new AuthorizationFilter(authenticationManager()))
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)

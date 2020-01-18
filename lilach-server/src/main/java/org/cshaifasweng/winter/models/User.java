@@ -21,8 +21,7 @@ public class User {
 
     private String phone;
 
-    @Lob
-    private String loginToken;
+    private Boolean isLoggedIn;
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
@@ -42,7 +41,7 @@ public class User {
         this.firstName = firstName;
         this.lastName = lastName;
         this.phone = phone;
-        this.loginToken = null;
+        this.isLoggedIn = false;
     }
 
     public Long getId() {
@@ -101,11 +100,11 @@ public class User {
         this.phone = phone;
     }
 
-    public String getLoginToken() {
-        return loginToken;
+    public Boolean getLoggedIn() {
+        return isLoggedIn;
     }
 
-    public void setLoginToken(String loginToken) {
-        this.loginToken = loginToken;
+    public void setLoggedIn(Boolean loggedIn) {
+        isLoggedIn = loggedIn;
     }
 }
