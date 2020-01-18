@@ -1,5 +1,7 @@
 package org.cshaifasweng.winter.models;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import java.util.Collection;
@@ -12,10 +14,12 @@ public class Customer extends User {
 
     private Long creditCard;
 
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
     private Date dateOfBirth;
 
     private SubscriberType subscriberType;
 
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
     private Date subscriptionEnd;
 
     private Double totalBalance;

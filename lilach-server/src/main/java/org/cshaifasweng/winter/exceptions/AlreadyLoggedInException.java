@@ -1,4 +1,4 @@
-package org.cshaifasweng.winter.security;
+package org.cshaifasweng.winter.exceptions;
 
 
 import org.springframework.security.core.AuthenticationException;

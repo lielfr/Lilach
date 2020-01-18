@@ -47,7 +47,7 @@ public class SecurityDataLoader implements ApplicationListener<ContextRefreshedE
         Privilege ordersCreatePrivilege = createOrReturnPrivilege(SecurityConstants.PRIVILEGE_ORDERS_CREATE);
         Privilege ordersCancelPrivilege = createOrReturnPrivilege(SecurityConstants.PRIVILEGE_ORDERS_CANCEL);
 
-        Role adminRole = createOrReturnRole("ROLE_ADMIN", Arrays.asList(
+        Role adminRole = createOrReturnRole(SecurityConstants.ROLE_ADMIN, Arrays.asList(
                 catalogEditPrivilege,
                 usersEditPrivilege,
                 complaintFilePrivilege,
@@ -57,14 +57,17 @@ public class SecurityDataLoader implements ApplicationListener<ContextRefreshedE
                 ordersCancelPrivilege
         ));
 
-        Role customerRole = createOrReturnRole("ROLE_CUSTOMER", Arrays.asList(
+        Role customerRole = createOrReturnRole(SecurityConstants.ROLE_CUSTOMER, Arrays.asList(
                 complaintFilePrivilege,
                 ordersCreatePrivilege,
                 ordersCancelPrivilege
         ));
 
-        Role customerServiceEmployeeRole = createOrReturnRole("ROLE_CUSTOMER_SERIVCE_EMPLOYEE", Arrays.asList(
-            complaintHandlePrivilege
+        Role customerServiceEmployeeRole = createOrReturnRole(SecurityConstants.ROLE_CUSTOMER_SERVICE_EMPLOYEE, Arrays.asList(
+                complaintHandlePrivilege,
+                complaintFilePrivilege,
+                ordersCancelPrivilege,
+                ordersCreatePrivilege
         ));
 
         Calendar customerBirth = Calendar.getInstance();

@@ -67,6 +67,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .hasAuthority(SecurityConstants.PRIVILEGE_CATALOG_EDIT)
                 .antMatchers(HttpMethod.GET, "/catalog", SecurityConstants.AUTH_LOGIN_URL)
                 .permitAll()
+                .antMatchers(HttpMethod.POST, "/customer")
+                .permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .addFilter(new AuthenticationFilter(authenticationManager(), userRepository, userService))
