@@ -1,11 +1,9 @@
 package org.cshaifasweng.winter.models;
 
-import javax.persistence.Entity;
 import java.util.Collection;
 import java.util.Date;
-import java.util.List;
 
-@Entity
+
 public class Employee extends User {
 
     private Date employedSince;
