@@ -7,7 +7,6 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 
-
 <AnchorPane prefHeight="768.0" prefWidth="904.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.cshaifasweng.winter.HandleComplaintController">
    <children>
       <Label layoutX="138.0" layoutY="103.0" text="Complaint number:" />
@@ -22,5 +21,6 @@
       <Button layoutX="316.0" layoutY="629.0" mnemonicParsing="false" onAction="#cancel" text="Cancel" />
       <Button layoutX="525.0" layoutY="629.0" mnemonicParsing="false" onAction="#sendFrom" text="Send" />
       <Button layoutX="461.0" layoutY="427.0" mnemonicParsing="false" onAction="#clearText" text="Clear" />
+      <Label fx:id="empty" layoutX="742.0" layoutY="303.0" text="can not be empty" textFill="RED" visible="false" />
    </children>
 </AnchorPane>

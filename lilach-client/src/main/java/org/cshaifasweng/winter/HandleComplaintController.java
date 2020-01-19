@@ -30,23 +30,34 @@ public class HandleComplaintController implements Refreshable {
     private TextField compAmountFild;
 
     @FXML
+    private Label empty;
+
+
+    private boolean status = true;
+
+    @FXML
     void cancel(ActionEvent event) {
 
     }
 
     @FXML
     void clearText(ActionEvent event) {
-
+        answerBox.setText("");
     }
 
     @FXML
     void sendFrom(ActionEvent event) {
-
+        if (answerBox.getText().isEmpty())
+        {
+            empty.setVisible(true);
+        }
     }
 
     @FXML
     void toggleCompensation(MouseEvent event) {
-
+        status = !status;
+        compAmuLable.setDisable(status);
+        compAmountFild.setDisable(status);
     }
 
     @Override
