@@ -33,9 +33,11 @@ public class LayoutManager {
     }
 
     public Parent getFXML(String name) throws IOException {
-        if (!layouts.containsKey(name)) {
-            layouts.put(name, loadFXML(name));
+        if (layouts.containsKey(name)) {
+            layouts.remove(name);
+            controllers.remove(name);
         }
+        layouts.put(name, loadFXML(name));
         return layouts.get(name);
     }
 

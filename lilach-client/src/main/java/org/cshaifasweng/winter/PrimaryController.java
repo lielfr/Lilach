@@ -5,7 +5,6 @@ import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
@@ -15,6 +14,8 @@ import javafx.scene.input.MouseEvent;
 import org.cshaifasweng.winter.events.DashboardSwitchEvent;
 import org.cshaifasweng.winter.events.SendEvent;
 import org.cshaifasweng.winter.models.CatalogItem;
+import org.cshaifasweng.winter.web.APIAccess;
+import org.cshaifasweng.winter.web.LilachService;
 import org.greenrobot.eventbus.EventBus;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -22,9 +23,7 @@ import retrofit2.Response;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.net.URL;
 import java.util.List;
-import java.util.ResourceBundle;
 
 public class PrimaryController implements Refreshable {
 

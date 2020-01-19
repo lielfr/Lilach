@@ -1,8 +1,16 @@
 package org.cshaifasweng.winter.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonSubTypes;
+
 import java.util.Collection;
 
-
+@JsonIgnoreProperties(ignoreUnknown = true)
+@JsonSubTypes({
+        @JsonSubTypes.Type(value = Employee.class, name = "employee"),
+        @JsonSubTypes.Type(value = Customer.class, name = "customer")
+}
+)
 public class User {
 
     private Long id;

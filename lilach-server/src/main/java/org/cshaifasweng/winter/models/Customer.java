@@ -35,6 +35,13 @@ public class Customer extends User {
     public Customer() {
     }
 
+    public Customer(Customer customer) {
+        super(customer);
+        this.creditCard = customer.creditCard;
+        this.totalBalance = customer.totalBalance;
+        this.dateOfBirth = customer.dateOfBirth;
+    }
+
     public long getCreditCard() {
         return creditCard;
     }
