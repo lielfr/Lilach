@@ -1,6 +1,6 @@
 package org.cshaifasweng.winter;
 
-public class LoginScreen implements Refreshable {
+public class LoginScreenController implements Refreshable {
 
     @Override
     public void refresh() {

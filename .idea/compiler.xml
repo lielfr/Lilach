@@ -15,6 +15,7 @@
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="lilach-client" options="--add-exports=jdk.jfr/jdk.jfr.internal=ALL-UNNAMED" />
       <module name="lilach-server" options="-parameters" />
     </option>
   </component>

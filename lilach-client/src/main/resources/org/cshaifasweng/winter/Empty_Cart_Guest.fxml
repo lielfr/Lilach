@@ -1,20 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane prefHeight="768.0" prefWidth="904.0" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.cshaifasweng.winter.CartController">
+<AnchorPane maxHeight="1.7976931348623157E308" maxWidth="-Infinity" prefHeight="400.0" prefWidth="904.0" style="-fx-background-color: #FFFFFF;" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.cshaifasweng.winter.CartController">
    <children>
-    <Button layoutX="348.0" layoutY="208.0" mnemonicParsing="false" onAction="#switchToLogin" prefHeight="52.0" prefWidth="104.0" text="Log In">
+    <Button layoutX="274.0" layoutY="208.0" mnemonicParsing="false" onAction="#GoToLogin" prefHeight="52.0" prefWidth="104.0" style="-fx-background-color: #99CCFF;" text="Log In">
          <font>
             <Font size="14.0" />
          </font></Button>
-      <TextField layoutY="20.0" prefHeight="77.0" prefWidth="904.0" text="Your cart is empty">
+      <TextField layoutY="20.0" prefHeight="77.0" prefWidth="904.0" style="-fx-background-color: #FFCCFF;" text="Your cart is empty">
          <font>
             <Font size="36.0" />
-         </font></TextField>
-      <Button layoutX="100.0" layoutY="208.0" mnemonicParsing="false" onAction="#switchToDashboard" prefHeight="52.0" prefWidth="121.0" text="Shop as a guest">
+         </font>
+         <opaqueInsets>
+            <Insets top="1.0" />
+         </opaqueInsets></TextField>
+      <Button layoutX="87.0" layoutY="208.0" mnemonicParsing="false" onAction="#BackToCatalog" prefHeight="52.0" prefWidth="123.0" style="-fx-background-color: #FF9999;" text="Shop as a guest">
          <font>
             <Font size="14.0" />
          </font>
@@ -24,4 +28,7 @@
             <Font size="14.0" />
          </font></Label>
    </children>
+   <opaqueInsets>
+      <Insets />
+   </opaqueInsets>
 </AnchorPane>

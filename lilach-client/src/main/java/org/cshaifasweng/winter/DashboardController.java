@@ -13,7 +13,13 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 
+
+
 public class DashboardController implements Initializable {
+
+    private boolean CartIsEmpty=true;   // Needs to be setup
+    private boolean LoggedIn=false;       // Needs to be setup
+
     @FXML
     private ScrollPane containerPane;
 
@@ -46,9 +52,6 @@ public class DashboardController implements Initializable {
     void handleComplaint(ActionEvent event) {
         setPage("complaint_handling");
     }
-
-    public boolean CartIsEmpty=true;   // to setup
-    public boolean LoggedIn=false;       // to setup
 
     @FXML
      void CartButton(ActionEvent event) {

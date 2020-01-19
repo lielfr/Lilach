@@ -8,24 +8,28 @@ import org.greenrobot.eventbus.EventBus;
 import java.io.IOException;
 
 
-public class CartController extends PrimaryController implements Refreshable {
+public class CartController implements Refreshable {
 
-    public boolean CartIsEmpty = true;
 
     @Override
     public void refresh() {
     }
 
-
     @FXML
-    private void switchToDashboard() throws IOException {
+    private void BackToCatalog() throws IOException {
         EventBus.getDefault().post(new DashboardSwitchEvent("primary"));
     }
 
     @FXML
-    private void switchToLogin() throws IOException {
+    private void GoToLogin() throws IOException {
         EventBus.getDefault().post(new DashboardSwitchEvent("login_screen"));
     }
+
+    @FXML
+    private void GoToCheckOut() throws IOException {
+        EventBus.getDefault().post(new DashboardSwitchEvent("order"));
+    }
+
 
 
 }
