@@ -1,34 +1,33 @@
 package org.cshaifasweng.winter.models;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
 import java.util.Collection;
 
-@JsonIgnoreProperties(ignoreUnknown = true)
+
+@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "type")
 @JsonSubTypes({
         @JsonSubTypes.Type(value = Employee.class, name = "employee"),
         @JsonSubTypes.Type(value = Customer.class, name = "customer")
-}
-)
-public class User {
+})
+public abstract class User {
+    protected Long id;
 
-    private Long id;
+    protected String email;
+
+    protected String password;
+
+    protected String firstName;
+
+    protected String lastName;
+
+    protected String phone;
+
+    protected Boolean isLoggedIn;
 
 
-    private String email;
-
-    private String password;
-
-    private String firstName;
-
-    private String lastName;
-
-    private String phone;
-
-    private Boolean isLoggedIn;
-
-    private Collection<Role> roles;
+    protected Collection<Role> roles;
 
     public User() {
     }
@@ -42,6 +41,9 @@ public class User {
         this.phone = phone;
         this.isLoggedIn = false;
     }
+
+    public abstract User copy();
+
 
     public Long getId() {
         return id;
