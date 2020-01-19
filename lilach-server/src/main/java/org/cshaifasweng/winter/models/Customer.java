@@ -1,13 +1,14 @@
 package org.cshaifasweng.winter.models;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonTypeName;
 
 import javax.persistence.Entity;
-import javax.persistence.Id;
 import java.util.Collection;
 import java.util.Date;
 
 @Entity
+@JsonTypeName("customer")
 public class Customer extends User {
 
     private String address;
@@ -35,11 +36,11 @@ public class Customer extends User {
     public Customer() {
     }
 
-    public Customer(Customer customer) {
-        super(customer);
-        this.creditCard = customer.creditCard;
-        this.totalBalance = customer.totalBalance;
-        this.dateOfBirth = customer.dateOfBirth;
+    @Override
+    public User copy() {
+        Customer copy = new Customer(email, password, firstName, lastName, phone,
+                roles, creditCard, (Date)dateOfBirth.clone());
+        return copy;
     }
 
     public long getCreditCard() {
