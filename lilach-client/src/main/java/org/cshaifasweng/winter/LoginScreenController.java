@@ -2,10 +2,11 @@ package org.cshaifasweng.winter;
 
 import javafx.application.Platform;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import org.cshaifasweng.winter.events.DashboardSwitchEvent;
-import org.cshaifasweng.winter.events.LoginEvent;
+import org.cshaifasweng.winter.events.LoginChangeEvent;
 import org.cshaifasweng.winter.events.TokenSetEvent;
 import org.cshaifasweng.winter.models.User;
 import org.cshaifasweng.winter.web.APIAccess;
@@ -15,15 +16,13 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import java.net.URL;
+import java.util.ResourceBundle;
 import java.util.logging.Logger;
 
-public class LoginScreenController implements Refreshable {
+public class LoginScreenController implements Refreshable, Initializable {
 
     protected static final Logger log = Logger.getLogger(LoginScreenController.class.getName());
-
-    public LoginScreenController() {
-        LoggerUtils.setupLogger(log);
-    }
 
     @FXML
     private TextField username;
@@ -57,7 +56,7 @@ public class LoginScreenController implements Refreshable {
                             APIAccess.setCurrentUser(response.body());
                             // Notify the dashboard
                             Platform.runLater(() -> {
-                                EventBus.getDefault().post(new LoginEvent());
+                                EventBus.getDefault().post(new LoginChangeEvent());
                             });
 
                         }
@@ -85,5 +84,10 @@ public class LoginScreenController implements Refreshable {
     @Override
     public void refresh() {
 
+    }
+
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+        LoggerUtils.setupLogger(log);
     }
 }
