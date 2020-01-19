@@ -1,13 +1,9 @@
 package org.cshaifasweng.winter;
 
-import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.fxml.Initializable;
-import javafx.scene.Parent;
-import javafx.scene.control.Button;
-import javafx.scene.control.ScrollPane;
-import javafx.scene.layout.Pane;
 import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
+import javafx.scene.control.ScrollPane;
 import org.cshaifasweng.winter.events.DashboardSwitchEvent;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -50,5 +46,24 @@ public class DashboardController implements Initializable {
     void handleComplaint(ActionEvent event) {
         setPage("complaint_handling");
     }
+
+    public boolean CartIsEmpty=true;   // to setup
+    public boolean LoggedIn=false;       // to setup
+
+    @FXML
+     void CartButton(ActionEvent event) {
+        if (CartIsEmpty && LoggedIn) {
+            setPage("Empty_Cart_Customer");
+        }
+        else if (CartIsEmpty) {
+            setPage("Empty_Cart_Guest");
+        }
+        else  {
+            setPage("Customer_Cart");
+        }
+
+
+    }
+
 
 }

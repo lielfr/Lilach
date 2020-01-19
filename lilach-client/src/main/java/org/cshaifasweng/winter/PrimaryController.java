@@ -5,7 +5,6 @@ import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
@@ -22,9 +21,7 @@ import retrofit2.Response;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.net.URL;
 import java.util.List;
-import java.util.ResourceBundle;
 
 public class PrimaryController implements Refreshable {
 
@@ -53,8 +50,6 @@ public class PrimaryController implements Refreshable {
                     TableColumn<CatalogItem, String> dominantColorColumn = new TableColumn<>("Dominant Color");
                     TableColumn<CatalogItem, Double> priceColumn = new TableColumn<>("Price");
 
-
-
                     idColumn.setCellValueFactory(new PropertyValueFactory<CatalogItem, Long>("id"));
                     pictureColumn.setCellFactory(tableColumn -> {
                         final ImageView imageView = new ImageView();
@@ -77,6 +72,7 @@ public class PrimaryController implements Refreshable {
                     descriptionColumn.setCellValueFactory(new PropertyValueFactory<CatalogItem, String>("description"));
                     dominantColorColumn.setCellValueFactory(new PropertyValueFactory<CatalogItem, String>("dominantColor"));
                     priceColumn.setCellValueFactory(new PropertyValueFactory<CatalogItem, Double>("price"));
+
 
                     dataTable.getColumns().addAll(idColumn, descriptionColumn,
                             dominantColorColumn, priceColumn, pictureColumn);
