@@ -44,6 +44,16 @@ public class User {
         this.isLoggedIn = false;
     }
 
+    public User(User user) {
+        this.email = user.email;
+        this.password = user.password;
+        this.roles = user.roles;
+        this.firstName = user.firstName;
+        this.lastName = user.lastName;
+        this.phone = user.phone;
+        this.isLoggedIn = user.isLoggedIn;
+    }
+
     public Long getId() {
         return id;
     }

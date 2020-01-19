@@ -87,6 +87,24 @@ public class UserService {
 
         customerRepository.save(customerInDB);
 
+        // Copy it so we don't accidentally set the password to null
+        customerInDB = new Customer(customerInDB);
+
+        // Hide stuff that shouldn't be in the JSON
+        customerInDB.setPassword(null);
         return customerInDB;
+    }
+
+    @Transactional
+    public User getUser(String email) throws LogicalException {
+        User user = userRepository.findByEmail(email);
+
+        if (user == null)
+            throw new LogicalException("User does not exist");
+
+        User userCopy = new User(user);
+        userCopy.setPassword(null);
+
+        return userCopy;
     }
 }

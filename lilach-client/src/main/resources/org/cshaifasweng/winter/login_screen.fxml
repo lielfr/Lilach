@@ -7,14 +7,13 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 
-
-<AnchorPane prefHeight="480.0" prefWidth="640.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.cshaifasweng.winter.LoginScreenController">
+<AnchorPane prefHeight="768.0" prefWidth="904.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.cshaifasweng.winter.LoginScreenController">
    <children>
       <Label layoutX="191.0" layoutY="198.0" text="user name:" />
       <Label layoutX="195.0" layoutY="232.0" text="Password:" />
-      <TextField layoutX="278.0" layoutY="193.0" />
-      <Button layoutX="293.0" layoutY="262.0" mnemonicParsing="false" text="Login" />
-      <PasswordField layoutX="278.0" layoutY="227.0" />
+      <TextField fx:id="username" layoutX="278.0" layoutY="193.0" />
+      <Button layoutX="293.0" layoutY="262.0" mnemonicParsing="false" onAction="#performLogin" text="Login" />
+      <PasswordField fx:id="password" layoutX="278.0" layoutY="227.0" />
    </children>
    <padding>
       <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />

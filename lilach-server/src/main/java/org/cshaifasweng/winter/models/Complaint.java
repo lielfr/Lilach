@@ -1,21 +1,30 @@
 package org.cshaifasweng.winter.models;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import javax.annotation.processing.Generated;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 @Entity
 public class Complaint {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
 //    private boolean perchesed;
     private String description;
     private boolean email;
     private String answer;
     private Double compensation = 0.0;
+    private  boolean isOpen;
+    private Date complaintOpen;
+    private Date complaintClose;
 
     public Complaint() {
     }
@@ -63,5 +72,20 @@ public class Complaint {
 
     public void setCompensation(Double compensation) {
         this.compensation = compensation;
+    }
+
+    private void getOpenTime(){
+        complaintOpen = new Date();
+        String StrDateFormat =  "hh:mm:ss a";
+        DateFormat dateFormat = new SimpleDateFormat(StrDateFormat);
+        String formattedDate= dateFormat.format(complaintOpen);
+
+    }
+    private void getCloseTime(){
+        complaintClose = new Date();
+        String StrDateFormat =  "hh:mm:ss a";
+        DateFormat dateFormat = new SimpleDateFormat(StrDateFormat);
+        String formattedDate= dateFormat.format(complaintClose);
+
     }
 }
