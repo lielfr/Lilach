@@ -8,7 +8,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 
 
-<AnchorPane prefHeight="480.0" prefWidth="640.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.cshaifasweng.winter.LoginScreen">
+<AnchorPane prefHeight="480.0" prefWidth="640.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.cshaifasweng.winter.LoginScreenController">
    <children>
       <Label layoutX="191.0" layoutY="198.0" text="user name:" />
       <Label layoutX="195.0" layoutY="232.0" text="Password:" />

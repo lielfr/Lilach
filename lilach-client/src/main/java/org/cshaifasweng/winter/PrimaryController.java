@@ -50,6 +50,7 @@ public class PrimaryController implements Refreshable {
                     TableColumn<CatalogItem, String> dominantColorColumn = new TableColumn<>("Dominant Color");
                     TableColumn<CatalogItem, Double> priceColumn = new TableColumn<>("Price");
 
+
                     idColumn.setCellValueFactory(new PropertyValueFactory<CatalogItem, Long>("id"));
                     pictureColumn.setCellFactory(tableColumn -> {
                         final ImageView imageView = new ImageView();
@@ -72,7 +73,6 @@ public class PrimaryController implements Refreshable {
                     descriptionColumn.setCellValueFactory(new PropertyValueFactory<CatalogItem, String>("description"));
                     dominantColorColumn.setCellValueFactory(new PropertyValueFactory<CatalogItem, String>("dominantColor"));
                     priceColumn.setCellValueFactory(new PropertyValueFactory<CatalogItem, Double>("price"));
-
 
                     dataTable.getColumns().addAll(idColumn, descriptionColumn,
                             dominantColorColumn, priceColumn, pictureColumn);
