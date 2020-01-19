@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="737.0" prefWidth="609.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.cshaifasweng.winter.createaccountController">
+   <children>
+      <Button fx:id="finishcreate" layoutX="270.0" layoutY="501.0" mnemonicParsing="false" onAction="#Fcreate" prefHeight="50.0" prefWidth="125.0" text="Finish:" />
+      <Label fx:id="Lname" layoutX="87.0" layoutY="239.0" prefHeight="30.0" prefWidth="50.0" text="Name:" />
+      <Label fx:id="Lid" layoutX="87.0" layoutY="289.0" prefHeight="30.0" prefWidth="50.0" text="Id:" />
+      <Label fx:id="Lemail" layoutX="87.0" layoutY="264.0" prefHeight="30.0" prefWidth="50.0" text="Email:" />
+      <Label fx:id="Lphone" layoutX="87.0" layoutY="314.0" prefHeight="30.0" prefWidth="50.0" text="Phone:" />
+      <Label fx:id="Lcredit" layoutX="87.0" layoutY="339.0" prefHeight="30.0" prefWidth="83.0" text="Credit Card:" />
+      <Label fx:id="Lvaild" layoutX="87.0" layoutY="364.0" prefHeight="30.0" prefWidth="113.0" text="Expiry Month / Year" />
+      <Label fx:id="Lcvv" layoutX="87.0" layoutY="389.0" prefHeight="30.0" prefWidth="50.0" text="Cvv:" />
+      <Label fx:id="Lpassword" layoutX="86.0" layoutY="418.0" text="Password:" />
+      <PasswordField fx:id="Tpassword" layoutX="202.0" layoutY="414.0" />
+      <TextField fx:id="Tname" layoutX="202.0" layoutY="241.0" />
+      <TextField fx:id="Temail" layoutX="202.0" layoutY="266.0" />
+      <TextField fx:id="Tid" layoutX="202.0" layoutY="291.0" />
+      <TextField fx:id="Tphone" layoutX="202.0" layoutY="316.0" />
+      <TextField fx:id="Tcredit" layoutX="202.0" layoutY="341.0" prefHeight="25.0" prefWidth="149.0" />
+      <TextField fx:id="TvaildM" layoutX="202.0" layoutY="366.0" prefHeight="25.0" prefWidth="68.0" promptText="MM" />
+      <TextField fx:id="Tcvv" layoutX="202.0" layoutY="391.0" />
+      <ChoiceBox fx:id="Cmembership" layoutX="201.0" layoutY="439.0" prefWidth="150.0" />
+      <Label fx:id="Lmembership" layoutX="87.0" layoutY="443.0" prefHeight="17.0" prefWidth="83.0" text="Membership:" />
+      <Label fx:id="Lheadline" layoutX="191.0" layoutY="60.0" prefHeight="127.0" prefWidth="292.0" text="create account" textAlignment="JUSTIFY">
+         <font>
+            <Font size="34.0" />
+         </font>
+      </Label>
+      <Label fx:id="LEMembership" layoutX="355.0" layoutY="443.0" prefHeight="17.0" prefWidth="255.0" textFill="#f80000" />
+      <Label fx:id="LEName" layoutX="355.0" layoutY="245.0" prefHeight="17.0" prefWidth="255.0" textFill="RED" />
+      <Label fx:id="LEEmail" layoutX="355.0" layoutY="270.0" prefHeight="17.0" prefWidth="255.0" textFill="RED" />
+      <Label fx:id="LEId" layoutX="355.0" layoutY="295.0" prefHeight="17.0" prefWidth="255.0" textFill="RED" />
+      <Label fx:id="LEPhone" layoutX="355.0" layoutY="320.0" prefHeight="17.0" prefWidth="255.0" textFill="RED" />
+      <Label fx:id="LECredit" layoutX="355.0" layoutY="345.0" prefHeight="17.0" prefWidth="255.0" textFill="RED" />
+      <Label fx:id="LEVaild" layoutX="355.0" layoutY="370.0" prefHeight="17.0" prefWidth="255.0" textFill="RED" />
+      <Label fx:id="LECvv" layoutX="355.0" layoutY="395.0" prefHeight="17.0" prefWidth="255.0" textFill="RED" />
+      <Label fx:id="LEPassword" layoutX="355.0" layoutY="418.0" prefHeight="17.0" prefWidth="255.0" textFill="RED" />
+      <Label fx:id="Lseprate" layoutX="271.0" layoutY="364.0" prefHeight="30.0" prefWidth="27.0" text="/">
+         <font>
+            <Font size="18.0" />
+         </font>
+      </Label>
+      <TextField fx:id="TvaildY" layoutX="283.0" layoutY="366.0" prefHeight="25.0" prefWidth="68.0" promptText="YYYY" />
+      <Label fx:id="Tmessage" layoutX="82.0" layoutY="600.0" prefHeight="95.0" prefWidth="450.0">
+         <font>
+            <Font size="34.0" />
+         </font>
+      </Label>
+   </children>
+</AnchorPane>
