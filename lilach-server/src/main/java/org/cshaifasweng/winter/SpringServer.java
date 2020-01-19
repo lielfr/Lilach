@@ -35,22 +35,22 @@ public class SpringServer {
     private static SpringApplication app;
     private static Properties properties;
 
-    @Autowired
-    private CatalogItemsRepository catalogItemsRepository;
+    private final CatalogItemsRepository catalogItemsRepository;
 
-    @Autowired
-    private MailService mailService;
+    private final MailService mailService;
 
-    @Autowired
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
 
-    @Autowired
-    private CustomerRepository customerRepository;
+    private final CustomerRepository customerRepository;
 
     private static final Logger log = LoggerFactory.getLogger(SpringServer.class);
 
-    public SpringServer() {
+    public SpringServer(CatalogItemsRepository catalogItemsRepository, MailService mailService, UserRepository userRepository, CustomerRepository customerRepository) {
         context = builder.context();
+        this.catalogItemsRepository = catalogItemsRepository;
+        this.mailService = mailService;
+        this.userRepository = userRepository;
+        this.customerRepository = customerRepository;
     }
 
     public static void main(String[] args) throws IOException {
