@@ -22,5 +22,7 @@
       <Button layoutX="525.0" layoutY="629.0" mnemonicParsing="false" onAction="#sendFrom" text="Send" />
       <Button layoutX="461.0" layoutY="427.0" mnemonicParsing="false" onAction="#clearText" text="Clear" />
       <Label fx:id="empty" layoutX="742.0" layoutY="303.0" text="can not be empty" textFill="RED" visible="false" />
+      <Label fx:id="compensationEmpty" layoutX="570.0" layoutY="518.0" text="enter amount of mony for compensation" textFill="RED" visible="false" />
+      <Label fx:id="invalidInput" layoutX="570.0" layoutY="518.0" text="Invalid input" textFill="RED" visible="false" />
    </children>
 </AnchorPane>
