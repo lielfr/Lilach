@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane prefHeight="768.0" prefWidth="904.0" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.cshaifasweng.winter.CartController">
+   <children>
+      <TextField layoutY="20.0" prefHeight="77.0" prefWidth="904.0" text="Your cart is empty">
+         <font>
+            <Font size="36.0" />
+         </font></TextField>
+      <Label layoutX="95.0" layoutY="130.0" prefHeight="40.0" prefWidth="267.0" text="There are currently no items in your cart.  ">
+         <font>
+            <Font size="14.0" />
+         </font></Label>
+       <Button layoutX="95.0" layoutY="207.0" mnemonicParsing="false" onAction="#switchToDashboard" prefHeight="52.0" prefWidth="163.0" text="Continue Shopping">
+           <font>
+               <Font size="14.0" />
+           </font>
+       </Button>
+   </children>
+</AnchorPane>
