@@ -128,5 +128,10 @@ public class DashboardController implements Initializable {
 
     }
 
+    @FXML
+    void backToCatalog(ActionEvent event) {
+        EventBus.getDefault().post(new DashboardSwitchEvent("primary"));
+    }
+
 
 }

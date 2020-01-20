@@ -12,6 +12,8 @@ public class Employee extends User {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
     private Date employedSince;
 
+    private Collection<Complaint> handledComplaints;
+
     public Employee() {}
 
     @Override
@@ -32,5 +34,13 @@ public class Employee extends User {
 
     public void setEmployedSince(Date employedSince) {
         this.employedSince = employedSince;
+    }
+
+    public Collection<Complaint> getHandledComplaints() {
+        return handledComplaints;
+    }
+
+    public void setHandledComplaints(Collection<Complaint> handledComplaints) {
+        this.handledComplaints = handledComplaints;
     }
 }

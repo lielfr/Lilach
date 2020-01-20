@@ -2,7 +2,6 @@ package org.cshaifasweng.winter.models;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonTypeName;
-
 import java.util.Collection;
 import java.util.Date;
 
@@ -22,6 +21,8 @@ public class Customer extends User {
     private Date subscriptionEnd;
 
     private Double totalBalance;
+
+    private Collection<Complaint> complaints;
 
 
     public Customer(String email, String password, String firstName, String lastName, String phone, Collection<Role> roles, long creditCard, Date dateOfBirth) {
@@ -91,6 +92,14 @@ public class Customer extends User {
 
     public void setTotalBalance(Double totalBalance) {
         this.totalBalance = totalBalance;
+    }
+
+    public Collection<Complaint> getComplaints() {
+        return complaints;
+    }
+
+    public void setComplaints(Collection<Complaint> complaints) {
+        this.complaints = complaints;
     }
 }
 
