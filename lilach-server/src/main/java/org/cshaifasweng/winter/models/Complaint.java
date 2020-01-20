@@ -96,4 +96,28 @@ public class Complaint {
         String formattedDate= dateFormat.format(complaintClose);
 
     }
+
+    public boolean isOpen() {
+        return isOpen;
+    }
+
+    public void setOpen(boolean open) {
+        isOpen = open;
+    }
+
+    public Date getComplaintOpen() {
+        return complaintOpen;
+    }
+
+    public void setComplaintOpen(Date complaintOpen) {
+        this.complaintOpen = complaintOpen;
+    }
+
+    public Date getComplaintClose() {
+        return complaintClose;
+    }
+
+    public void setComplaintClose(Date complaintClose) {
+        this.complaintClose = complaintClose;
+    }
 }
