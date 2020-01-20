@@ -1,27 +1,35 @@
 package org.cshaifasweng.winter.models;
 
+import com.fasterxml.jackson.annotation.JsonSubTypes;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
+
 import javax.persistence.*;
 import java.util.Collection;
 
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
-public class User {
+@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "type")
+@JsonSubTypes({
+        @JsonSubTypes.Type(value = Employee.class, name = "employee"),
+        @JsonSubTypes.Type(value = Customer.class, name = "customer")
+})
+public abstract class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    protected Long id;
 
     @Column(nullable = false, unique = true)
-    private String email;
+    protected String email;
 
-    private String password;
+    protected String password;
 
-    private String firstName;
+    protected String firstName;
 
-    private String lastName;
+    protected String lastName;
 
-    private String phone;
+    protected String phone;
 
-    private Boolean isLoggedIn;
+    protected Boolean isLoggedIn;
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
@@ -29,7 +37,7 @@ public class User {
             joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id")
     )
-    private Collection<Role> roles;
+    protected Collection<Role> roles;
 
     public User() {
     }
@@ -44,15 +52,8 @@ public class User {
         this.isLoggedIn = false;
     }
 
-    public User(User user) {
-        this.email = user.email;
-        this.password = user.password;
-        this.roles = user.roles;
-        this.firstName = user.firstName;
-        this.lastName = user.lastName;
-        this.phone = user.phone;
-        this.isLoggedIn = user.isLoggedIn;
-    }
+    public abstract User copy();
+
 
     public Long getId() {
         return id;

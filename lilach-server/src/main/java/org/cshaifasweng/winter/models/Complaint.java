@@ -1,5 +1,6 @@
 package org.cshaifasweng.winter.models;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.annotation.processing.Generated;
@@ -17,13 +18,20 @@ public class Complaint {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-//    private boolean perchesed;
+//    private boolean purchased;
     private String description;
+
     private boolean email;
+
     private String answer;
     private Double compensation = 0.0;
+
     private  boolean isOpen;
+
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
     private Date complaintOpen;
+
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
     private Date complaintClose;
 
     public Complaint() {
@@ -87,5 +95,29 @@ public class Complaint {
         DateFormat dateFormat = new SimpleDateFormat(StrDateFormat);
         String formattedDate= dateFormat.format(complaintClose);
 
+    }
+
+    public boolean isOpen() {
+        return isOpen;
+    }
+
+    public void setOpen(boolean open) {
+        isOpen = open;
+    }
+
+    public Date getComplaintOpen() {
+        return complaintOpen;
+    }
+
+    public void setComplaintOpen(Date complaintOpen) {
+        this.complaintOpen = complaintOpen;
+    }
+
+    public Date getComplaintClose() {
+        return complaintClose;
+    }
+
+    public void setComplaintClose(Date complaintClose) {
+        this.complaintClose = complaintClose;
     }
 }
