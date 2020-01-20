@@ -16,17 +16,17 @@ public class CartController implements Refreshable {
     }
 
     @FXML
-    private void BackToCatalog() throws IOException {
+    private void backToCatalog() throws IOException {
         EventBus.getDefault().post(new DashboardSwitchEvent("primary"));
     }
 
     @FXML
-    private void GoToLogin() throws IOException {
+    private void goToLogin() throws IOException {
         EventBus.getDefault().post(new DashboardSwitchEvent("login_screen"));
     }
 
     @FXML
-    private void GoToOrder() throws IOException {
+    private void goToOrder() throws IOException {
         EventBus.getDefault().post(new DashboardSwitchEvent("order"));
     }
 

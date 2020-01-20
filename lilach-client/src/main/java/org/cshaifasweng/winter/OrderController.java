@@ -15,22 +15,22 @@ public class OrderController implements Refreshable {
     }
 
     @FXML
-    private void GoToPayment() throws IOException {
+    private void goToPayment() throws IOException {
         EventBus.getDefault().post(new DashboardSwitchEvent("order_payment"));
     }
 
     @FXML
-    private void GoToOrderCompleted() throws IOException {
+    private void goToOrderCompleted() throws IOException {
         EventBus.getDefault().post(new DashboardSwitchEvent("order_completed"));
     }
 
     @FXML
-    private void BackToEditOrder() throws IOException {
+    private void backToEditOrder() throws IOException {
         EventBus.getDefault().post(new DashboardSwitchEvent("order"));
     }
 
     @FXML
-    private void BackToCart() throws IOException {
+    private void backToCart() throws IOException {
         EventBus.getDefault().post(new DashboardSwitchEvent("Customer_Cart"));
     }
 
