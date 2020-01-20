@@ -26,7 +26,7 @@ public class CartController implements Refreshable {
     }
 
     @FXML
-    private void GoToCheckOut() throws IOException {
+    private void GoToOrder() throws IOException {
         EventBus.getDefault().post(new DashboardSwitchEvent("order"));
     }
 
