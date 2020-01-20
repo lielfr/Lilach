@@ -1,5 +1,6 @@
 package org.cshaifasweng.winter.models;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 
 import javax.persistence.Entity;
@@ -10,6 +11,7 @@ import java.util.Date;
 @JsonTypeName("employee")
 public class Employee extends User {
 
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
     private Date employedSince;
 
     public Employee() {}

@@ -17,6 +17,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 import java.net.URL;
+import java.util.Objects;
 import java.util.ResourceBundle;
 import java.util.logging.Logger;
 
@@ -39,7 +40,7 @@ public class LoginScreenController implements Refreshable, Initializable {
                 log.finest("Got response code: " + response.code());
                 if (response.code() == 200) {
                     log.finest("Got token");
-                    String token = response.headers().get("Authorization")
+                    String token = Objects.requireNonNull(response.headers().get("Authorization"))
                             .replace("Bearer ", "");
                     Platform.runLater(() -> {
                         EventBus.getDefault().post(new TokenSetEvent(token));
