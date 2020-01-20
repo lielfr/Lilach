@@ -53,7 +53,6 @@ public class PrimaryController implements Refreshable {
                     TableColumn<CatalogItem, Double> priceColumn = new TableColumn<>("Price");
 
 
-
                     idColumn.setCellValueFactory(new PropertyValueFactory<CatalogItem, Long>("id"));
                     pictureColumn.setCellFactory(tableColumn -> {
                         final ImageView imageView = new ImageView();

@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="500.0" prefWidth="904.0"
+            xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="org.cshaifasweng.winter.OrderController">
+    <opaqueInsets>
+        <Insets/>
+    </opaqueInsets>
+    <Button layoutX="700.0" layoutY="443.0" mnemonicParsing="false" onAction="#goToPayment" prefHeight="50.0"
+            prefWidth="161.0" text="Agree &amp; Payment">
+        <font>
+            <Font name="System Bold" size="14.0"/>
+        </font>
+    </Button>
+    <Label layoutX="46.0" layoutY="14.0" prefHeight="27.0" prefWidth="627.0"
+           text="Please review your information below, Then click Agree to set payment.">
+        <font>
+          <Font name="System Bold" size="18.0"/>
+        </font>
+    </Label>
+    <Label layoutX="46.0" layoutY="72.0" prefHeight="42.0" prefWidth="198.0" text="Delivery Address:">
+        <font>
+          <Font size="24.0"/>
+        </font>
+    </Label>
+    <TextFlow layoutX="45.0" layoutY="114.0" prefHeight="120.0" prefWidth="200.0"/>
+    <Label layoutX="46.0" layoutY="285.0" prefHeight="42.0" prefWidth="395.0"
+           text="Order Details &amp; Shipping Method:">
+        <font>
+          <Font size="24.0"/>
+        </font>
+    </Label>
+    <Button layoutX="729.0" layoutY="72.0" mnemonicParsing="false" onAction="#backToCart" prefHeight="42.0"
+            prefWidth="104.0" text="Edit Cart">
+        <font>
+          <Font name="System Bold" size="14.0"/>
+        </font>
+    </Button>
+    <TextFlow layoutX="44.0" layoutY="327.0" prefHeight="200.0" prefWidth="434.0"/>
+</AnchorPane>

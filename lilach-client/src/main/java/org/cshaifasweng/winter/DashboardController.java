@@ -27,6 +27,10 @@ import java.util.logging.Logger;
 public class DashboardController implements Initializable {
     protected static final Logger log = Logger.getLogger(DashboardController.class.getName());
 
+
+    private boolean CartIsEmpty=false;   // Needs to be setup
+    private boolean LoggedIn=true;       // Needs to be setup
+
     @FXML
     private ScrollPane containerPane;
 
@@ -108,5 +112,21 @@ public class DashboardController implements Initializable {
         }
 
     }
+
+    @FXML
+     void cartButton(ActionEvent event) {
+        if (CartIsEmpty && LoggedIn) {
+            setPage("Empty_Cart_Customer");
+        }
+        else if (CartIsEmpty) {
+            setPage("Empty_Cart_Guest");
+        }
+        else  {
+            setPage("Customer_Cart");
+        }
+
+
+    }
+
 
 }

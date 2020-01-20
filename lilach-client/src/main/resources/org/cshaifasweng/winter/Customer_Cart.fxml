@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="510.0" prefWidth="904.0"
+            xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="org.cshaifasweng.winter.CartController">
+    <opaqueInsets>
+        <Insets/>
+    </opaqueInsets>
+    <TextField layoutY="20.0" prefHeight="77.0" prefWidth="904.0" text="My Shopping Cart">
+        <font>
+            <Font size="36.0"/>
+        </font>
+        <opaqueInsets>
+            <Insets top="1.0"/>
+        </opaqueInsets>
+    </TextField>
+    <Button layoutX="670.0" layoutY="348.0" mnemonicParsing="false" onAction="#goToOrder" prefHeight="50.0"
+            prefWidth="104.0" text="Check Out">
+        <font>
+          <Font name="System Bold" size="14.0"/>
+        </font>
+    </Button>
+</AnchorPane>
