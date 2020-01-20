@@ -64,6 +64,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .permitAll()
                 .antMatchers(HttpMethod.POST, "/customer")
                 .permitAll()
+                .antMatchers(HttpMethod.POST, "/complaint")
+                .hasAuthority(SecurityConstants.PRIVILEGE_COMPLAINT_FILE)
                 .anyRequest().authenticated()
                 .and()
                 .addFilter(new AuthenticationFilter(authenticationManager(), userRepository, userService))

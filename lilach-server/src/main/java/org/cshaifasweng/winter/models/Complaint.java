@@ -1,13 +1,8 @@
 package org.cshaifasweng.winter.models;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import org.springframework.format.annotation.DateTimeFormat;
 
-import javax.annotation.processing.Generated;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -28,6 +23,12 @@ public class Complaint {
 
     private  boolean isOpen;
 
+    @ManyToOne(fetch = FetchType.EAGER)
+    private Customer openedBy;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    private Employee handledBy;
+
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
     private Date complaintOpen;
 
@@ -37,9 +38,10 @@ public class Complaint {
     public Complaint() {
     }
 
-    public Complaint(String description, boolean email) {
+    public Complaint(String description, boolean email, Customer openedBy) {
         this.description = description;
         this.email = email;
+        this.openedBy = openedBy;
     }
 
     public Long getId() {
@@ -119,5 +121,21 @@ public class Complaint {
 
     public void setComplaintClose(Date complaintClose) {
         this.complaintClose = complaintClose;
+    }
+
+    public Customer getOpenedBy() {
+        return openedBy;
+    }
+
+    public void setOpenedBy(Customer openedBy) {
+        this.openedBy = openedBy;
+    }
+
+    public Employee getHandledBy() {
+        return handledBy;
+    }
+
+    public void setHandledBy(Employee handledBy) {
+        this.handledBy = handledBy;
     }
 }
