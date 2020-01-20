@@ -2,19 +2,26 @@ package org.cshaifasweng.winter.models;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class Complaint {
     private Long id;
 
-//    private boolean purchased;
+    //    private boolean purchased;
     private String description;
 
     private boolean email;
 
     private String answer;
-
     private Double compensation = 0.0;
+
+    private  boolean isOpen;
+
+    private Customer openedBy;
+
+    private Employee handledBy;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
     private Date complaintOpen;
@@ -70,6 +77,29 @@ public class Complaint {
         this.compensation = compensation;
     }
 
+    private void getOpenTime(){
+        complaintOpen = new Date();
+        String StrDateFormat =  "hh:mm:ss a";
+        DateFormat dateFormat = new SimpleDateFormat(StrDateFormat);
+        String formattedDate= dateFormat.format(complaintOpen);
+
+    }
+    private void getCloseTime(){
+        complaintClose = new Date();
+        String StrDateFormat =  "hh:mm:ss a";
+        DateFormat dateFormat = new SimpleDateFormat(StrDateFormat);
+        String formattedDate= dateFormat.format(complaintClose);
+
+    }
+
+    public boolean isOpen() {
+        return isOpen;
+    }
+
+    public void setOpen(boolean open) {
+        isOpen = open;
+    }
+
     public Date getComplaintOpen() {
         return complaintOpen;
     }
@@ -84,5 +114,21 @@ public class Complaint {
 
     public void setComplaintClose(Date complaintClose) {
         this.complaintClose = complaintClose;
+    }
+
+    public Customer getOpenedBy() {
+        return openedBy;
+    }
+
+    public void setOpenedBy(Customer openedBy) {
+        this.openedBy = openedBy;
+    }
+
+    public Employee getHandledBy() {
+        return handledBy;
+    }
+
+    public void setHandledBy(Employee handledBy) {
+        this.handledBy = handledBy;
     }
 }

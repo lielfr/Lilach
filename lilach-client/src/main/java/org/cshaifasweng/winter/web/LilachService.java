@@ -1,6 +1,7 @@
 package org.cshaifasweng.winter.web;
 
 import org.cshaifasweng.winter.models.CatalogItem;
+import org.cshaifasweng.winter.models.Complaint;
 import org.cshaifasweng.winter.models.Customer;
 import org.cshaifasweng.winter.models.User;
 import retrofit2.Call;
@@ -26,4 +27,7 @@ public interface LilachService {
 
     @GET("/user/me")
     Call<User> getCurrentUser();
+
+    @POST("/complaint")
+    Call<Complaint> newComplaint(@Body Complaint complaint);
 }

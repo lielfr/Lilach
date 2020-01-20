@@ -1,5 +1,6 @@
 package org.cshaifasweng.winter;
 
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -9,7 +10,13 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import org.cshaifasweng.winter.events.DashboardSwitchEvent;
+import org.cshaifasweng.winter.models.Complaint;
+import org.cshaifasweng.winter.web.APIAccess;
+import org.cshaifasweng.winter.web.LilachService;
 import org.greenrobot.eventbus.EventBus;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class ComplaintController implements Refreshable {
 
@@ -114,7 +121,28 @@ public class ComplaintController implements Refreshable {
     @FXML
     void sendComplaint(ActionEvent event) {
         restVisible();
-        inputCheck();
+
+        //TODO: Add a popup here.
+        if (!inputCheck()) return;
+
+        // TODO: Actually instantiate the complaint (using new and all the fields).
+        Complaint complaint = null;
+
+        LilachService service = APIAccess.getService();
+        service.newComplaint(complaint).enqueue(new Callback<Complaint>() {
+            @Override
+            public void onResponse(Call<Complaint> call, Response<Complaint> response) {
+                Complaint received = response.body();
+
+                // TODO: Replace with something meaningful
+                Platform.runLater(() -> complaintBox.setText("DONE"));
+            }
+
+            @Override
+            public void onFailure(Call<Complaint> call, Throwable throwable) {
+
+            }
+        });
     }
 
     @Override
