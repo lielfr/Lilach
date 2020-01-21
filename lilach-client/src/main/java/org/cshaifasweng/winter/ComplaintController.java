@@ -88,6 +88,17 @@ public class ComplaintController implements Refreshable {
         return true;
     }
 
+    private boolean isValidOrderNum (TextField fieldA){
+        for (int i = 0; i<fieldA.getText().length() ; i++){
+            char temp = fieldA.getText().charAt(i);
+            if(!(temp >= '0') && (temp <= '9')){
+                return false;
+            }
+        }
+        return true;
+    }
+
+
     private boolean inputCheck (){
         boolean retVal = true;
 
@@ -103,11 +114,12 @@ public class ComplaintController implements Refreshable {
                 orderNumEmpty.setVisible(true);
                 retVal = false;
             }
-        }
-        if (!(isValid(orderNumberFild)))
-        {
-            invalidInputOrNum.setVisible(true);
-            retVal = false;
+            else{
+                if (!(isValidOrderNum(orderNumberFild))){
+                    invalidInputOrNum.setVisible(true);
+                    retVal = false;
+                }
+            }
         }
         return retVal;
     }
@@ -116,6 +128,19 @@ public class ComplaintController implements Refreshable {
     {
         orderNumEmpty.setVisible(false);
         compEmpty.setVisible(false);
+        invalidInputOrNum.setVisible(false);
+    }
+
+    private void fillComplaint(Complaint complaint){
+        complaint.setDescription(complaintBox.getText());
+        complaint.setOrdered(pruchasedCheckBox.isSelected());
+        complaint.setEmail(emailCheckBox.isSelected());
+        if (pruchasedCheckBox.isSelected()){
+            complaint.setOrderNum(orderNumberFild.getText());
+        }
+        complaint.setOpen(true);
+
+
     }
 
     @FXML
@@ -126,7 +151,8 @@ public class ComplaintController implements Refreshable {
         if (!inputCheck()) return;
 
         // TODO: Actually instantiate the complaint (using new and all the fields).
-        Complaint complaint = null;
+        Complaint complaint;
+        complaint = new Complaint();
 
         LilachService service = APIAccess.getService();
         service.newComplaint(complaint).enqueue(new Callback<Complaint>() {

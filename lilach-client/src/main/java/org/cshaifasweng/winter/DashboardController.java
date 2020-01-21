@@ -133,5 +133,9 @@ public class DashboardController implements Initializable {
         EventBus.getDefault().post(new DashboardSwitchEvent("primary"));
     }
 
+    @FXML
+    void addItem(ActionEvent event) {
+        EventBus.getDefault().post(new DashboardSwitchEvent("add_item"));
+    }
 
 }
