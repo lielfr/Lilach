@@ -7,8 +7,10 @@ import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @JsonTypeName("customer")
@@ -32,6 +34,9 @@ public class Customer extends User {
 
     private Double totalBalance;
 
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "customer")
+    private List<Transaction> transactions;
+
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "openedBy")
     private Collection<Complaint> complaints;
 
@@ -43,6 +48,7 @@ public class Customer extends User {
         this.dateOfBirth = dateOfBirth;
         this.expireDate = expireDate;
         this.cvv = cvv;
+        this.transactions = new ArrayList<>();
     }
 
     public Customer() {
@@ -129,6 +135,14 @@ public class Customer extends User {
 
     public void setCvv(Integer cvv) {
         this.cvv = cvv;
+    }
+
+    public List<Transaction> getTransactions() {
+        return transactions;
+    }
+
+    public void setTransactions(List<Transaction> transactions) {
+        this.transactions = transactions;
     }
 }
 
