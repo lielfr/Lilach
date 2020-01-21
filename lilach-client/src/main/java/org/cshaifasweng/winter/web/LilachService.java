@@ -30,4 +30,8 @@ public interface LilachService {
 
     @POST("/complaint")
     Call<Complaint> newComplaint(@Body Complaint complaint);
+
+    @PUT("/complaint/{id}")
+    Call<Complaint> handleComplaint(@Path("id") long id, @Body Complaint complaint);
+
 }
