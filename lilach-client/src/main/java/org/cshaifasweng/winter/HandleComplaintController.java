@@ -16,7 +16,7 @@ public class HandleComplaintController implements Refreshable {
 
 
     @FXML
-    private Label complatinNum;
+    private Label complaintNum;
 
     @FXML
     private Label customerName;
@@ -28,10 +28,10 @@ public class HandleComplaintController implements Refreshable {
     private CheckBox finComp;
 
     @FXML
-    private Label compAmuLable;
+    private Label compAmuLabel;
 
     @FXML
-    private TextField compAmountFild;
+    private TextField compAmountField;
 
     @FXML
     private Label empty;
@@ -92,13 +92,13 @@ public class HandleComplaintController implements Refreshable {
         }
         if (finComp.isSelected())
         {
-            if (compAmountFild.getText().isEmpty())
+            if (compAmountField.getText().isEmpty())
             {
                 compensationEmpty.setVisible(true);
                 retVal = false;
             }
         }
-        if (!(isValid(compAmountFild)))
+        if (!(isValid(compAmountField)))
         {
             invalidInput.setVisible(true);
             retVal = false;
@@ -123,8 +123,8 @@ public class HandleComplaintController implements Refreshable {
     @FXML
     void toggleCompensation(MouseEvent event) {
         status = !status;
-        compAmuLable.setDisable(status);
-        compAmountFild.setDisable(status);
+        compAmuLabel.setDisable(status);
+        compAmountField.setDisable(status);
     }
 
     @Override
