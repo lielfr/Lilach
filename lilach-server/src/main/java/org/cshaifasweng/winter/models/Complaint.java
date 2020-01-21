@@ -16,6 +16,8 @@ public class Complaint {
 //    private boolean purchased;
     private String description;
     private boolean ordered;
+
+    // TODO: Change this once we have an order entity in place.
     private  String orderNum;
 
     private boolean email;

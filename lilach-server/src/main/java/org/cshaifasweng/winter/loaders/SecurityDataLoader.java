@@ -73,9 +73,12 @@ public class SecurityDataLoader implements ApplicationListener<ContextRefreshedE
         Calendar customerBirth = Calendar.getInstance();
         customerBirth.set(2000, 1, 1);
 
+        Calendar customerCreditCardExpire = Calendar.getInstance();
+        customerCreditCardExpire.set(2022, 1, 1);
+
         Customer customer = createOrReturnCustomer("customer@lilach.com", "moo",
                 Collections.singletonList(customerRole),"Lilach", "Customer", "0509999999",
-                11, customerBirth.getTime());
+                11, customerCreditCardExpire.getTime(), 222, customerBirth.getTime());
 
         Employee admin = createOrReturnEmployee("lielft@gmail.com", "AdminBaby!",
                 "Liel", "Fridman", "0509999999",
@@ -110,11 +113,11 @@ public class SecurityDataLoader implements ApplicationListener<ContextRefreshedE
     @Transactional
     Customer createOrReturnCustomer(String email, String password, Collection<Role> roles,
                                     String firstName, String lastName, String phone,
-                                    long creditCard, Date dateOfBirth) {
+                                    long creditCard, Date expireDate, int cvv, Date dateOfBirth) {
         Customer customer = customerRepository.findByEmail(email);
         if (customer == null) {
             customer = new Customer(email, new BCryptPasswordEncoder().encode(password),
-                    firstName, lastName, phone, roles, creditCard, dateOfBirth);
+                    firstName, lastName, phone, roles, creditCard, expireDate, cvv, dateOfBirth);
             customerRepository.save(customer);
         }
 

@@ -18,6 +18,10 @@ public class Customer extends User {
 
     private Long creditCard;
 
+    private Date expireDate;
+
+    private Integer cvv;
+
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
     private Date dateOfBirth;
 
@@ -32,11 +36,13 @@ public class Customer extends User {
     private Collection<Complaint> complaints;
 
 
-    public Customer(String email, String password, String firstName, String lastName, String phone, Collection<Role> roles, long creditCard, Date dateOfBirth) {
+    public Customer(String email, String password, String firstName, String lastName, String phone, Collection<Role> roles, long creditCard, Date expireDate, int cvv, Date dateOfBirth) {
         super(email, password, firstName, lastName, phone, roles);
         this.creditCard = creditCard;
         this.totalBalance = 0.0;
         this.dateOfBirth = dateOfBirth;
+        this.expireDate = expireDate;
+        this.cvv = cvv;
     }
 
     public Customer() {
@@ -45,7 +51,7 @@ public class Customer extends User {
     @Override
     public User copy() {
         Customer copy = new Customer(email, password, firstName, lastName, phone,
-                roles, creditCard, (Date)dateOfBirth.clone());
+                roles, creditCard, expireDate, cvv, (Date)dateOfBirth.clone());
         return copy;
     }
 
