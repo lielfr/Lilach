@@ -83,7 +83,7 @@ public class UserService {
         customerInDB = new Customer(customer.getEmail(), new BCryptPasswordEncoder().encode(customer.getPassword()),
                 customer.getFirstName(), customer.getLastName(), customer.getPhone(),
                 Arrays.asList(roleRepository.findByName(SecurityConstants.ROLE_CUSTOMER)),
-                customer.getCreditCard(), customer.getDateOfBirth());
+                customer.getCreditCard(), customer.getExpireDate(), customer.getCvv(), customer.getDateOfBirth());
 
         customerRepository.save(customerInDB);
 

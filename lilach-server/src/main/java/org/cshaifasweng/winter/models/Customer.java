@@ -114,5 +114,21 @@ public class Customer extends User {
     public void setComplaints(Collection<Complaint> complaints) {
         this.complaints = complaints;
     }
+
+    public Date getExpireDate() {
+        return expireDate;
+    }
+
+    public void setExpireDate(Date expireDate) {
+        this.expireDate = expireDate;
+    }
+
+    public Integer getCvv() {
+        return cvv;
+    }
+
+    public void setCvv(Integer cvv) {
+        this.cvv = cvv;
+    }
 }
 
