@@ -10,14 +10,14 @@
 <AnchorPane prefHeight="1050.0" prefWidth="904.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.cshaifasweng.winter.HandleComplaintController">
    <children>
       <Label layoutX="138.0" layoutY="103.0" text="Complaint number:" />
-      <Label fx:id="complatinNum" layoutX="275.0" layoutY="103.0" prefHeight="16.0" prefWidth="147.0" text="Label" />
+      <Label fx:id="complaintNum" layoutX="275.0" layoutY="103.0" prefHeight="16.0" prefWidth="147.0" text="Label" />
       <Label layoutX="138.0" layoutY="135.0" text="Customer name:" />
       <Label fx:id="customerName" layoutX="275.0" layoutY="135.0" prefHeight="16.0" prefWidth="147.0" text="Label" />
       <Label layoutX="138.0" layoutY="515.0" text="Answer to client:" />
       <TextArea fx:id="answerBox" layoutX="248.0" layoutY="545.0" prefHeight="200.0" prefWidth="488.0" promptText="Enter the answer here" wrapText="true" />
       <CheckBox fx:id="finComp" layoutX="138.0" layoutY="816.0" mnemonicParsing="false" onMouseClicked="#toggleCompensation" text="Financial compensation" />
-      <Label fx:id="compAmuLable" disable="true" layoutX="174.0" layoutY="852.0" text="Enter a compensation amount:" />
-      <TextField fx:id="compAmountFild" disable="true" layoutX="385.0" layoutY="847.0" />
+      <Label fx:id="compAmuLabel" disable="true" layoutX="174.0" layoutY="852.0" text="Enter a compensation amount:" />
+      <TextField fx:id="compAmountField" disable="true" layoutX="385.0" layoutY="847.0" />
       <Button layoutX="316.0" layoutY="963.0" mnemonicParsing="false" onAction="#cancel" text="Cancel" />
       <Button layoutX="525.0" layoutY="963.0" mnemonicParsing="false" onAction="#sendFrom" text="Send" />
       <Button layoutX="461.0" layoutY="761.0" mnemonicParsing="false" onAction="#clearText" text="Clear" />
@@ -30,6 +30,6 @@
       <Label fx:id="complaintOpDaLabel" layoutX="291.0" layoutY="200.0" text="Label" />
       <Label layoutX="138.0" layoutY="233.0" text="Complaint open time:" />
       <Label fx:id="complaintOpTiLabel" layoutX="298.0" layoutY="233.0" text="Label" />
-      <CheckBox fx:id="purchaseMadeCheckBox" disable="true" layoutX="138.0" layoutY="168.0" mnemonicParsing="false" text="Has a purchase been made" />
+      <CheckBox fx:id="purchaseMadeCheckBox" disable="true" layoutX="138.0" layoutY="168.0" mnemonicParsing="false" style="-fx-opacity: 1;" text="Has a purchase been made" />
    </children>
 </AnchorPane>
