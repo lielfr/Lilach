@@ -32,8 +32,6 @@ public class Customer extends User {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
     private Date subscriptionEnd;
 
-    private Double totalBalance;
-
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "customer")
     private List<Transaction> transactions;
 
@@ -44,7 +42,6 @@ public class Customer extends User {
     public Customer(String email, String password, String firstName, String lastName, String phone, Collection<Role> roles, long creditCard, Date expireDate, int cvv, Date dateOfBirth) {
         super(email, password, firstName, lastName, phone, roles);
         this.creditCard = creditCard;
-        this.totalBalance = 0.0;
         this.dateOfBirth = dateOfBirth;
         this.expireDate = expireDate;
         this.cvv = cvv;
@@ -103,14 +100,6 @@ public class Customer extends User {
 
     public void setSubscriptionEnd(Date subscriptionEnd) {
         this.subscriptionEnd = subscriptionEnd;
-    }
-
-    public Double getTotalBalance() {
-        return totalBalance;
-    }
-
-    public void setTotalBalance(Double totalBalance) {
-        this.totalBalance = totalBalance;
     }
 
     public Collection<Complaint> getComplaints() {

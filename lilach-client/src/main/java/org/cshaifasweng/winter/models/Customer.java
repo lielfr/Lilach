@@ -2,8 +2,11 @@ package org.cshaifasweng.winter.models;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonTypeName;
+
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 
 @JsonTypeName("customer")
 public class Customer extends User {
@@ -11,6 +14,10 @@ public class Customer extends User {
     private String address;
 
     private Long creditCard;
+
+    private Date expireDate;
+
+    private Integer cvv;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
     private Date dateOfBirth;
@@ -20,16 +27,18 @@ public class Customer extends User {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
     private Date subscriptionEnd;
 
-    private Double totalBalance;
+    private List<Transaction> transactions;
 
     private Collection<Complaint> complaints;
 
 
-    public Customer(String email, String password, String firstName, String lastName, String phone, long creditCard, Date dateOfBirth) {
+    public Customer(String email, String password, String firstName, String lastName, String phone, long creditCard, Date expireDate, int cvv, Date dateOfBirth) {
         super(email, password, firstName, lastName, phone);
         this.creditCard = creditCard;
-        this.totalBalance = 0.0;
         this.dateOfBirth = dateOfBirth;
+        this.expireDate = expireDate;
+        this.cvv = cvv;
+        this.transactions = new ArrayList<>();
     }
 
     public Customer() {
@@ -38,7 +47,7 @@ public class Customer extends User {
     @Override
     public User copy() {
         Customer copy = new Customer(email, password, firstName, lastName, phone,
-                creditCard, (Date)dateOfBirth.clone());
+                creditCard, expireDate, cvv, (Date)dateOfBirth.clone());
         return copy;
     }
 
@@ -86,14 +95,6 @@ public class Customer extends User {
         this.subscriptionEnd = subscriptionEnd;
     }
 
-    public Double getTotalBalance() {
-        return totalBalance;
-    }
-
-    public void setTotalBalance(Double totalBalance) {
-        this.totalBalance = totalBalance;
-    }
-
     public Collection<Complaint> getComplaints() {
         return complaints;
     }
@@ -101,5 +102,28 @@ public class Customer extends User {
     public void setComplaints(Collection<Complaint> complaints) {
         this.complaints = complaints;
     }
-}
 
+    public Date getExpireDate() {
+        return expireDate;
+    }
+
+    public void setExpireDate(Date expireDate) {
+        this.expireDate = expireDate;
+    }
+
+    public Integer getCvv() {
+        return cvv;
+    }
+
+    public void setCvv(Integer cvv) {
+        this.cvv = cvv;
+    }
+
+    public List<Transaction> getTransactions() {
+        return transactions;
+    }
+
+    public void setTransactions(List<Transaction> transactions) {
+        this.transactions = transactions;
+    }
+}

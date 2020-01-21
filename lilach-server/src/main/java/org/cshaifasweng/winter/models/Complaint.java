@@ -18,7 +18,7 @@ public class Complaint {
     private boolean ordered;
 
     // TODO: Change this once we have an order entity in place.
-    private  String orderNum;
+    private String orderNum;
 
     private boolean email;
 
