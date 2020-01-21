@@ -25,8 +25,8 @@ public class Customer extends User {
     private Collection<Complaint> complaints;
 
 
-    public Customer(String email, String password, String firstName, String lastName, String phone, Collection<Role> roles, long creditCard, Date dateOfBirth) {
-        super(email, password, firstName, lastName, phone, roles);
+    public Customer(String email, String password, String firstName, String lastName, String phone, long creditCard, Date dateOfBirth) {
+        super(email, password, firstName, lastName, phone);
         this.creditCard = creditCard;
         this.totalBalance = 0.0;
         this.dateOfBirth = dateOfBirth;
@@ -38,7 +38,7 @@ public class Customer extends User {
     @Override
     public User copy() {
         Customer copy = new Customer(email, password, firstName, lastName, phone,
-                roles, creditCard, (Date)dateOfBirth.clone());
+                creditCard, (Date)dateOfBirth.clone());
         return copy;
     }
 
