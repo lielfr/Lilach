@@ -42,10 +42,9 @@ public abstract class User {
     public User() {
     }
 
-    public User(String email, String password, String firstName, String lastName, String phone, Collection<Role> roles) {
+    public User(String email, String password, String firstName, String lastName, String phone) {
         this.email = email;
         this.password = password;
-        this.roles = roles;
         this.firstName = firstName;
         this.lastName = lastName;
         this.phone = phone;

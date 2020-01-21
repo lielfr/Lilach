@@ -24,13 +24,13 @@ public class Employee extends User {
 
     @Override
     public User copy() {
-        Employee copy = new Employee(email, password, firstName, lastName, phone, roles, (Date) employedSince.clone());
+        Employee copy = new Employee(email, password, firstName, lastName, phone, (Date) employedSince.clone());
         return copy;
     }
 
     public Employee(String email, String password, String firstName, String lastName,
-                    String phone, Collection<Role> roles, Date employedSince) {
-        super(email, password, firstName, lastName, phone, roles);
+                    String phone, Date employedSince) {
+        super(email, password, firstName, lastName, phone);
         this.employedSince = employedSince;
     }
 
