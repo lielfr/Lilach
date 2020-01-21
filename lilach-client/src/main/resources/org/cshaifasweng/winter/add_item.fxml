@@ -1,8 +1,39 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
 
-
-<AnchorPane prefHeight="768.0" prefWidth="904.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.cshaifasweng.winter.AddItem">
-
+<AnchorPane prefHeight="768.0" prefWidth="904.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.cshaifasweng.winter.AddItemController">
+   <children>
+      <Label layoutX="370.0" layoutY="39.0" text="Add Item">
+         <font>
+            <Font size="36.0" />
+         </font>
+      </Label>
+      <Label layoutX="69.0" layoutY="145.0" text="Item name:" />
+      <Label layoutX="69.0" layoutY="175.0" text="Dominant color: " />
+      <Label layoutX="69.0" layoutY="207.0" text="Price:" />
+      <Label layoutX="70.0" layoutY="236.0" text="Discount: " />
+      <Label layoutX="70.0" layoutY="270.0" text="Discount Percentage: " />
+      <Label layoutX="70.0" layoutY="302.0" text="Type: " />
+      <TextField fx:id="itemNameField" layoutX="157.0" layoutY="140.0" promptText="Enter Item's name" />
+      <TextField fx:id="discountSumField" layoutX="144.0" layoutY="231.0" promptText="Enter discount sum" />
+      <TextField fx:id="discountPrecnetageField" layoutX="224.0" layoutY="265.0" promptText="Enter discount precentage" />
+      <Label layoutX="70.0" layoutY="338.0" text="Add item image:" />
+      <Button fx:id="addImgaeButton" layoutX="186.0" layoutY="333.0" mnemonicParsing="false" onAction="#addImage" text="Add Image" />
+      <ImageView fx:id="imageViewer" fitHeight="232.0" fitWidth="316.0" layoutX="304.0" layoutY="384.0" pickOnBounds="true" preserveRatio="true" />
+      <Button fx:id="cancelButton" layoutX="276.0" layoutY="660.0" mnemonicParsing="false" onAction="#cancelItemAddition" text="Canel" />
+      <Button fx:id="addItemButton" layoutX="576.0" layoutY="660.0" mnemonicParsing="false" onAction="#addItem" text="Add Item" />
+      <TextField fx:id="itemPriceField" layoutX="120.0" layoutY="202.0" promptText="Enter item's price in $" />
+      <Label layoutX="297.0" layoutY="207.0" text="\$" />
+      <Label layoutX="322.0" layoutY="236.0" text="\$" />
+      <Label layoutX="403.0" layoutY="270.0" text="\%" />
+      <ChoiceBox fx:id="dominantColorChoiceBox" layoutX="188.0" layoutY="170.0" prefWidth="150.0" />
+      <ChoiceBox fx:id="typeChiceBox" layoutX="124.0" layoutY="297.0" prefWidth="150.0" />
+   </children>
 </AnchorPane>

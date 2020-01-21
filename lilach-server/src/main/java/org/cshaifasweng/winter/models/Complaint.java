@@ -15,6 +15,8 @@ public class Complaint {
 
 //    private boolean purchased;
     private String description;
+    private boolean ordered;
+    private  String orderNum;
 
     private boolean email;
 
@@ -25,6 +27,22 @@ public class Complaint {
 
     @ManyToOne(fetch = FetchType.EAGER)
     private Customer openedBy;
+
+    public boolean isOrdered() {
+        return ordered;
+    }
+
+    public void setOrdered(boolean ordered) {
+        this.ordered = ordered;
+    }
+
+    public String getOrderNum() {
+        return orderNum;
+    }
+
+    public void setOrderNum(String orderNum) {
+        this.orderNum = orderNum;
+    }
 
     @ManyToOne(fetch = FetchType.EAGER)
     private Employee handledBy;
