@@ -42,6 +42,19 @@ public class HandleComplaintController implements Refreshable {
     @FXML
     private Label invalidInput;
 
+    @FXML
+    private TextArea complaintBox;
+
+    @FXML
+    private Label complaintOpDaLabel;
+
+    @FXML
+    private Label complaintOpTiLabel;
+
+    @FXML
+    private CheckBox purchaseMadeCheckBox;
+
+
     private boolean status = true;
 
     @FXML
