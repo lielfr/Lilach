@@ -71,4 +71,9 @@ public class ComplaintController {
                 complaint.getCompensation(), (Employee)user);
     }
 
+    @GetMapping("/complaint")
+    public List<Complaint> getComplaints() {
+        return complaintService.getComplaints();
+    }
+
 }

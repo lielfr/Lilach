@@ -2,15 +2,13 @@ package org.cshaifasweng.winter.services;
 
 import org.cshaifasweng.winter.da.ComplaintRepository;
 import org.cshaifasweng.winter.da.CustomerRepository;
-import org.cshaifasweng.winter.models.Complaint;
-import org.cshaifasweng.winter.models.Customer;
-import org.cshaifasweng.winter.models.Employee;
-import org.cshaifasweng.winter.models.Transaction;
+import org.cshaifasweng.winter.models.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
+import java.util.List;
 
 @Service
 public class ComplaintService {
@@ -61,5 +59,10 @@ public class ComplaintService {
         complaintRepository.save(complaint);
 
         return complaint;
+    }
+
+    @Transactional
+    public List<Complaint> getComplaints() {
+        return complaintRepository.findAll();
     }
 }

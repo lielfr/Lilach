@@ -8,5 +8,4 @@ import java.util.List;
 
 public interface ComplaintRepository extends JpaRepository<Complaint, Long> {
     public List<Complaint> findComplaintsByIsOpenTrueAndComplaintOpenAfter(Date date);
-
 }
