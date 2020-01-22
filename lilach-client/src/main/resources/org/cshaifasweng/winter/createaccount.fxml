@@ -8,7 +8,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="737.0" prefWidth="609.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.cshaifasweng.winter.createaccountController">
+<AnchorPane prefHeight="737.0" prefWidth="609.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.cshaifasweng.winter.CreateAccountController">
    <children>
       <Button fx:id="finishcreate" layoutX="270.0" layoutY="501.0" mnemonicParsing="false" onAction="#Fcreate" prefHeight="50.0" prefWidth="125.0" text="Finish:" />
       <Label fx:id="LFname" layoutX="87.0" layoutY="193.0" prefHeight="30.0" prefWidth="83.0" text="First Name:" />

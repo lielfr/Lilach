@@ -34,7 +34,7 @@ import java.util.regex.Pattern;
 
 
 
-public class createaccountController implements Refreshable{
+public class CreateAccountController implements Refreshable{
 
     @FXML
     private Button finishcreate;
@@ -247,7 +247,8 @@ public class createaccountController implements Refreshable{
           //  calendarB.set(calendar.YEAR,Integer.parseInt(Tbirthy.getText()));
             calendarB.set(Integer.parseInt(Tbirthd.getText()), Integer.parseInt(Tbirthm.getText()),Integer.parseInt(Tbirthy.getText()));
             Date datebirth = calendarB.getTime();
-            Customer newCustomer = new Customer(Temail.getText(),Tpassword.getText(),TFname.getText(),TLname.getText(),Tphone.getText(),Long.valueOf(Tcredit.getText()),date,Integer.parseInt(Tcvv.getText()),choice1,datebirth);
+            Customer newCustomer = new Customer(Temail.getText(),Tpassword.getText(),TFname.getText(),TLname.getText(),Tphone.getText(),Long.valueOf(Tcredit.getText()),date,Integer.parseInt(Tcvv.getText()),datebirth);
+            newCustomer.setSubscriberType(choice1);
             LilachService service = APIAccess.getService();
             service.newCustomer(newCustomer).enqueue(new Callback<Customer>() {
                 @Override
