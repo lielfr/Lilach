@@ -24,6 +24,8 @@ public final class SecurityConstants {
     public static final String ROLE_ADMIN = "ROLE_ADMIN";
     public static final String ROLE_CUSTOMER = "ROLE_CUSTOMER";
     public static final String ROLE_CUSTOMER_SERVICE_EMPLOYEE = "ROLE_CUSTOMER_SERVICE_EMPLOYEE";
+    public static final String ROLE_STORE_MANAGER = "ROLE_STORE_MANAGER";
+    public static final String ROLE_STORE_CHAIN_MANAGER = "ROLE_STORE_CHAIN_MANAGER";
 
     @Autowired
     public SecurityConstants(@Value("${security.jwt-secret}") String secret) {

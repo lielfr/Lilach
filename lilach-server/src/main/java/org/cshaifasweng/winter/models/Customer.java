@@ -3,10 +3,7 @@ package org.cshaifasweng.winter.models;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.OneToMany;
+import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
@@ -37,6 +34,13 @@ public class Customer extends User {
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "openedBy")
     private Collection<Complaint> complaints;
+
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinTable(name = "customers_stores",
+            joinColumns = @JoinColumn(name = "customer_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "store_id", referencedColumnName = "id")
+    )
+    private Collection<Store> stores;
 
 
     public Customer(String email, String password, String firstName, String lastName, String phone, Collection<Role> roles, long creditCard, Date expireDate, int cvv, Date dateOfBirth) {

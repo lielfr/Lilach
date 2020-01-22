@@ -1,9 +1,6 @@
 package org.cshaifasweng.winter.loaders;
 
-import org.cshaifasweng.winter.da.CustomerRepository;
-import org.cshaifasweng.winter.da.EmployeeRepository;
-import org.cshaifasweng.winter.da.PrivilegeRepository;
-import org.cshaifasweng.winter.da.RoleRepository;
+import org.cshaifasweng.winter.da.*;
 import org.cshaifasweng.winter.models.*;
 import org.cshaifasweng.winter.security.SecurityConstants;
 import org.springframework.context.ApplicationListener;
@@ -27,11 +24,14 @@ public class SecurityDataLoader implements ApplicationListener<ContextRefreshedE
 
     private final EmployeeRepository employeeRepository;
 
-    public SecurityDataLoader(PrivilegeRepository privilegeRepository, RoleRepository roleRepository, CustomerRepository customerRepository, EmployeeRepository employeeRepository) {
+    private final StoreRepository storeRepository;
+
+    public SecurityDataLoader(PrivilegeRepository privilegeRepository, RoleRepository roleRepository, CustomerRepository customerRepository, EmployeeRepository employeeRepository, StoreRepository storeRepository) {
         this.privilegeRepository = privilegeRepository;
         this.roleRepository = roleRepository;
         this.customerRepository = customerRepository;
         this.employeeRepository = employeeRepository;
+        this.storeRepository = storeRepository;
     }
 
     @Override
@@ -70,6 +70,20 @@ public class SecurityDataLoader implements ApplicationListener<ContextRefreshedE
                 ordersCreatePrivilege
         ));
 
+        Role storeManagerEmployeeRole = createOrReturnRole(SecurityConstants.ROLE_STORE_MANAGER, Arrays.asList(
+                complaintHandlePrivilege
+        ));
+
+        Role storeChainManagerEmployeeRole = createOrReturnRole(SecurityConstants.ROLE_STORE_CHAIN_MANAGER, Arrays.asList(
+           complaintFilePrivilege
+        ));
+
+        Store haifaUniBranch = createOrReturnStore("Haifa University Branch", "Abba Houshy Av. 199, Haifa",
+                "04-9899999", "Every day between 8AM to 8PM");
+
+        Store qiryatYamBranch = createOrReturnStore("Qiryat Yam Branch", "Moshe Sharet 12, Qiryat Yam",
+                "04-8799999", "Every day betwen 8AM to 6PM");
+
         Calendar customerBirth = Calendar.getInstance();
         customerBirth.set(2000, 1, 1);
 
@@ -83,6 +97,25 @@ public class SecurityDataLoader implements ApplicationListener<ContextRefreshedE
         Employee admin = createOrReturnEmployee("lielft@gmail.com", "AdminBaby!",
                 "Liel", "Fridman", "0509999999",
                 Collections.singletonList(adminRole));
+
+        Employee haifaUniManager = createOrReturnEmployee("haifa.uni.manager@lilach.com", "haifarocks",
+                "Aharon", "Cohen", "0500009000",
+                Collections.singletonList(storeManagerEmployeeRole));
+        haifaUniManager.setManagedStore(haifaUniBranch);
+        haifaUniManager.setAssignedStore(haifaUniBranch);
+        haifaUniBranch.setManager(haifaUniManager);
+
+        Employee qiryatYamManager = createOrReturnEmployee("qy.manager@lilach.com", "iloveky",
+                "Lilach", "Schwartzman", "0509811999",
+                Collections.singletonList(storeManagerEmployeeRole));
+        qiryatYamBranch.setManager(qiryatYamManager);
+        qiryatYamManager.setManagedStore(qiryatYamBranch);
+        qiryatYamManager.setAssignedStore(qiryatYamBranch);
+
+        employeeRepository.save(haifaUniManager);
+        employeeRepository.save(qiryatYamManager);
+        storeRepository.save(haifaUniBranch);
+        storeRepository.save(qiryatYamBranch);
 
 
         done = true;
@@ -136,5 +169,17 @@ public class SecurityDataLoader implements ApplicationListener<ContextRefreshedE
         }
 
         return employee;
+    }
+
+    @Transactional
+    Store createOrReturnStore(String name, String address, String phone, String openingHours) {
+        Store store = storeRepository.findByName(name);
+
+        if (store == null) {
+            store = new Store(name, address, phone, openingHours);
+            storeRepository.save(store);
+        }
+
+        return store;
     }
 }

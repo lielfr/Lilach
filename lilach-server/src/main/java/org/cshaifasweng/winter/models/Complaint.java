@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import javax.persistence.*;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Collection;
 import java.util.Date;
 
 @Entity
@@ -23,12 +24,16 @@ public class Complaint {
     private boolean email;
 
     private String answer;
+
     private Double compensation = 0.0;
 
     private  boolean isOpen;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Customer openedBy;
+
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private Store store;
 
     public boolean isOrdered() {
         return ordered;
@@ -157,5 +162,13 @@ public class Complaint {
 
     public void setHandledBy(Employee handledBy) {
         this.handledBy = handledBy;
+    }
+
+    public Store getStore() {
+        return store;
+    }
+
+    public void setStore(Store store) {
+        this.store = store;
     }
 }
