@@ -26,6 +26,8 @@ public class Order {
 
     private String recipientMail;
 
+    private OrderStatus status;
+
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Customer orderedBy;
 
@@ -47,6 +49,7 @@ public class Order {
         this.store = store;
         this.orderedBy = orderedBy;
         this.items = new ArrayList<>();
+        this.status = OrderStatus.PENDING;
     }
 
     public Long getId() {
@@ -143,6 +146,14 @@ public class Order {
 
     public void setOrderDate(Date orderDate) {
         this.orderDate = orderDate;
+    }
+
+    public OrderStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(OrderStatus status) {
+        this.status = status;
     }
 }
 

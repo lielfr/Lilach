@@ -1,10 +1,13 @@
 package org.cshaifasweng.winter.api;
 
+import org.cshaifasweng.winter.da.PrivilegeRepository;
+import org.cshaifasweng.winter.da.RoleRepository;
 import org.cshaifasweng.winter.exceptions.LogicalException;
 import org.cshaifasweng.winter.models.Customer;
 import org.cshaifasweng.winter.models.Order;
 import org.cshaifasweng.winter.models.OrderCompensation;
 import org.cshaifasweng.winter.models.User;
+import org.cshaifasweng.winter.security.SecurityConstants;
 import org.cshaifasweng.winter.services.OrderService;
 import org.cshaifasweng.winter.services.UserService;
 import org.springframework.security.core.Authentication;
@@ -14,11 +17,15 @@ import org.springframework.web.bind.annotation.*;
 public class OrderController {
     private final OrderService orderService;
     private final UserService userService;
+    private final RoleRepository roleRepository;
+    private final PrivilegeRepository privilegeRepository;
 
 
-    public OrderController(OrderService orderService, UserService userService) {
+    public OrderController(OrderService orderService, UserService userService, RoleRepository roleRepository, PrivilegeRepository repository) {
         this.orderService = orderService;
         this.userService = userService;
+        this.roleRepository = roleRepository;
+        this.privilegeRepository = repository;
     }
 
     @PostMapping("/order")
@@ -38,7 +45,11 @@ public class OrderController {
         if (user instanceof Customer)
             return orderService.cancelOrderCustomer(id, (Customer) user);
 
-        // TODO: Allow employees with the required permission to cancel every order without all the logic.
-        return null;
+        if (user.getRoles().stream().noneMatch(role -> role.getPrivileges().contains(
+                privilegeRepository.findByName(SecurityConstants.PRIVILEGE_ORDERS_CANCEL_ALL)))) {
+            throw new LogicalException("You don't have permission to cancel an order");
+        }
+
+        return orderService.cancelOrderEmployee(id);
     }
 }

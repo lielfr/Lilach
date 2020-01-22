@@ -76,6 +76,9 @@ public class OrderService {
         if (!order.getOrderedBy().equals(customer))
             throw new LogicalException("Cannot cancel others' order");
 
+        order.setStatus(OrderStatus.CANCELLED);
+        orderRepository.save(order);
+
         Date supplyDate = order.getSupplyDate();
 
         Calendar threeHoursFromNow = Calendar.getInstance();
@@ -102,5 +105,13 @@ public class OrderService {
         );
         customerRepository.save(customer);
         return new OrderCompensation(refund);
+    }
+
+    @Transactional
+    public OrderCompensation cancelOrderEmployee(long id) {
+        Order order = orderRepository.getOne(id);
+        order.setStatus(OrderStatus.CANCELLED);
+
+        return new OrderCompensation(0.0);
     }
 }
