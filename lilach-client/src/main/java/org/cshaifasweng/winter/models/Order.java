@@ -27,9 +27,6 @@ public class Order {
 
     public void setDelivery(boolean delivery) {this.delivery = delivery; }
 
-    public void setDeliveryAddress(String deliveryAddress) {
-        this.deliveryAddress = deliveryAddress;
-    }
     public void setRecipientPhone(long recipientPhone) {
         this.recipientPhone = recipientPhone;
     }
@@ -47,6 +44,11 @@ public class Order {
     }
 
     public String getDeliveryAddress() { return deliveryAddress;}
+
+    public void setDeliveryAddress(String deliveryAddress) {
+        this.deliveryAddress = deliveryAddress;
+    }
+
 
     public long getRecipientPhone() {
         return recipientPhone;

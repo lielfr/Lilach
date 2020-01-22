@@ -2,6 +2,7 @@ package org.cshaifasweng.winter.web;
 
 import org.cshaifasweng.winter.models.CatalogItem;
 import org.cshaifasweng.winter.models.Customer;
+import org.cshaifasweng.winter.models.Order;
 import org.cshaifasweng.winter.models.User;
 import retrofit2.Call;
 import retrofit2.http.*;
@@ -26,4 +27,7 @@ public interface LilachService {
 
     @GET("/user/me")
     Call<User> getCurrentUser();
+
+    @POST("/customer")
+    Call<Order> newOrder(@Body Order order);
 }

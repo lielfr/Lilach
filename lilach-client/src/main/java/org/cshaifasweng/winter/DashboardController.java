@@ -6,6 +6,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
+import org.cshaifasweng.winter.events.CartEvent;
 import org.cshaifasweng.winter.events.DashboardSwitchEvent;
 import org.cshaifasweng.winter.events.LoginChangeEvent;
 import org.cshaifasweng.winter.events.TokenSetEvent;
@@ -26,10 +27,6 @@ import java.util.logging.Logger;
 
 public class DashboardController implements Initializable {
     protected static final Logger log = Logger.getLogger(DashboardController.class.getName());
-
-
-    private boolean CartIsEmpty=false;   // Needs to be setup
-    private boolean LoggedIn=true;       // Needs to be setup
 
     @FXML
     private ScrollPane containerPane;
@@ -75,14 +72,15 @@ public class DashboardController implements Initializable {
     }
 
     @FXML
-    void handleComplaint(ActionEvent event) {
-        setPage("complaint_handling");
-    }
+    void handleComplaint(ActionEvent event) { setPage("complaint_handling"); }
 
     @FXML
-    void showLoginScreen(ActionEvent event) {
-        setPage("login_screen");
-    }
+    void showLoginScreen(ActionEvent event) { setPage("login_screen"); }
+
+    @FXML
+    void cartButton(ActionEvent event) {
+        EventBus.getDefault().post(new CartEvent("My Cart"));
+        setPage("Customer_Cart"); }
 
     @FXML
     void logout(ActionEvent event) {
@@ -113,20 +111,7 @@ public class DashboardController implements Initializable {
 
     }
 
-    @FXML
-     void cartButton(ActionEvent event) {
-        if (CartIsEmpty && LoggedIn) {
-            setPage("Empty_Cart_Customer");
-        }
-        else if (CartIsEmpty) {
-            setPage("Empty_Cart_Guest");
-        }
-        else  {
-            setPage("Customer_Cart");
-        }
-
-
     }
 
 
-}
+
