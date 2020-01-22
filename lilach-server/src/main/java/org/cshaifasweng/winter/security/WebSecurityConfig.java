@@ -74,6 +74,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .hasAuthority(SecurityConstants.PRIVILEGE_COMPLAINT_HANDLE)
                 .antMatchers(HttpMethod.GET, "/complaint")
                 .hasAuthority(SecurityConstants.PRIVILEGE_COMPLAINT_HANDLE)
+                .antMatchers(HttpMethod.POST, "/order")
+                .hasAuthority(SecurityConstants.PRIVILEGE_ORDERS_CREATE)
                 .anyRequest().authenticated()
                 .and()
                 .addFilter(new AuthenticationFilter(authenticationManager(), userRepository, userService))

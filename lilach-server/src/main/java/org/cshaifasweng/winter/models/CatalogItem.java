@@ -5,6 +5,9 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import javax.persistence.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static javax.persistence.CascadeType.ALL;
 
 @Entity
@@ -36,6 +39,14 @@ public class CatalogItem {
     @JsonIgnore
     private Store store;
 
+    @ManyToMany(fetch = FetchType.LAZY, cascade = ALL)
+    @JoinTable(name = "items_orders",
+            joinColumns = @JoinColumn(name = "item_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "order_id", referencedColumnName = "id")
+    )
+    @JsonIgnore
+    private List<Order> orders;
+
     public CatalogItem(double price, String description, String dominantColor,
                        byte[] picture, long availableCount, Store store) {
         this.price = price;
@@ -44,6 +55,7 @@ public class CatalogItem {
         this.picture = picture.clone();
         this.availableCount = availableCount;
         this.store = store;
+        this.orders = new ArrayList<>();
     }
 
     public long getId() {

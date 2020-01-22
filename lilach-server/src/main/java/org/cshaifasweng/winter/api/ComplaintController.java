@@ -1,17 +1,16 @@
 package org.cshaifasweng.winter.api;
 
-import org.apache.juli.logging.Log;
 import org.cshaifasweng.winter.exceptions.LogicalException;
 import org.cshaifasweng.winter.models.Complaint;
 import org.cshaifasweng.winter.models.Customer;
 import org.cshaifasweng.winter.models.Employee;
 import org.cshaifasweng.winter.models.User;
 import org.cshaifasweng.winter.services.ComplaintService;
+import org.cshaifasweng.winter.services.OrderService;
 import org.cshaifasweng.winter.services.UserService;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -56,15 +55,7 @@ public class ComplaintController {
         requiredFields.put("answer", complaint.getAnswer());
         requiredFields.put("compensation", complaint.getCompensation());
 
-        List<String> missingFields = new ArrayList<>();
-
-        for (Map.Entry<String, Object> entry : requiredFields.entrySet()) {
-            if (entry.getValue() == null)
-                missingFields.add(entry.getKey());
-        }
-
-        if (!missingFields.isEmpty())
-            throw new LogicalException("Missing field(s): " + String.join(", ", missingFields));
+        OrderService.validateRequiredFields(requiredFields);
 
 
         return complaintService.handleComplaint(id, complaint.getAnswer(),

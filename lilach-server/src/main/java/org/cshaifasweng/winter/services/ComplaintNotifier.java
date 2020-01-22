@@ -48,7 +48,7 @@ public class ComplaintNotifier {
                 Customer customer = complaint.getOpenedBy();
                 String email = complaint.getOpenedBy().getEmail();
                 mailService.sendMail(email, "Complaint Status",
-                        "<h1>Dear " + customer.getFirstName() + " " + customer.getLastName() + "</h1>,<br>" +
+                        "<h2>Dear " + customer.getFirstName() + " " + customer.getLastName() + "</h2>,<br>" +
                                 "<p>We apologize for the inconvenience, but it seems that your complaint is taking" +
                                 "a bit of time to handle." +
                                 "Please note that the Lilach store chain" +
@@ -72,7 +72,6 @@ public class ComplaintNotifier {
 
             toNotify.forEach((employee -> {
                 mailService.sendMail(employee.getEmail(), "URGENT: Unhandled complaint!",
-                        "<h1>Found unhandled complaint past due time.</h1><br>" +
                                 "<p>Please handle complaint no. " + complaint.getId() + "urgently.</p>");
             }));
         }
