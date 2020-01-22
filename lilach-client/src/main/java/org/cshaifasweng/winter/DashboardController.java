@@ -80,6 +80,9 @@ public class DashboardController implements Initializable {
     }
 
     @FXML
+    void createaccount(ActionEvent event) {setPage("createaccount");}
+
+    @FXML
     void showLoginScreen(ActionEvent event) {
         setPage("login_screen");
     }

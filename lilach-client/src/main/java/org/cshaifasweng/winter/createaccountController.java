@@ -1,5 +1,8 @@
 package org.cshaifasweng.winter;
+import java.util.Calendar;
+import  java.util.Date;
 
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -10,20 +13,34 @@ import javafx.scene.control.TextField;
 import javafx.fxml.Initializable;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import org.cshaifasweng.winter.events.DashboardSwitchEvent;
+import org.cshaifasweng.winter.models.Customer;
+import org.cshaifasweng.winter.models.SubscriberType;
+import org.cshaifasweng.winter.web.APIAccess;
+import org.cshaifasweng.winter.web.LilachService;
+import org.greenrobot.eventbus.EventBus;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 import java.time.YearMonth;
 
 import javax.swing.*;
 import java.net.URL;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.ResourceBundle;
 import java.util.regex.Pattern;
 
-public class createaccountController implements Initializable{
+
+
+public class createaccountController implements Refreshable{
 
     @FXML
     private Button finishcreate;
 
     @FXML
-    private Label Lname;
+    private Label LFname;
 
     @FXML
     private Label Lid;
@@ -50,7 +67,7 @@ public class createaccountController implements Initializable{
     private PasswordField Tpassword;
 
     @FXML
-    private TextField Tname;
+    private TextField TFname;
 
     @FXML
     private TextField Temail;
@@ -75,8 +92,7 @@ public class createaccountController implements Initializable{
 
     @FXML
     private Label Lmembership;
-    @FXML
-    private Label Tmessage;
+
     @FXML
     private Label Lheadline;
 
@@ -84,7 +100,7 @@ public class createaccountController implements Initializable{
     private Label LEMembership;
 
     @FXML
-    private Label LEName;
+    private Label LEFName;
 
     @FXML
     private Label LEEmail;
@@ -106,16 +122,55 @@ public class createaccountController implements Initializable{
 
     @FXML
     private Label LEPassword;
+
     @FXML
     private Label Lseprate;
+
+    @FXML
+    private Label Lseprate1;
+
+    @FXML
+    private Label Lseprate2;
 
     @FXML
     private TextField TvaildY;
 
     @FXML
+    private Label Tmessage;
+
+    @FXML
+    private Label LLname;
+
+    @FXML
+    private TextField TLname;
+
+    @FXML
+    private Label Ldateofbirth;
+
+    @FXML
+    private TextField Tbirthd;
+
+    @FXML
+    private TextField Tbirthm;
+
+    @FXML
+    private TextField Tbirthy;
+
+    @FXML
+    private Label LEFName1;
+
+    @FXML
+    private Label LELName;
+
+    @FXML
+    private Label LEDateofbirth;
+
+    @FXML
     void Fcreate(ActionEvent event) {
         Tmessage.setVisible(false);
-        LEName.setText("");
+        LEFName.setText("");
+        LELName.setText("");
+        LEDateofbirth.setText("");
         LEEmail.setText("");
         LEId.setText("");
         LEPhone.setText("");
@@ -123,27 +178,43 @@ public class createaccountController implements Initializable{
         LEVaild.setText("");
         LECvv.setText("");
         LEPassword.setText("");
-        Cmembership.setValue("");
+
         LEMembership.setText("");
         if((MissField()!=0) ){
+            Cmembership.setValue("");
             Tmessage.setText("Cant create account");
             Tmessage.setVisible(true);
         }
         if(MistakeField()!=0){
+            Cmembership.setValue("");
             Tmessage.setText("Cant create account");
             Tmessage.setVisible(true);
         }
         else if(MissField()==0 && MistakeField()==0){
-
-            //need to add send details to server.
-
+            String choice = Cmembership.getValue().toString();
+            SubscriberType choice1;
+            if(choice.equals("None")){
+                choice1 = null;
+            }
+            if(choice.equals("Month")){
+                choice1= SubscriberType.MONTHLY;
+            }
+            else
+                choice1= SubscriberType.YEARLY;
+            Cmembership.setValue("");
             //clean all the page only message on the page
-            Tname.setVisible(false);
-            Lname.setVisible(false);
+            TFname.setVisible(false);
+            LFname.setVisible(false);
+            TLname.setVisible(false);
+            LLname.setVisible(false);
             Temail.setVisible(false);
             Lemail.setVisible(false);
             Tid.setVisible(false);
             Lid.setVisible(false);
+            Tbirthd.setVisible(false);
+            Tbirthm.setVisible(false);
+            Tbirthy.setVisible(false);
+            Ldateofbirth.setVisible(false);
             Tphone.setVisible(false);
             Lphone.setVisible(false);
             Tcredit.setVisible(false);
@@ -160,17 +231,53 @@ public class createaccountController implements Initializable{
             Tmessage.setVisible(true);
             finishcreate.setVisible(false);
             Lseprate.setVisible(false);
+            Lseprate1.setVisible(false);
+            Lseprate2.setVisible(false);
             Lmembership.setVisible(false);
             Lheadline.setVisible(false);
 
+            Calendar calendar = Calendar.getInstance();
+            calendar.set(calendar.MONTH,Integer.parseInt(TvaildM.getText()));
+            calendar.set(calendar.YEAR,Integer.parseInt(TvaildY.getText()));
+          // calendar.set(Integer.parseInt(TvaildY.getText()),Integer.parseInt(TvaildY.getText()));
+            Date date = calendar.getTime();
+
+            Calendar calendarB = Calendar.getInstance();
+           // calendarB.set(calendar.MONTH,Integer.parseInt(Tbirthm.getText()));
+          //  calendarB.set(calendar.YEAR,Integer.parseInt(Tbirthy.getText()));
+            calendarB.set(Integer.parseInt(Tbirthd.getText()), Integer.parseInt(Tbirthm.getText()),Integer.parseInt(Tbirthy.getText()));
+            Date datebirth = calendarB.getTime();
+            Customer newCustomer = new Customer(Temail.getText(),Tpassword.getText(),TFname.getText(),TLname.getText(),Tphone.getText(),Long.valueOf(Tcredit.getText()),date,Integer.parseInt(Tcvv.getText()),choice1,datebirth);
+            LilachService service = APIAccess.getService();
+            service.newCustomer(newCustomer).enqueue(new Callback<Customer>() {
+                @Override
+                public void onResponse(Call<Customer> call, Response<Customer> response) {
+                    if (response.code() == 200) {
+                        Platform.runLater(() -> {
+                            EventBus.getDefault().post(new DashboardSwitchEvent("login_screen"));
+                        });
+
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<Customer> call, Throwable t) {
+
+                }
+            });
         }
     }
 
     public int MissField(){
         int count=0;
-        if (Tname.getText().isEmpty())
+        if (TFname.getText().isEmpty())
         {
-            LEName.setText("Please insert name");
+            LEFName.setText("Please insert first name");
+            count++;
+        }
+        if (TLname.getText().isEmpty())
+        {
+            LELName.setText("Please insert last name");
             count++;
         }
         if (Temail.getText().isEmpty())
@@ -181,6 +288,21 @@ public class createaccountController implements Initializable{
         if (Tid.getText().isEmpty())
         {
             LEId.setText("Please insert id");
+            count++;
+        }
+        if (Tbirthd.getText().isEmpty())
+        {
+            LEDateofbirth.setText("Please insert date of birth");
+            count++;
+        }
+        if (Tbirthm.getText().isEmpty())
+        {
+            LEDateofbirth.setText("Please insert date of birth");
+            count++;
+        }
+        if (Tbirthy.getText().isEmpty())
+        {
+            LEDateofbirth.setText("Please insert date of birth");
             count++;
         }
         if (Tphone.getText().isEmpty())
@@ -218,52 +340,48 @@ public class createaccountController implements Initializable{
         }
         return count;
     }
-    public int MistakeField(){
-        int countMistake=0;
+    public int MistakeField() {
+        int countMistake = 0;
         String check;
-        check = Tname.getText();
-        if ((Pattern.matches("[a-zA-Z]+",check)==false) && (check.isEmpty()==false))
-        {
-            LEName.setText("Name is incorrect");
+        check = TFname.getText();
+        if ((Pattern.matches("[a-zA-Z]+", check) == false) && (check.isEmpty() == false)) {
+            LEFName.setText("First name is incorrect");
             countMistake++;
-        }//finish check Tname
-
-        check=Temail.getText();
-        if(check.matches("(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|\"(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21\\x23-\\x5b\\x5d-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])*\")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21-\\x5a\\x53-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])+)\\])")==false  && (check.isEmpty()==false)){
+        }//finish check first name
+        check = TLname.getText();
+        if ((Pattern.matches("[a-zA-Z]+", check) == false) && (check.isEmpty() == false)) {
+            LELName.setText("Last name is incorrect");
+            countMistake++;
+        }//finish check last name
+        check = Temail.getText();
+        if (check.matches("(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|\"(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21\\x23-\\x5b\\x5d-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])*\")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21-\\x5a\\x53-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])+)\\])") == false && (check.isEmpty() == false)) {
             LEEmail.setText("Email is incorrect");
         }//finsh check email
-        check=Tid.getText();
-        if ((check.length()!=9) && (check.isEmpty()==false))
-        {
+        check = Tid.getText();
+        if ((check.length() != 9) && (check.isEmpty() == false)) {
             LEId.setText("Id is incorrect");
             countMistake++;
-        }
-        else if(check.length()==9){
-            for(int i=0;i<check.length();i++) {
-                if ((check.charAt(i) < '0') || (check.charAt(i) > '9'))
-                {
+        } else if (check.length() == 9) {
+            for (int i = 0; i < check.length(); i++) {
+                if ((check.charAt(i) < '0') || (check.charAt(i) > '9')) {
                     LEId.setText("Id is incorrect");
                     countMistake++;
                 }
             }
         }//finish check Tid
-        check=Tphone.getText();
-        if ((Pattern.matches("[a-zA-Z]+",check)==true) && (check.isEmpty()==false))
-        {
+        check = Tphone.getText();
+        if ((Pattern.matches("^((\\+|00)?972\\-?|0)(([23489]|[57]\\d)\\-?\\d{7})$", check) == false) && (check.isEmpty() == false)) {
             LEPhone.setText("Phone number is incorrect");
             countMistake++;
         }//finish check Tphone (maybe check length of tphone???
-        check=Tcredit.getText();
-        if ((check.length()!=16) && (check.isEmpty()==false))
-        {
+        check = Tcredit.getText();
+        if ((check.length() != 16) && (check.isEmpty() == false)) {
 
             LECredit.setText("Credit card  is incorrect");
             countMistake++;
-        }
-        else if(check.length()==16) {
-            for(int i=0;i<check.length();i++)
-            {
-                if ((check.charAt(i)<'0') || (check.charAt(i)>'9')){
+        } else if (check.length() == 16) {
+            for (int i = 0; i < check.length(); i++) {
+                if ((check.charAt(i) < '0') || (check.charAt(i) > '9')) {
                     LECredit.setText("Credit card is incorrect");
                     countMistake++;
                 }
@@ -271,98 +389,206 @@ public class createaccountController implements Initializable{
             }
         }//finish check Tcredit
 
-        check=TvaildM.getText();
-        if((check.length()>2)&&(check.isEmpty()==false))
-        {
-            LEVaild.setText("Expiry date of credit card is incorrect");
-        }
-        else if(check.length()==1){
-            if (Integer.parseInt(check)>0 &&Integer.parseInt(check)<=9){
-                switch ( Integer.parseInt(check)){
+        check = Tbirthd.getText();
+        if ((check.length() > 2) && (check.isEmpty() == false)) {
+            LEDateofbirth.setText("Date of birth is incorrect");
+        } else if (check.length() == 1) {
+            if (Integer.parseInt(check) > 0 && Integer.parseInt(check) <= 9) {
+                switch (Integer.parseInt(check)) {
                     case 1:
-                        check="01";
+                        check = "01";
                         break;
                     case 2:
-                        check="02";
+                        check = "02";
                         break;
                     case 3:
-                        check="03";
+                        check = "03";
                         break;
                     case 4:
-                        check="04";
+                        check = "04";
                         break;
                     case 5:
-                        check="05";
+                        check = "05";
                         break;
                     case 6:
-                        check="06";
+                        check = "06";
                         break;
                     case 7:
-                        check="07";
+                        check = "07";
                         break;
                     case 8:
-                        check="08";
+                        check = "08";
                         break;
                     case 9:
-                        check="09";
+                        check = "09";
                         break;
                 }
-                TvaildM.setText(check);
-                if ((Integer.parseInt(check))<(YearMonth.now().getMonthValue()) ) {
-                    LEVaild.setText("Expiry date of credit card is incorrect");
-                    countMistake++;
-                }
+                Tbirthd.setText(check);
             }
-            else{
-                LEVaild.setText("Expiry date of credit card is incorrect");
+        } else if (check.length() == 2) {
+            if (Integer.parseInt(check) > 31) {
+                LEDateofbirth.setText("Date of birth is incorrect");
                 countMistake++;
             }
+
         }
-        else if(check.length()==2) {
-            for (int i = 0; i < check.length(); i++) {
-                if ((Integer.parseInt(check))<(YearMonth.now().getMonthValue()) ) {
+            check = Tbirthm.getText();
+            if ((check.length() > 2) && (check.isEmpty() == false)) {
+                LEDateofbirth.setText("Date of birth is incorrect");
+            } else if (check.length() == 1) {
+                if (Integer.parseInt(check) > 0 && Integer.parseInt(check) <= 9) {
+                    switch (Integer.parseInt(check)) {
+                        case 1:
+                            check = "01";
+                            break;
+                        case 2:
+                            check = "02";
+                            break;
+                        case 3:
+                            check = "03";
+                            break;
+                        case 4:
+                            check = "04";
+                            break;
+                        case 5:
+                            check = "05";
+                            break;
+                        case 6:
+                            check = "06";
+                            break;
+                        case 7:
+                            check = "07";
+                            break;
+                        case 8:
+                            check = "08";
+                            break;
+                        case 9:
+                            check = "09";
+                            break;
+                    }
+                    Tbirthm.setText(check);
+
+                }
+            } else if (check.length() == 2) {
+
+                    if ((Integer.parseInt(check)) >12) {
+                        LEDateofbirth.setText("Date of birth is incorrect");
+                        countMistake++;
+                    }
+            }
+            Date date=new Date();
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(date);
+            check = Tbirthy.getText();
+            String checkM=Tbirthm.getText();
+            String checkD=Tbirthd.getText();
+            if ((check.length() != 4) && (check.isEmpty() == false)) {
+                LEDateofbirth.setText("Date of birth is incorrect");
+            } else if (check.length() == 4) {
+           //     for (int i = 0; i < check.length(); i++) {
+                    if ((Integer.parseInt(check)) > (YearMonth.now().getYear())) {
+                        LEDateofbirth.setText("Date of birth is incorrect");
+                        countMistake++;
+                    }
+                    else if ((Integer.parseInt(check)) == (YearMonth.now().getYear())) {
+                        if (((Integer.parseInt(checkM)) > (YearMonth.now().getMonthValue()))){
+                            LEDateofbirth.setText("Date of birth is incorrect");
+                            countMistake++;
+                        }
+                        else if ((Integer.parseInt(checkM)) == (YearMonth.now().getMonthValue())){
+                            if (((Integer.parseInt(checkD)) > (calendar.get(Calendar.DAY_OF_MONTH)))){
+                                LEDateofbirth.setText("Date of birth is incorrect");
+                                countMistake++;
+                            }
+                        }
+
+                    }
+               // }
+            }
+
+            check = TvaildM.getText();
+            if ((check.length() > 2) && (check.isEmpty() == false)) {
+                LEVaild.setText("Expiry date of credit card is incorrect");
+            } else if (check.length() == 1) {
+                if (Integer.parseInt(check) > 0 && Integer.parseInt(check) <= 9) {
+                    switch (Integer.parseInt(check)) {
+                        case 1:
+                            check = "01";
+                            break;
+                        case 2:
+                            check = "02";
+                            break;
+                        case 3:
+                            check = "03";
+                            break;
+                        case 4:
+                            check = "04";
+                            break;
+                        case 5:
+                            check = "05";
+                            break;
+                        case 6:
+                            check = "06";
+                            break;
+                        case 7:
+                            check = "07";
+                            break;
+                        case 8:
+                            check = "08";
+                            break;
+                        case 9:
+                            check = "09";
+                            break;
+                    }
+                    TvaildM.setText(check);
+                    if ((Integer.parseInt(check)) < (YearMonth.now().getMonthValue())) {
+                        LEVaild.setText("Expiry date of credit card is incorrect");
+                        countMistake++;
+                    }
+                } else {
                     LEVaild.setText("Expiry date of credit card is incorrect");
                     countMistake++;
                 }
-            }
-        }
-        check=TvaildY.getText();
-        if((check.length()!=4)&&(check.isEmpty()==false))
-        {
-            LEVaild.setText("Expiry date of credit card is incorrect");
-        }
-        else if(check.length()==4) {
-            for (int i = 0; i < check.length(); i++) {
-                if ((Integer.parseInt(check))<(YearMonth.now().getYear()) ) {
-                    LEVaild.setText("Expiry date of credit card is incorrect");
-                    countMistake++;
+            } else if (check.length() == 2) {
+                for (int i = 0; i < check.length(); i++) {
+                    if ((Integer.parseInt(check)) < (YearMonth.now().getMonthValue())) {
+                        LEVaild.setText("Expiry date of credit card is incorrect");
+                        countMistake++;
+                    }
                 }
             }
-        }
-        check=Tcvv.getText();
-        if ((check.length()!=3) && (check.isEmpty()==false))
-        {
-            LECvv.setText("Cvv is incorrect");
-            countMistake++;
-        }
-        else if(check.length()==3){
-            for(int i=0;i<check.length();i++)
-            {
-                if ((check.charAt(i)<'0') || (check.charAt(i)>'9')){
-                    LECvv.setText("Cvv is incorrect");
-                    countMistake++;
+            check = TvaildY.getText();
+            if ((check.length() != 4) && (check.isEmpty() == false)) {
+                LEVaild.setText("Expiry date of credit card is incorrect");
+            } else if (check.length() == 4) {
+                for (int i = 0; i < check.length(); i++) {
+                    if ((Integer.parseInt(check)) < (YearMonth.now().getYear())) {
+                        LEVaild.setText("Expiry date of credit card is incorrect");
+                        countMistake++;
+                    }
                 }
-
             }
-        }//finish check Tcvv
-        return countMistake;
+            check = Tcvv.getText();
+            if ((check.length() != 3) && (check.isEmpty() == false)) {
+                LECvv.setText("Cvv is incorrect");
+                countMistake++;
+            } else if (check.length() == 3) {
+                for (int i = 0; i < check.length(); i++) {
+                    if ((check.charAt(i) < '0') || (check.charAt(i) > '9')) {
+                        LECvv.setText("Cvv is incorrect");
+                        countMistake++;
+                    }
 
-    }
+                }
+            }//finish check Tcvv
+            return countMistake;
+
+        }
 
     private ObservableList<String> dbTypeList = FXCollections.observableArrayList("None","Month","Year");
 
     @Override
-    public void initialize(URL location, ResourceBundle resources) {
+    public void refresh() {
         Cmembership.setItems(dbTypeList);
     }
 }
