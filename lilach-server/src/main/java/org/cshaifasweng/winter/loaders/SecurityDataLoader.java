@@ -84,7 +84,8 @@ public class SecurityDataLoader implements ApplicationListener<ContextRefreshedE
         ));
 
         Role storeChainManagerEmployeeRole = createOrReturnRole(SecurityConstants.ROLE_STORE_CHAIN_MANAGER, Arrays.asList(
-           complaintFilePrivilege
+                complaintFilePrivilege,
+                usersEditPrivilege
         ));
 
         Store haifaUniBranch = createOrReturnStore("Haifa University Branch", "Abba Houshy Av. 199, Haifa",
@@ -100,7 +101,7 @@ public class SecurityDataLoader implements ApplicationListener<ContextRefreshedE
         customerCreditCardExpire.set(2022, 1, 1);
 
         Customer customer = createOrReturnCustomer("customer@lilach.com", "moo",
-                Collections.singletonList(customerRole),"Lilach", "Customer", "0509999999",
+                Collections.singletonList(customerRole), "Lilach", "Customer", "0509999999",
                 11, customerCreditCardExpire.getTime(), 222, customerBirth.getTime());
 
         Employee admin = createOrReturnEmployee("lielft@gmail.com", "AdminBaby!",
@@ -125,7 +126,6 @@ public class SecurityDataLoader implements ApplicationListener<ContextRefreshedE
         employeeRepository.save(qiryatYamManager);
         storeRepository.save(haifaUniBranch);
         storeRepository.save(qiryatYamBranch);
-
 
 
         List<CatalogItem> items = new ArrayList<>();
@@ -155,7 +155,7 @@ public class SecurityDataLoader implements ApplicationListener<ContextRefreshedE
     }
 
     @Transactional
-    Privilege createOrReturnPrivilege (String name) {
+    Privilege createOrReturnPrivilege(String name) {
         Privilege privilege = privilegeRepository.findByName(name);
         if (privilege == null) {
             privilege = new Privilege(name);
@@ -166,7 +166,7 @@ public class SecurityDataLoader implements ApplicationListener<ContextRefreshedE
     }
 
     @Transactional
-    Role createOrReturnRole (String name, Collection<Privilege> privileges) {
+    Role createOrReturnRole(String name, Collection<Privilege> privileges) {
         Role role = roleRepository.findByName(name);
         if (role == null) {
             role = new Role(name, privileges);
@@ -218,7 +218,7 @@ public class SecurityDataLoader implements ApplicationListener<ContextRefreshedE
 
     @Transactional
     CatalogItem createOrReturnItem(double price, String description, String dominantColor,
-                                      byte[] picture, long availableCount, Store store) {
+                                   byte[] picture, long availableCount, Store store) {
         CatalogItem item = catalogItemsRepository.findByStoreAndDescription(store, description);
 
         if (item == null) {
