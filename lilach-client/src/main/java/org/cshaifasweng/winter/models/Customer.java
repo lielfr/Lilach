@@ -12,6 +12,10 @@ public class Customer extends User {
 
     private Long creditCard;
 
+    private Date expireDate;
+
+    private Integer cvv;
+
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
     private Date dateOfBirth;
 
@@ -25,11 +29,15 @@ public class Customer extends User {
     private Collection<Complaint> complaints;
 
 
-    public Customer(String email, String password, String firstName, String lastName, String phone, long creditCard, Date dateOfBirth) {
+    public Customer(String email, String password, String firstName, String lastName, String phone, long creditCard, Date expireDate,
+                    int cvv, SubscriberType subscriberType, Date dateOfBirth) {
         super(email, password, firstName, lastName, phone);
         this.creditCard = creditCard;
         this.totalBalance = 0.0;
         this.dateOfBirth = dateOfBirth;
+        this.expireDate = expireDate;
+        this.cvv = cvv;
+        this.subscriberType = subscriberType;
     }
 
     public Customer() {
@@ -38,7 +46,7 @@ public class Customer extends User {
     @Override
     public User copy() {
         Customer copy = new Customer(email, password, firstName, lastName, phone,
-                creditCard, (Date)dateOfBirth.clone());
+                creditCard, expireDate, cvv, subscriberType, (Date)dateOfBirth.clone());
         return copy;
     }
 
@@ -100,6 +108,22 @@ public class Customer extends User {
 
     public void setComplaints(Collection<Complaint> complaints) {
         this.complaints = complaints;
+    }
+
+    public Date getExpireDate() {
+        return expireDate;
+    }
+
+    public void setExpireDate(Date expireDate) {
+        this.expireDate = expireDate;
+    }
+
+    public Integer getCvv() {
+        return cvv;
+    }
+
+    public void setCvv(Integer cvv) {
+        this.cvv = cvv;
     }
 }
 
