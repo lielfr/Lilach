@@ -1,8 +1,11 @@
 package org.cshaifasweng.winter.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import javax.persistence.*;
+
+import static javax.persistence.CascadeType.ALL;
 
 @Entity
 @JsonIgnoreProperties({"hibernateLazyInitializer"})
@@ -29,13 +32,18 @@ public class CatalogItem {
 
     private long itemsSold = 0;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JsonIgnore
+    private Store store;
+
     public CatalogItem(double price, String description, String dominantColor,
-                       byte[] picture, long availableCount) {
+                       byte[] picture, long availableCount, Store store) {
         this.price = price;
         this.description = description;
         this.dominantColor = dominantColor;
         this.picture = picture.clone();
         this.availableCount = availableCount;
+        this.store = store;
     }
 
     public long getId() {
@@ -94,5 +102,11 @@ public class CatalogItem {
         this.itemsSold = itemsSold;
     }
 
+    public Store getStore() {
+        return store;
+    }
 
+    public void setStore(Store store) {
+        this.store = store;
+    }
 }

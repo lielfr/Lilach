@@ -1,9 +1,7 @@
 package org.cshaifasweng.winter.loaders;
 
-import org.cshaifasweng.winter.da.CustomerRepository;
-import org.cshaifasweng.winter.da.EmployeeRepository;
-import org.cshaifasweng.winter.da.PrivilegeRepository;
-import org.cshaifasweng.winter.da.RoleRepository;
+import org.cshaifasweng.winter.SpringServer;
+import org.cshaifasweng.winter.da.*;
 import org.cshaifasweng.winter.models.*;
 import org.cshaifasweng.winter.security.SecurityConstants;
 import org.springframework.context.ApplicationListener;
@@ -12,6 +10,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.IOException;
 import java.util.*;
 
 @Component
@@ -27,11 +26,21 @@ public class SecurityDataLoader implements ApplicationListener<ContextRefreshedE
 
     private final EmployeeRepository employeeRepository;
 
-    public SecurityDataLoader(PrivilegeRepository privilegeRepository, RoleRepository roleRepository, CustomerRepository customerRepository, EmployeeRepository employeeRepository) {
+    private final StoreRepository storeRepository;
+
+    private final CatalogItemsRepository catalogItemsRepository;
+
+    public SecurityDataLoader(PrivilegeRepository privilegeRepository, RoleRepository roleRepository, CustomerRepository customerRepository, EmployeeRepository employeeRepository, StoreRepository storeRepository, CatalogItemsRepository catalogItemsRepository) {
         this.privilegeRepository = privilegeRepository;
         this.roleRepository = roleRepository;
         this.customerRepository = customerRepository;
         this.employeeRepository = employeeRepository;
+        this.storeRepository = storeRepository;
+        this.catalogItemsRepository = catalogItemsRepository;
+    }
+
+    private byte[] imageAsBytes(String name) throws IOException {
+        return SpringServer.class.getResourceAsStream(name).readAllBytes();
     }
 
     @Override
@@ -70,6 +79,20 @@ public class SecurityDataLoader implements ApplicationListener<ContextRefreshedE
                 ordersCreatePrivilege
         ));
 
+        Role storeManagerEmployeeRole = createOrReturnRole(SecurityConstants.ROLE_STORE_MANAGER, Arrays.asList(
+                complaintHandlePrivilege
+        ));
+
+        Role storeChainManagerEmployeeRole = createOrReturnRole(SecurityConstants.ROLE_STORE_CHAIN_MANAGER, Arrays.asList(
+           complaintFilePrivilege
+        ));
+
+        Store haifaUniBranch = createOrReturnStore("Haifa University Branch", "Abba Houshy Av. 199, Haifa",
+                "04-9899999", "Every day between 8AM to 8PM");
+
+        Store qiryatYamBranch = createOrReturnStore("Qiryat Yam Branch", "Moshe Sharet 12, Qiryat Yam",
+                "04-8799999", "Every day betwen 8AM to 6PM");
+
         Calendar customerBirth = Calendar.getInstance();
         customerBirth.set(2000, 1, 1);
 
@@ -84,6 +107,49 @@ public class SecurityDataLoader implements ApplicationListener<ContextRefreshedE
                 "Liel", "Fridman", "0509999999",
                 Collections.singletonList(adminRole));
 
+        Employee haifaUniManager = createOrReturnEmployee("haifa.uni.manager@lilach.com", "haifarocks",
+                "Aharon", "Cohen", "0500009000",
+                Collections.singletonList(storeManagerEmployeeRole));
+        haifaUniManager.setManagedStore(haifaUniBranch);
+        haifaUniManager.setAssignedStore(haifaUniBranch);
+        haifaUniBranch.setManager(haifaUniManager);
+
+        Employee qiryatYamManager = createOrReturnEmployee("qy.manager@lilach.com", "iloveky",
+                "Lilach", "Schwartzman", "0509811999",
+                Collections.singletonList(storeManagerEmployeeRole));
+        qiryatYamBranch.setManager(qiryatYamManager);
+        qiryatYamManager.setManagedStore(qiryatYamBranch);
+        qiryatYamManager.setAssignedStore(qiryatYamBranch);
+
+        employeeRepository.save(haifaUniManager);
+        employeeRepository.save(qiryatYamManager);
+        storeRepository.save(haifaUniBranch);
+        storeRepository.save(qiryatYamBranch);
+
+
+
+        List<CatalogItem> items = new ArrayList<>();
+        try {
+            items.add(createOrReturnItem(25, "Just another flower",
+                    "Blue",
+                    imageAsBytes("flower1.jpg"),
+                    4, qiryatYamBranch));
+            items.add(createOrReturnItem(15, "A cheaper flower",
+                    "White",
+                    imageAsBytes("flower2.jpg"),
+                    3, qiryatYamBranch));
+            items.add(createOrReturnItem(30, "Classic Rose", "Red",
+                    imageAsBytes("flower3.jpg"),
+                    1, haifaUniBranch));
+            items.add(createOrReturnItem(10, "Cheapest flower available", "White",
+                    imageAsBytes("flower4.jpg"),
+                    5, haifaUniBranch));
+            items.add(createOrReturnItem(40, "A flower in the sun (pun intended)", "Yellow",
+                    imageAsBytes("flower5.jpg"),
+                    0, haifaUniBranch));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
         done = true;
     }
@@ -136,5 +202,30 @@ public class SecurityDataLoader implements ApplicationListener<ContextRefreshedE
         }
 
         return employee;
+    }
+
+    @Transactional
+    Store createOrReturnStore(String name, String address, String phone, String openingHours) {
+        Store store = storeRepository.findByName(name);
+
+        if (store == null) {
+            store = new Store(name, address, phone, openingHours);
+            storeRepository.save(store);
+        }
+
+        return store;
+    }
+
+    @Transactional
+    CatalogItem createOrReturnItem(double price, String description, String dominantColor,
+                                      byte[] picture, long availableCount, Store store) {
+        CatalogItem item = catalogItemsRepository.findByStoreAndDescription(store, description);
+
+        if (item == null) {
+            item = new CatalogItem(price, description, dominantColor, picture, availableCount, store);
+            catalogItemsRepository.save(item);
+        }
+
+        return item;
     }
 }
