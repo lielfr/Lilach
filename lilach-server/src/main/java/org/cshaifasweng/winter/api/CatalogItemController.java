@@ -1,8 +1,10 @@
 package org.cshaifasweng.winter.api;
 
 import org.cshaifasweng.winter.da.CatalogItemsRepository;
+import org.cshaifasweng.winter.da.StoreRepository;
+import org.cshaifasweng.winter.exceptions.LogicalException;
 import org.cshaifasweng.winter.models.CatalogItem;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.cshaifasweng.winter.models.Store;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -11,14 +13,23 @@ import java.util.List;
 public class CatalogItemController {
 
     private final CatalogItemsRepository repository;
+    private final StoreRepository storeRepository;
 
-    public CatalogItemController(CatalogItemsRepository repository) {
+    public CatalogItemController(CatalogItemsRepository repository, StoreRepository storeRepository) {
         this.repository = repository;
+        this.storeRepository = storeRepository;
     }
 
     @GetMapping("/catalog")
     public List<CatalogItem> getItems() {
         return repository.findAll();
+    }
+
+    @GetMapping("/store/{id}/catalog")
+    public List<CatalogItem> getItemsByStore(@PathVariable("id") long id) {
+        Store store = storeRepository.getOne(id);
+
+        return repository.findByStore(store);
     }
 
     @PutMapping("/catalog/{id}")

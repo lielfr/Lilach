@@ -62,6 +62,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .hasAuthority(SecurityConstants.PRIVILEGE_CATALOG_EDIT)
                 .antMatchers(HttpMethod.GET, "/catalog", SecurityConstants.AUTH_LOGIN_URL)
                 .permitAll()
+                .antMatchers(HttpMethod.GET, "/store/**/catalog")
+                .permitAll()
                 .antMatchers(HttpMethod.POST, "/customer")
                 .permitAll()
                 .antMatchers(HttpMethod.POST, "/complaint")

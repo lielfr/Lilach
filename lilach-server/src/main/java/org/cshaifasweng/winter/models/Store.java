@@ -18,18 +18,21 @@ public class Store {
 
     private String openingHours;
 
-    @OneToOne(targetEntity = Employee.class, cascade = CascadeType.ALL,
+    @OneToOne(targetEntity = Employee.class,
             fetch = FetchType.LAZY)
     private Employee manager;
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "assignedStore")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "assignedStore")
     private List<Employee> employees;
 
-    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @ManyToMany(fetch = FetchType.LAZY)
     private List<Customer> customers;
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "store")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "store")
     private List<Complaint> complaints;
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "store")
+    private List<CatalogItem> catalogItems;
 
     public Store() {
 
@@ -51,6 +54,7 @@ public class Store {
         this.employees = new ArrayList<>();
         this.customers = new ArrayList<>();
         this.complaints = new ArrayList<>();
+        this.catalogItems = new ArrayList<>();
     }
 
     public Long getId() {

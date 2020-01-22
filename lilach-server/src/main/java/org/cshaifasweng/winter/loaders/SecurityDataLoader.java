@@ -1,5 +1,6 @@
 package org.cshaifasweng.winter.loaders;
 
+import org.cshaifasweng.winter.SpringServer;
 import org.cshaifasweng.winter.da.*;
 import org.cshaifasweng.winter.models.*;
 import org.cshaifasweng.winter.security.SecurityConstants;
@@ -9,6 +10,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.IOException;
 import java.util.*;
 
 @Component
@@ -26,12 +28,19 @@ public class SecurityDataLoader implements ApplicationListener<ContextRefreshedE
 
     private final StoreRepository storeRepository;
 
-    public SecurityDataLoader(PrivilegeRepository privilegeRepository, RoleRepository roleRepository, CustomerRepository customerRepository, EmployeeRepository employeeRepository, StoreRepository storeRepository) {
+    private final CatalogItemsRepository catalogItemsRepository;
+
+    public SecurityDataLoader(PrivilegeRepository privilegeRepository, RoleRepository roleRepository, CustomerRepository customerRepository, EmployeeRepository employeeRepository, StoreRepository storeRepository, CatalogItemsRepository catalogItemsRepository) {
         this.privilegeRepository = privilegeRepository;
         this.roleRepository = roleRepository;
         this.customerRepository = customerRepository;
         this.employeeRepository = employeeRepository;
         this.storeRepository = storeRepository;
+        this.catalogItemsRepository = catalogItemsRepository;
+    }
+
+    private byte[] imageAsBytes(String name) throws IOException {
+        return SpringServer.class.getResourceAsStream(name).readAllBytes();
     }
 
     @Override
@@ -118,6 +127,30 @@ public class SecurityDataLoader implements ApplicationListener<ContextRefreshedE
         storeRepository.save(qiryatYamBranch);
 
 
+
+        List<CatalogItem> items = new ArrayList<>();
+        try {
+            items.add(createOrReturnItem(25, "Just another flower",
+                    "Blue",
+                    imageAsBytes("flower1.jpg"),
+                    4, qiryatYamBranch));
+            items.add(createOrReturnItem(15, "A cheaper flower",
+                    "White",
+                    imageAsBytes("flower2.jpg"),
+                    3, qiryatYamBranch));
+            items.add(createOrReturnItem(30, "Classic Rose", "Red",
+                    imageAsBytes("flower3.jpg"),
+                    1, haifaUniBranch));
+            items.add(createOrReturnItem(10, "Cheapest flower available", "White",
+                    imageAsBytes("flower4.jpg"),
+                    5, haifaUniBranch));
+            items.add(createOrReturnItem(40, "A flower in the sun (pun intended)", "Yellow",
+                    imageAsBytes("flower5.jpg"),
+                    0, haifaUniBranch));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
         done = true;
     }
 
@@ -181,5 +214,18 @@ public class SecurityDataLoader implements ApplicationListener<ContextRefreshedE
         }
 
         return store;
+    }
+
+    @Transactional
+    CatalogItem createOrReturnItem(double price, String description, String dominantColor,
+                                      byte[] picture, long availableCount, Store store) {
+        CatalogItem item = catalogItemsRepository.findByStoreAndDescription(store, description);
+
+        if (item == null) {
+            item = new CatalogItem(price, description, dominantColor, picture, availableCount, store);
+            catalogItemsRepository.save(item);
+        }
+
+        return item;
     }
 }

@@ -73,33 +73,11 @@ public class SpringServer {
             context.close();
     }
 
-    private byte[] imageAsBytes(String name) throws IOException {
-        return getClass().getResourceAsStream(name).readAllBytes();
-    }
-
     @Bean
     CommandLineRunner runner() {
         return args -> {
             // TODO: Initialize the data here (or maybe somewhere else?)
-            List<CatalogItem> items = new ArrayList<>();
-            items.add(new CatalogItem(25, "Just another flower",
-                    "Blue",
-                    imageAsBytes("flower1.jpg"),
-                    4));
-            items.add(new CatalogItem(15, "A cheaper flower",
-                    "White",
-                    imageAsBytes("flower2.jpg"),
-                    3));
-            items.add(new CatalogItem(30, "Classic Rose", "Red",
-                    imageAsBytes("flower3.jpg"),
-                    1));
-            items.add(new CatalogItem(10, "Cheapest flower available", "White",
-                    imageAsBytes("flower4.jpg"),
-                    5));
-            items.add(new CatalogItem(40, "A flower in the sun (pun intended)", "Yellow",
-                    imageAsBytes("flower5.jpg"),
-                    0));
-            catalogItemsRepository.saveAll(items);
+
 
 
             log.info("Server is up and running!");
