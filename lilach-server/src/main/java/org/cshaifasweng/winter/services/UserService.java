@@ -1,10 +1,12 @@
 package org.cshaifasweng.winter.services;
 
 import org.cshaifasweng.winter.da.CustomerRepository;
+import org.cshaifasweng.winter.da.EmployeeRepository;
 import org.cshaifasweng.winter.da.RoleRepository;
 import org.cshaifasweng.winter.da.UserRepository;
 import org.cshaifasweng.winter.exceptions.LogicalException;
 import org.cshaifasweng.winter.models.Customer;
+import org.cshaifasweng.winter.models.Employee;
 import org.cshaifasweng.winter.models.User;
 import org.cshaifasweng.winter.security.SecurityConstants;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,12 +21,14 @@ import java.util.*;
 public class UserService {
     private final UserRepository userRepository;
     private final CustomerRepository customerRepository;
+    private final EmployeeRepository employeeRepository;
     private final RoleRepository roleRepository;
 
     @Autowired
-    public UserService(UserRepository userRepository, CustomerRepository customerRepository, RoleRepository roleRepository) {
+    public UserService(UserRepository userRepository, CustomerRepository customerRepository, EmployeeRepository employeeRepository, RoleRepository roleRepository) {
         this.userRepository = userRepository;
         this.customerRepository = customerRepository;
+        this.employeeRepository = employeeRepository;
         this.roleRepository = roleRepository;
     }
 
@@ -65,15 +69,7 @@ public class UserService {
         }
 
 
-        List<String> missingFields = new ArrayList<>();
-        for (Map.Entry<String, Object> entry: requiredFields.entrySet()) {
-
-            if (entry.getValue() == null) {
-                missingFields.add(entry.getKey());
-            }
-        }
-        if (!missingFields.isEmpty())
-            throw new LogicalException("Missing field(s): "+ String.join(", ", missingFields));
+        enforceFields(requiredFields);
 
         Customer customerInDB = customerRepository.findByEmail(customer.getEmail());
         if (customerInDB != null) {
@@ -95,6 +91,18 @@ public class UserService {
         return customerInDB;
     }
 
+    static void enforceFields(Map<String, Object> requiredFields) throws LogicalException {
+        List<String> missingFields = new ArrayList<>();
+        for (Map.Entry<String, Object> entry: requiredFields.entrySet()) {
+
+            if (entry.getValue() == null) {
+                missingFields.add(entry.getKey());
+            }
+        }
+        if (!missingFields.isEmpty())
+            throw new LogicalException("Missing field(s): "+ String.join(", ", missingFields));
+    }
+
     @Transactional
     public User getUser(String email) throws LogicalException {
         User user = userRepository.findByEmail(email);
@@ -108,5 +116,32 @@ public class UserService {
         System.out.println("Type: " + user.getClass());
 
         return userCopy;
+    }
+
+    @Transactional
+    public Customer updateCustomer(long id, Customer customer) throws LogicalException {
+        Customer dbObject = customerRepository.getOne(id);
+
+        if (dbObject.getId() != id)
+            throw new LogicalException("Id does not match");
+
+        dbObject.setPassword(customer.getPassword());
+        dbObject.setFirstName(customer.getFirstName());
+        dbObject.setLastName(customer.getLastName());
+        dbObject.setSubscriberType(customer.getSubscriberType());
+        dbObject.setAddress(customer.getAddress());
+        dbObject.setCreditCard(customer.getCreditCard());
+        dbObject.setCvv(customer.getCvv());
+        dbObject.setPhone(customer.getPhone());
+        dbObject.setExpireDate(customer.getExpireDate());
+
+        customerRepository.save(dbObject);
+
+        return customer;
+    }
+
+    @Transactional
+    public Employee updateEmployee(long id, Employee employee) {
+        return employeeRepository.save(employee);
     }
 }

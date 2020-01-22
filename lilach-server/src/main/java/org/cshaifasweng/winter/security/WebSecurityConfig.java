@@ -79,6 +79,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.DELETE, "/order/**")
                 .hasAnyAuthority(SecurityConstants.PRIVILEGE_ORDERS_CANCEL,
                         SecurityConstants.PRIVILEGE_ORDERS_CANCEL_ALL)
+                .antMatchers(HttpMethod.PUT, "/employee/**")
+                .hasAuthority(SecurityConstants.PRIVILEGE_USERS_EDIT)
                 .anyRequest().authenticated()
                 .and()
                 .addFilter(new AuthenticationFilter(authenticationManager(), userRepository, userService))

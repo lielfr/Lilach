@@ -59,15 +59,7 @@ public class OrderService {
     }
 
     public static void validateRequiredFields(Map<String, Object> requiredFields) throws LogicalException {
-        List<String> missingFields = new ArrayList<>();
-
-        for (Map.Entry<String, Object> entry : requiredFields.entrySet()) {
-            if (entry.getValue() == null)
-                missingFields.add(entry.getKey());
-        }
-
-        if (!missingFields.isEmpty())
-            throw new LogicalException("Missing field(s): " + String.join(", ", missingFields));
+        UserService.enforceFields(requiredFields);
     }
 
     public OrderCompensation cancelOrderCustomer(long id, Customer customer) throws LogicalException {
