@@ -19,6 +19,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.Bean;
+import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.io.IOException;
@@ -28,6 +29,7 @@ import java.util.List;
 import java.util.Properties;
 
 @SpringBootApplication
+@EnableScheduling
 public class SpringServer {
 
     private static ConfigurableApplicationContext context = null;
