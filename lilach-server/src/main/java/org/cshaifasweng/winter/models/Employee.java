@@ -36,11 +36,13 @@ public class Employee extends User {
     @Override
     public User copy() {
         Employee copy = new Employee(email, password, firstName, lastName, phone, roles, (Date) employedSince.clone());
-        copy.setManagedStore(new Store(managedStore));
-        copy.setReportsTo((Employee) reportsTo.copy());
-        copy.setHandledComplaints(
-                Arrays.asList((Complaint[]) handledComplaints.toArray().clone()));
-        copy.setAssignedStore(new Store(assignedStore));
+        if (managedStore != null)
+            copy.setManagedStore(new Store(managedStore));
+        if (reportsTo != null)
+            copy.setReportsTo((Employee) reportsTo.copy());
+        copy.setHandledComplaints(handledComplaints);
+        if (assignedStore != null)
+            copy.setAssignedStore(new Store(assignedStore));
         return copy;
     }
 

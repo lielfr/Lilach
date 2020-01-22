@@ -31,6 +31,8 @@ public class Customer extends User {
 
     private Collection<Complaint> complaints;
 
+    private Collection<Store> stores;
+
 
     public Customer(String email, String password, String firstName, String lastName, String phone, long creditCard, Date expireDate, int cvv, Date dateOfBirth) {
         super(email, password, firstName, lastName, phone);
@@ -127,3 +129,4 @@ public class Customer extends User {
         this.transactions = transactions;
     }
 }
+
