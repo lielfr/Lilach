@@ -60,6 +60,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers(HttpMethod.PUT, "/catalog/**")
                 .hasAuthority(SecurityConstants.PRIVILEGE_CATALOG_EDIT)
+                .antMatchers(HttpMethod.POST, "/catalog")
+                .hasAuthority(SecurityConstants.PRIVILEGE_CATALOG_EDIT)
                 .antMatchers(HttpMethod.GET, "/catalog", SecurityConstants.AUTH_LOGIN_URL)
                 .permitAll()
                 .antMatchers(HttpMethod.GET, "/store/**/catalog")
@@ -113,12 +115,4 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         authProvider.setPasswordEncoder(passwordEncoder());
         return authProvider;
     }
-
-//    @Bean
-//    public LogoutSuccessHandler logoutSuccessHandler() {
-//        return (httpServletRequest, httpServletResponse, authentication) -> {
-//            System.out.println("LOGOUT : " + httpServletRequest.getAttribute("email"));
-//            httpServletResponse.setStatus(200);
-//        };
-//    }
 }
