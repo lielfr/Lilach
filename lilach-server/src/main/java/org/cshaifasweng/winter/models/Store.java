@@ -34,6 +34,9 @@ public class Store {
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "store")
     private List<CatalogItem> catalogItems;
 
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "store")
+    private List<Order> orders;
+
     public Store() {
 
     }
@@ -43,6 +46,11 @@ public class Store {
         this.address = address;
         this.phone = phone;
         this.openingHours = openingHours;
+        this.employees = new ArrayList<>();
+        this.customers = new ArrayList<>();
+        this.complaints = new ArrayList<>();
+        this.catalogItems = new ArrayList<>();
+        this.orders = new ArrayList<>();
     }
 
     public Store(Store origin) {
@@ -55,6 +63,7 @@ public class Store {
         this.customers = new ArrayList<>();
         this.complaints = new ArrayList<>();
         this.catalogItems = new ArrayList<>();
+        this.orders = new ArrayList<>();
     }
 
     public Long getId() {
@@ -127,5 +136,21 @@ public class Store {
 
     public void setComplaints(List<Complaint> complaints) {
         this.complaints = complaints;
+    }
+
+    public List<CatalogItem> getCatalogItems() {
+        return catalogItems;
+    }
+
+    public void setCatalogItems(List<CatalogItem> catalogItems) {
+        this.catalogItems = catalogItems;
+    }
+
+    public List<Order> getOrders() {
+        return orders;
+    }
+
+    public void setOrders(List<Order> orders) {
+        this.orders = orders;
     }
 }
