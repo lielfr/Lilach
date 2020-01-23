@@ -35,7 +35,7 @@ public class Order {
     private Store store;
 
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private List<CatalogItem> items;
+    private List<Deliverable> items;
 
     private double price;
 
@@ -116,11 +116,11 @@ public class Order {
         this.store = store;
     }
 
-    public List<CatalogItem> getItems() {
+    public List<Deliverable> getItems() {
         return items;
     }
 
-    public void setItems(List<CatalogItem> items) {
+    public void setItems(List<Deliverable> items) {
         this.items = items;
     }
 

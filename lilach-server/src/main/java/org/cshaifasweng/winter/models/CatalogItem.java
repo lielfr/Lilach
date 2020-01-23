@@ -2,6 +2,7 @@ package org.cshaifasweng.winter.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonTypeName;
 
 import javax.persistence.*;
 
@@ -11,15 +12,13 @@ import java.util.List;
 import static javax.persistence.CascadeType.ALL;
 
 @Entity
+@JsonTypeName("catalog_item")
 @JsonIgnoreProperties({"hibernateLazyInitializer"})
-public class CatalogItem {
+public class CatalogItem extends Deliverable {
 
     public CatalogItem() {
+        super();
     }
-
-    @Id
-    @GeneratedValue(strategy=GenerationType.IDENTITY)
-    private long id;
 
     private double price;
 
@@ -39,13 +38,9 @@ public class CatalogItem {
     @JsonIgnore
     private Store store;
 
-    @ManyToMany(fetch = FetchType.LAZY, cascade = ALL)
-    @JoinTable(name = "items_orders",
-            joinColumns = @JoinColumn(name = "item_id", referencedColumnName = "id"),
-            inverseJoinColumns = @JoinColumn(name = "order_id", referencedColumnName = "id")
-    )
+    @ManyToMany(fetch = FetchType.LAZY)
     @JsonIgnore
-    private List<Order> orders;
+    private List<CustomItem> customItems;
 
     public CatalogItem(double price, String description, String dominantColor,
                        byte[] picture, long availableCount, Store store) {
@@ -55,15 +50,7 @@ public class CatalogItem {
         this.picture = picture.clone();
         this.availableCount = availableCount;
         this.store = store;
-        this.orders = new ArrayList<>();
-    }
-
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
+        this.customItems = new ArrayList<>();
     }
 
     public double getPrice() {
@@ -120,5 +107,13 @@ public class CatalogItem {
 
     public void setStore(Store store) {
         this.store = store;
+    }
+
+    public List<CustomItem> getCustomItems() {
+        return customItems;
+    }
+
+    public void setCustomItems(List<CustomItem> customItems) {
+        this.customItems = customItems;
     }
 }
