@@ -6,7 +6,6 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
-import org.cshaifasweng.winter.events.CartEvent;
 import org.cshaifasweng.winter.events.DashboardSwitchEvent;
 import org.cshaifasweng.winter.events.LoginChangeEvent;
 import org.cshaifasweng.winter.events.TokenSetEvent;
@@ -78,9 +77,7 @@ public class DashboardController implements Initializable {
     void showLoginScreen(ActionEvent event) { setPage("login_screen"); }
 
     @FXML
-    void cartButton(ActionEvent event) {
-        EventBus.getDefault().post(new CartEvent("My Cart"));
-        setPage("Customer_Cart"); }
+    void cartButton(ActionEvent event) { setPage("order"); }
 
     @FXML
     void logout(ActionEvent event) {

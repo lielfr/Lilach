@@ -3,80 +3,52 @@ package org.cshaifasweng.winter;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
-import javafx.scene.control.TextArea;
-
-import java.awt.event.MouseEvent;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
+import javafx.scene.input.MouseEvent;
+import org.cshaifasweng.winter.events.DashboardSwitchEvent;
+import org.cshaifasweng.winter.models.Order;
+import org.cshaifasweng.winter.web.APIAccess;
+import org.cshaifasweng.winter.web.LilachService;
+import org.greenrobot.eventbus.EventBus;
 
 
 public class OrderController implements Refreshable {
 
-/*
-    @FXML
-    public TextField Right;
+    public Order order;
 
     @FXML
-    private TextField orderDeliveryAddress;
-*/
+    public TextField AddressDetails;
+
+    @FXML
+    public Label Address;
+
+    @FXML
+    public Button checkout;
+
+    @FXML
+    public Label Phone;
+
+    @FXML
+    public TextField FillPhone;
 
     @Override
     public void refresh() {
     }
 
-
     @FXML
-    private Button displayOrderAddress;
-
-    @FXML
-    private TextArea orderDeliveryAddress;
-
-    @FXML
-    private TextArea Right;
-
-    @FXML
-    void backToCart(MouseEvent event) {
-
+    public void createOrder(ActionEvent event) {
+        LilachService service = APIAccess.getService();
+        service.newOrder(order);
     }
-
     @FXML
-    void goToPayment(MouseEvent event) {
-
-    }
-
-    @FXML
-    void move(ActionEvent event) {
-        Right.setText(orderDeliveryAddress.getText());
-
-    }
-
-
-/*    @FXML
-    void goToPayment(MouseEvent event){
+    public void CheckOut(ActionEvent actionEvent) {
         EventBus.getDefault().post(new DashboardSwitchEvent("order_payment"));
-        Right.setText(orderDeliveryAddress.getText());
-    }*/
-
- /*   @FXML
-    void move(MouseEvent event){
-        EventBus.getDefault().post(new DashboardSwitchEvent("order_payment"));
-        Right.setText(orderDeliveryAddress.getText());
     }
 
-
-    @FXML
-    void goToOrderCompleted(MouseEvent event){
-        EventBus.getDefault().post(new DashboardSwitchEvent("order_completed"));
-    }
-
-    @FXML
-    void backToEditOrder(MouseEvent event){
+    public void backToEditOrder(MouseEvent mouseEvent) {
         EventBus.getDefault().post(new DashboardSwitchEvent("order"));
-    }
 
-    @FXML
-    void backToCart(MouseEvent event){
-        EventBus.getDefault().post(new DashboardSwitchEvent("Customer_Cart"));
     }
-*/
 }
-
 
