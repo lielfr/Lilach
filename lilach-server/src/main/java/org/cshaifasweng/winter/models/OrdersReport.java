@@ -14,7 +14,7 @@ public class OrdersReport extends Report {
     private long ordersAmount;
 
     @ElementCollection
-    private Map<CatalogItemType, String> ordersByType;
+    private Map<CatalogItemType, Long> ordersByType;
 
     public OrdersReport() {
         super();
@@ -30,11 +30,11 @@ public class OrdersReport extends Report {
         this.ordersAmount = ordersAmount;
     }
 
-    public Map<CatalogItemType, String> getOrdersByType() {
+    public Map<CatalogItemType, Long> getOrdersByType() {
         return ordersByType;
     }
 
-    public void setOrdersByType(Map<CatalogItemType, String> ordersByType) {
+    public void setOrdersByType(Map<CatalogItemType, Long> ordersByType) {
         this.ordersByType = ordersByType;
     }
 }

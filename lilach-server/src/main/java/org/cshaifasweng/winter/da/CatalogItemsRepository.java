@@ -1,6 +1,7 @@
 package org.cshaifasweng.winter.da;
 
 import org.cshaifasweng.winter.models.CatalogItem;
+import org.cshaifasweng.winter.models.CatalogItemType;
 import org.cshaifasweng.winter.models.Store;
 import org.springframework.data.jpa.repository.JpaRepository;
 
@@ -12,4 +13,6 @@ public interface CatalogItemsRepository extends JpaRepository<CatalogItem, Long>
     List<CatalogItem> findByStore(Store store);
 
     List<CatalogItem> findByStoreOrderByDiscountAmountAscDiscountPercentAsc(Store store);
+
+    List<CatalogItem> findByStoreAndItemType(Store store, CatalogItemType itemType);
 }

@@ -6,28 +6,27 @@ import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 @Entity
 @JsonTypeName("income_report")
 public class IncomeReport extends Report {
 
     @ElementCollection
-    private List<Double> incomeByDay;
+    private List<Double> incomeByMonth;
 
     private Double totalIncome;
 
     public IncomeReport() {
-        this.incomeByDay = new ArrayList<>();
+        this.incomeByMonth = new ArrayList<>();
         this.totalIncome = 0.0;
     }
 
-    public List<Double> getIncomeByDay() {
-        return incomeByDay;
+    public List<Double> getIncomeByMonth() {
+        return incomeByMonth;
     }
 
-    public void setIncomeByDay(List<Double> incomeByDay) {
-        this.incomeByDay = incomeByDay;
+    public void setIncomeByMonth(List<Double> incomeByMonth) {
+        this.incomeByMonth = incomeByMonth;
     }
 
     public Double getTotalIncome() {
