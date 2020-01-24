@@ -55,6 +55,8 @@ public class SecurityDataLoader implements ApplicationListener<ContextRefreshedE
         Privilege rolesEditPrivilege = createOrReturnPrivilege(SecurityConstants.PRIVILEGE_ROLES_EDIT);
         Privilege ordersCreatePrivilege = createOrReturnPrivilege(SecurityConstants.PRIVILEGE_ORDERS_CREATE);
         Privilege ordersCancelPrivilege = createOrReturnPrivilege(SecurityConstants.PRIVILEGE_ORDERS_CANCEL);
+        Privilege reportsViewPrivilege = createOrReturnPrivilege(SecurityConstants.PRIVILEGE_REPORTS_VIEW);
+        Privilege reportsViewAllPrivilege = createOrReturnPrivilege(SecurityConstants.PRIVILEGE_REPORTS_VIEW_ALL);
 
         Role adminRole = createOrReturnRole(SecurityConstants.ROLE_ADMIN, Arrays.asList(
                 catalogEditPrivilege,
@@ -63,7 +65,9 @@ public class SecurityDataLoader implements ApplicationListener<ContextRefreshedE
                 complaintHandlePrivilege,
                 rolesEditPrivilege,
                 ordersCreatePrivilege,
-                ordersCancelPrivilege
+                ordersCancelPrivilege,
+                reportsViewAllPrivilege,
+                reportsViewPrivilege
         ));
 
         Role customerRole = createOrReturnRole(SecurityConstants.ROLE_CUSTOMER, Arrays.asList(
@@ -80,12 +84,15 @@ public class SecurityDataLoader implements ApplicationListener<ContextRefreshedE
         ));
 
         Role storeManagerEmployeeRole = createOrReturnRole(SecurityConstants.ROLE_STORE_MANAGER, Arrays.asList(
-                complaintHandlePrivilege
+                complaintHandlePrivilege,
+                reportsViewPrivilege
         ));
 
         Role storeChainManagerEmployeeRole = createOrReturnRole(SecurityConstants.ROLE_STORE_CHAIN_MANAGER, Arrays.asList(
                 complaintFilePrivilege,
-                usersEditPrivilege
+                usersEditPrivilege,
+                reportsViewAllPrivilege,
+                reportsViewPrivilege
         ));
 
         Store haifaUniBranch = createOrReturnStore("Haifa University Branch", "Abba Houshy Av. 199, Haifa",

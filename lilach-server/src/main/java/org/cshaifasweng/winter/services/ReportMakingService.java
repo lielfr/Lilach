@@ -12,8 +12,6 @@ import java.util.*;
 
 @Component
 public class ReportMakingService {
-    // TODO: Move this to the configuration file
-    private static final long runningRate = 1000 * 10;
 
     private static final Logger log = LoggerFactory.getLogger(ReportMakingService.class);
 
@@ -144,7 +142,7 @@ public class ReportMakingService {
         }
     }
 
-    @Scheduled(fixedRate = runningRate)
+    @Scheduled(fixedRateString = "${lilach.scheduling.report-making}")
     public void genReports() {
         log.info("Started generating reports");
 

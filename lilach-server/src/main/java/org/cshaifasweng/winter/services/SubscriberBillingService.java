@@ -5,6 +5,7 @@ import org.cshaifasweng.winter.models.Customer;
 import org.cshaifasweng.winter.models.SubscriberType;
 import org.cshaifasweng.winter.models.Transaction;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
@@ -13,10 +14,11 @@ import java.util.List;
 
 @Component
 public class SubscriberBillingService {
-    // TODO: Move those to the configuration file
-    private static final long runningRate = 3600 * 30; // Run every month
-    private static final long monthlySubscriptionFee = 20;
-    private static final long yearlySubscriptionFee = 200;
+    @Value("${lilach.billing.monthly-fee}")
+    static long monthlySubscriptionFee;
+
+    @Value("${lilach.billing.yearly-fee}")
+    static long yearlySubscriptionFee;
 
     private final CustomerRepository customerRepository;
 
@@ -25,7 +27,7 @@ public class SubscriberBillingService {
         this.customerRepository = customerRepository;
     }
 
-    @Scheduled(fixedRate = runningRate)
+    @Scheduled(cron = "${lilach.scheduling.subscriber-billing}")
     public void billSubscribers() {
         List<Customer> customerList = customerRepository.findAll();
         Date now = new Date();
@@ -39,7 +41,7 @@ public class SubscriberBillingService {
             else if (customer.getSubscriberType() == SubscriberType.YEARLY &&
                     customer.getSubscriptionEnd().before(now)) {
                 customer.getTransactions()
-                        .add(new Transaction(now, "Yearly subscription fee", yearlySubscriptionFee));
+                        .add(new Transaction(now, "Yearly subscription fee", yearlySubscriptionFee / 12.0));
             }
             customerRepository.save(customer);
         }

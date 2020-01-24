@@ -21,7 +21,7 @@ public class Store {
     private String openingHours;
 
     @OneToOne(targetEntity = Employee.class,
-            fetch = FetchType.LAZY)
+            fetch = FetchType.EAGER)
     private Employee manager;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "assignedStore")

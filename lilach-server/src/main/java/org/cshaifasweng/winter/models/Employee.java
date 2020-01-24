@@ -1,6 +1,7 @@
 package org.cshaifasweng.winter.models;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 
 import javax.persistence.*;
@@ -16,13 +17,16 @@ public class Employee extends User {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
     private Date employedSince;
 
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "manager")
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "manager")
+    @JsonIgnore
     private Store managedStore;
 
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JsonIgnore
     private Store assignedStore;
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "reportsTo")
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "reportsTo")
+    @JsonIgnore
     private Collection<Employee> subordinates;
 
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)

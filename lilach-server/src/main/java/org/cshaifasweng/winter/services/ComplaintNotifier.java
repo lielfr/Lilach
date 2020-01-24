@@ -18,9 +18,6 @@ import java.util.List;
 
 @Component
 public class ComplaintNotifier {
-    // TODO: Move this to the configuration file.
-    // Run every half an hour.
-    private static final long runningRate = (long) (1000 * 3600 * 0.5);
 
     private final ComplaintRepository complaintRepository;
     private final MailService mailService;
@@ -35,7 +32,7 @@ public class ComplaintNotifier {
     }
 
 
-    @Scheduled(fixedRate = runningRate)
+    @Scheduled(fixedRateString = "${lilach.scheduling.complaint-notifying}")
     public void notifyUnhandledComplaints() {
         Calendar calendar = Calendar.getInstance();
         calendar.add(Calendar.DAY_OF_YEAR, -1);
