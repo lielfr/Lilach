@@ -141,6 +141,31 @@ public class OrderController {
     @FXML
     private TextArea greetingTextArea;
 
+    private void restVisibleTab2()
+    {
+        //empty labels
+        firstNameVerEmptyLabel.setVisible(false);
+        lastNameVerEmptyLabel.setVisible(false);
+        idVerEmptyLabel.setVisible(false);
+        emailVerEmptyLabel.setVisible(false);
+        phoneVerEmptyLabel.setVisible(false);
+        addressVerEmptyLabel.setVisible(false);
+
+        //invalid values labels
+        invalidFirstNameVerLabel.setVisible(false);
+        invalidLastNameVerLabel.setVisible(false);
+        invalidIdVerLabel.setVisible(false);
+        invalidEmailVerLabel.setVisible(false);
+        invalidPhoneVerLabel.setVisible(false);
+        invalidAddressVerLabel.setVisible(false);
+    }
+
+    private void resetVisibleTab4(){
+        deliveryAddressEmpty.setVisible(false);
+        recipientMailEmpty.setVisible(false);
+        invalidEmailAddressLabel.setVisible(false);
+    }
+
     @FXML
     void cancel(ActionEvent event) {
 
