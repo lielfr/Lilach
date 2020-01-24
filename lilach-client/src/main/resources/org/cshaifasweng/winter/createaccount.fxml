@@ -10,7 +10,7 @@
 
 <AnchorPane prefHeight="737.0" prefWidth="609.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.cshaifasweng.winter.CreateAccountController">
    <children>
-      <Button fx:id="finishcreate" layoutX="270.0" layoutY="501.0" mnemonicParsing="false" onAction="#Fcreate" prefHeight="50.0" prefWidth="125.0" text="Finish:" />
+      <Button fx:id="finishcreate" layoutX="275.0" layoutY="550.0" mnemonicParsing="false" onAction="#Fcreate" prefHeight="50.0" prefWidth="125.0" text="Finish:" />
       <Label fx:id="LFname" layoutX="87.0" layoutY="193.0" prefHeight="30.0" prefWidth="83.0" text="First Name:" />
       <Label fx:id="Lid" layoutX="87.0" layoutY="264.0" prefHeight="30.0" prefWidth="50.0" text="Id:" />
       <Label fx:id="Lemail" layoutX="87.0" layoutY="239.0" prefHeight="30.0" prefWidth="50.0" text="Email:" />
@@ -73,5 +73,8 @@
       <Label fx:id="LEFName1" layoutX="365.0" layoutY="210.0" prefHeight="17.0" prefWidth="255.0" textFill="RED" />
       <Label fx:id="LELName" layoutX="356.0" layoutY="224.0" prefHeight="17.0" prefWidth="255.0" textFill="RED" />
       <Label fx:id="LEDateofbirth" layoutX="355.0" layoutY="296.0" prefHeight="17.0" prefWidth="255.0" textFill="RED" />
+      <Label fx:id="addressLabel" layoutX="87.0" layoutY="470.0" text="Address:" />
+      <TextField fx:id="addressField" layoutX="200.0" layoutY="465.0" promptText="Enter your address" />
+      <Label fx:id="addressEmpty" layoutX="400.0" layoutY="470.0" textFill="RED" />
    </children>
 </AnchorPane>

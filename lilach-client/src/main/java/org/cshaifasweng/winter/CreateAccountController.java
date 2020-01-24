@@ -166,6 +166,15 @@ public class CreateAccountController implements Refreshable{
     private Label LEDateofbirth;
 
     @FXML
+    private Label addressLabel;
+
+    @FXML
+    private TextField addressField;
+
+    @FXML
+    private Label addressEmpty;
+
+    @FXML
     void Fcreate(ActionEvent event) {
         Tmessage.setVisible(false);
         LEFName.setText("");
@@ -178,6 +187,9 @@ public class CreateAccountController implements Refreshable{
         LEVaild.setText("");
         LECvv.setText("");
         LEPassword.setText("");
+        addressEmpty.setText("");
+
+
 
         LEMembership.setText("");
         if((MissField()!=0) ){
@@ -235,6 +247,9 @@ public class CreateAccountController implements Refreshable{
             Lseprate2.setVisible(false);
             Lmembership.setVisible(false);
             Lheadline.setVisible(false);
+            addressEmpty.setVisible(false);
+            addressField.setVisible(false);
+            addressLabel.setVisible(false);
 
             Calendar calendar = Calendar.getInstance();
             calendar.set(calendar.MONTH,Integer.parseInt(TvaildM.getText()));
@@ -247,7 +262,9 @@ public class CreateAccountController implements Refreshable{
           //  calendarB.set(calendar.YEAR,Integer.parseInt(Tbirthy.getText()));
             calendarB.set(Integer.parseInt(Tbirthd.getText()), Integer.parseInt(Tbirthm.getText()),Integer.parseInt(Tbirthy.getText()));
             Date datebirth = calendarB.getTime();
-            Customer newCustomer = new Customer(Temail.getText(),Tpassword.getText(),TFname.getText(),TLname.getText(),Tphone.getText(),Long.valueOf(Tcredit.getText()),date,Integer.parseInt(Tcvv.getText()),datebirth);
+            Customer newCustomer = new Customer(Temail.getText(),Tpassword.getText(),TFname.getText(),TLname.getText(),
+                    Tphone.getText(),Long.valueOf(Tcredit.getText()),date,Integer.parseInt(Tcvv.getText()),datebirth);
+            newCustomer.setAddress(addressField.getText());
             newCustomer.setSubscriberType(choice1);
             LilachService service = APIAccess.getService();
             service.newCustomer(newCustomer).enqueue(new Callback<Customer>() {
@@ -337,6 +354,10 @@ public class CreateAccountController implements Refreshable{
         }
         if(Cmembership.getSelectionModel().isEmpty()==true){
             LEMembership.setText("Please chose membership length");
+            count++;
+        }
+        if(addressField.getText().isEmpty() == true){
+            addressEmpty.setText("Please insert your address");
             count++;
         }
         return count;
