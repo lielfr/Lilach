@@ -4,14 +4,13 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import java.util.Collection;
 
-
 public class Privilege {
-
     private Long id;
 
     private String name;
 
-
+    @JsonIgnore
+    private Collection<Role> roles;
 
     public Privilege() {
     }
@@ -34,5 +33,13 @@ public class Privilege {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public Collection<Role> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(Collection<Role> roles) {
+        this.roles = roles;
     }
 }

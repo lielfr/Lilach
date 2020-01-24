@@ -1,70 +1,152 @@
 package org.cshaifasweng.winter.models;
 
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
 public class Order {
+    private Long id;
 
-    public Order(){
-    }
+    private DeliveryMethod deliveryMethod;
 
-    private long id;
+    private Date orderDate;
 
-    private boolean delivery;
+    private Date supplyDate;
 
-    private long supplyDate;
+    private String greeting;
 
-    private boolean greeting;
+    private boolean deliverToAnother;
 
     private String deliveryAddress;
 
-    private long recipientPhone;
+    private String recipientMail;
+
+    private OrderStatus status;
+
+    private Customer orderedBy;
+
+    private Store store;
+
+    private List<Item> items;
 
     private double price;
 
-    public long getId() { return id; }
+    public Order() {
+        this.items = new ArrayList<>();
+    }
 
-    public void SetID(long id) { this.id = id; }
+    public Order(Date supplyDate, Store store, Customer orderedBy, DeliveryMethod deliveryMethod) {
+        this.deliveryMethod = deliveryMethod;
+        this.supplyDate = supplyDate;
+        this.store = store;
+        this.orderedBy = orderedBy;
+        this.items = new ArrayList<>();
+        this.status = OrderStatus.PENDING;
+    }
 
-    public void setSupplyDate(long supplyDate)  { this.supplyDate = supplyDate; }
+    public Long getId() {
+        return id;
+    }
 
-    public void setDelivery(boolean delivery) {this.delivery = delivery; }
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public DeliveryMethod getDeliveryMethod() {
+        return deliveryMethod;
+    }
+
+    public void setDeliveryMethod(DeliveryMethod deliveryMethod) {
+        this.deliveryMethod = deliveryMethod;
+    }
+
+    public Date getSupplyDate() {
+        return supplyDate;
+    }
+
+    public void setSupplyDate(Date supplyDate) {
+        this.supplyDate = supplyDate;
+    }
+
+    public String getGreeting() {
+        return greeting;
+    }
+
+    public void setGreeting(String greeting) {
+        this.greeting = greeting;
+    }
+
+    public boolean isDeliverToAnother() {
+        return deliverToAnother;
+    }
+
+    public void setDeliverToAnother(boolean deliverToAnother) {
+        this.deliverToAnother = deliverToAnother;
+    }
+
+    public String getDeliveryAddress() {
+        return deliveryAddress;
+    }
 
     public void setDeliveryAddress(String deliveryAddress) {
         this.deliveryAddress = deliveryAddress;
     }
-    public void setRecipientPhone(long recipientPhone) {
-        this.recipientPhone = recipientPhone;
+
+    public String getRecipientMail() {
+        return recipientMail;
     }
 
-    public void setGreeting(boolean greeting) {
-        this.greeting = greeting;
+    public void setRecipientMail(String recipientMail) {
+        this.recipientMail = recipientMail;
     }
 
-    public boolean isDelivery() {
-        return delivery;
+    public Store getStore() {
+        return store;
     }
 
-    public boolean isGreeting() {
-        return greeting;
+    public void setStore(Store store) {
+        this.store = store;
     }
 
-    public String getDeliveryAddress() { return deliveryAddress;}
-
-    public long getRecipientPhone() {
-        return recipientPhone;
+    public List<Item> getItems() {
+        return items;
     }
 
-    public long getSupplyDate() {
-        return supplyDate;
-    }
-
-    public void setPrice(double price) {
-        this.price = price;
+    public void setItems(List<Item> items) {
+        this.items = items;
     }
 
     public double getPrice() {
         return price;
     }
 
+    public void setPrice(double price) {
+        this.price = price;
+    }
 
+    public Customer getOrderedBy() {
+        return orderedBy;
+    }
+
+    public void setOrderedBy(Customer orderedBy) {
+        this.orderedBy = orderedBy;
+    }
+
+    public Date getOrderDate() {
+        return orderDate;
+    }
+
+    public void setOrderDate(Date orderDate) {
+        this.orderDate = orderDate;
+    }
+
+    public OrderStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(OrderStatus status) {
+        this.status = status;
+    }
 }
 
 

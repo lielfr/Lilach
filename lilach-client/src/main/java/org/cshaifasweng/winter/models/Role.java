@@ -9,6 +9,9 @@ public class Role {
 
     private String name;
 
+    @JsonIgnore
+    private Collection<User> users;
+
     private Collection<Privilege> privileges;
 
     public Role() {
@@ -33,6 +36,14 @@ public class Role {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public Collection<User> getUsers() {
+        return users;
+    }
+
+    public void setUsers(Collection<User> users) {
+        this.users = users;
     }
 
     public Collection<Privilege> getPrivileges() {

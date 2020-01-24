@@ -9,18 +9,33 @@ import java.util.Date;
 public class Complaint {
     private Long id;
 
-    //    private boolean purchased;
+//    private boolean purchased;
     private String description;
     private boolean ordered;
-    private  String orderNum;
+
+    // TODO: Change this once we have an order entity in place.
+    private String orderNum;
+
     private boolean email;
 
     private String answer;
+
     private Double compensation = 0.0;
 
     private  boolean isOpen;
 
     private Customer openedBy;
+
+    private Store store;
+
+    private Employee handledBy;
+
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
+    private Date complaintOpen;
+
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
+    private Date complaintClose;
+
     public boolean isOrdered() {
         return ordered;
     }
@@ -37,20 +52,13 @@ public class Complaint {
         this.orderNum = orderNum;
     }
 
-    private Employee handledBy;
-
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
-    private Date complaintOpen;
-
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
-    private Date complaintClose;
-
     public Complaint() {
     }
 
-    public Complaint(String description, boolean email) {
+    public Complaint(String description, boolean email, Customer openedBy) {
         this.description = description;
         this.email = email;
+        this.openedBy = openedBy;
     }
 
     public Long getId() {
@@ -146,5 +154,13 @@ public class Complaint {
 
     public void setHandledBy(Employee handledBy) {
         this.handledBy = handledBy;
+    }
+
+    public Store getStore() {
+        return store;
+    }
+
+    public void setStore(Store store) {
+        this.store = store;
     }
 }
