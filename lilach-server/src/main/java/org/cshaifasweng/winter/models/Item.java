@@ -14,7 +14,7 @@ import java.util.List;
         @JsonSubTypes.Type(value = CatalogItem.class, name = "catalog_item"),
         @JsonSubTypes.Type(value = CustomItem.class, name = "custom_item")
 })
-public abstract class Deliverable {
+public abstract class Item {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -26,7 +26,9 @@ public abstract class Deliverable {
     )
     private List<Order> orders;
 
-    public Deliverable() {
+    protected double price;
+
+    public Item() {
         orders = new ArrayList<>();
     }
 
@@ -44,5 +46,13 @@ public abstract class Deliverable {
 
     public void setOrders(List<Order> orders) {
         this.orders = orders;
+    }
+
+    public double getPrice() {
+        return price;
+    }
+
+    public void setPrice(double price) {
+        this.price = price;
     }
 }

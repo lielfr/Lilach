@@ -9,18 +9,14 @@ import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
-import static javax.persistence.CascadeType.ALL;
-
 @Entity
 @JsonTypeName("catalog_item")
 @JsonIgnoreProperties({"hibernateLazyInitializer"})
-public class CatalogItem extends Deliverable {
+public class CatalogItem extends Item {
 
     public CatalogItem() {
         super();
     }
-
-    private double price;
 
     private String description;
 
@@ -51,14 +47,6 @@ public class CatalogItem extends Deliverable {
         this.availableCount = availableCount;
         this.store = store;
         this.customItems = new ArrayList<>();
-    }
-
-    public double getPrice() {
-        return price;
-    }
-
-    public void setPrice(double price) {
-        this.price = price;
     }
 
     public String getDescription() {

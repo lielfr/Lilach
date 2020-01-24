@@ -8,7 +8,7 @@ import java.util.List;
 
 @Entity
 @JsonTypeName("custom_item")
-public class CustomItem extends Deliverable {
+public class CustomItem extends Item {
 
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinTable(name = "custom_items_items",
@@ -21,7 +21,6 @@ public class CustomItem extends Deliverable {
     public CustomItem() {
         super();
         items = new ArrayList<>();
-        totalSum = 0.0;
     }
 
     public List<CatalogItem> getItems() {
@@ -30,13 +29,5 @@ public class CustomItem extends Deliverable {
 
     public void setItems(List<CatalogItem> items) {
         this.items = items;
-    }
-
-    public double getTotalSum() {
-        return totalSum;
-    }
-
-    public void setTotalSum(double totalSum) {
-        this.totalSum = totalSum;
     }
 }

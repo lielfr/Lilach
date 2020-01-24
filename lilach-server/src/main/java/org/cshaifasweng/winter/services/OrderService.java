@@ -1,6 +1,5 @@
 package org.cshaifasweng.winter.services;
 
-import org.apache.juli.logging.Log;
 import org.cshaifasweng.winter.da.CustomerRepository;
 import org.cshaifasweng.winter.da.OrderRepository;
 import org.cshaifasweng.winter.exceptions.LogicalException;
@@ -9,7 +8,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.*;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 @Service
 public class OrderService {
@@ -48,6 +50,13 @@ public class OrderService {
             throw new LogicalException("Supply date cannot be in the past");
 
         newOrder.setOrderDate(new Date());
+
+        double price = 0.0;
+        for (Item item : newOrder.getItems()) {
+            price += item.getPrice();
+        }
+        newOrder.setPrice(price);
+
         orderRepository.save(newOrder);
 
         Employee manager = newOrder.getStore().getManager();
