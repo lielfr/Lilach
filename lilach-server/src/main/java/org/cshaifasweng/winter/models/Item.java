@@ -1,5 +1,6 @@
 package org.cshaifasweng.winter.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
@@ -24,6 +25,7 @@ public abstract class Item {
             joinColumns = @JoinColumn(name = "deliverable_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "order_id", referencedColumnName = "id")
     )
+    @JsonIgnore
     private List<Order> orders;
 
     protected double price;
