@@ -83,6 +83,6 @@ public class ReportMakingService {
     public void genReports() {
         log.info("Started generating reports");
 
-        //genComplaintsReports();
+        genComplaintsReports();
     }
 }
