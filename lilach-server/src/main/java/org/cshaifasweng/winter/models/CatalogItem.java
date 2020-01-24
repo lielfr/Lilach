@@ -38,8 +38,10 @@ public class CatalogItem extends Item {
     @JsonIgnore
     private List<CustomItem> customItems;
 
+    private boolean canBeAssembled;
+
     public CatalogItem(double price, String description, String dominantColor,
-                       byte[] picture, long availableCount, Store store) {
+                       byte[] picture, long availableCount, Store store, boolean canBeAssembled) {
         this.price = price;
         this.description = description;
         this.dominantColor = dominantColor;
@@ -47,6 +49,7 @@ public class CatalogItem extends Item {
         this.availableCount = availableCount;
         this.store = store;
         this.customItems = new ArrayList<>();
+        this.canBeAssembled = canBeAssembled;
     }
 
     public String getDescription() {
@@ -103,5 +106,13 @@ public class CatalogItem extends Item {
 
     public void setCustomItems(List<CustomItem> customItems) {
         this.customItems = customItems;
+    }
+
+    public boolean isCanBeAssembled() {
+        return canBeAssembled;
+    }
+
+    public void setCanBeAssembled(boolean canBeAssembled) {
+        this.canBeAssembled = canBeAssembled;
     }
 }

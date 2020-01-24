@@ -56,7 +56,10 @@ public class OrderService {
             price += item.getPrice();
             if (item instanceof CustomItem) {
                 CustomItem customItem = (CustomItem) item;
-                // TODO: Add type check here.
+                for (CatalogItem customItemChild : customItem.getItems()) {
+                    if (!customItemChild.isCanBeAssembled())
+                        throw new LogicalException("Illegal custom item: contains items that cannot be assembled.");
+                }
             }
         }
         newOrder.setPrice(price);
