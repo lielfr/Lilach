@@ -39,7 +39,6 @@ public class CatalogService {
         CatalogItem dbItem = repository.getOne(id);
         dbItem.setDescription(item.getDescription());
         dbItem.setAvailableCount(item.getAvailableCount());
-        dbItem.setDominantColor(item.getDominantColor());
         dbItem.setItemsSold(item.getItemsSold());
         dbItem.setPicture(item.getPicture());
         dbItem.setPrice(item.getPrice());
