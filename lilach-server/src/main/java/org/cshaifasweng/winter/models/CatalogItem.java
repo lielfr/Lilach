@@ -20,8 +20,6 @@ public class CatalogItem extends Item {
 
     private String description;
 
-    private String dominantColor;
-
     @Lob
     @Column(columnDefinition = "BLOB")
     private byte[] picture;
@@ -40,11 +38,10 @@ public class CatalogItem extends Item {
 
     private boolean canBeAssembled;
 
-    public CatalogItem(double price, String description, String dominantColor,
+    public CatalogItem(double price, String description,
                        byte[] picture, long availableCount, Store store, boolean canBeAssembled) {
         this.price = price;
         this.description = description;
-        this.dominantColor = dominantColor;
         this.picture = picture.clone();
         this.availableCount = availableCount;
         this.store = store;
@@ -58,14 +55,6 @@ public class CatalogItem extends Item {
 
     public void setDescription(String description) {
         this.description = description;
-    }
-
-    public String getDominantColor() {
-        return dominantColor;
-    }
-
-    public void setDominantColor(String dominantColor) {
-        this.dominantColor = dominantColor;
     }
 
     public byte[] getPicture() {
