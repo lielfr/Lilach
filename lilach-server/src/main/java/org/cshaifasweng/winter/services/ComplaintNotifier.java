@@ -18,6 +18,7 @@ import java.util.List;
 
 @Component
 public class ComplaintNotifier {
+    // TODO: Move this to the configuration file.
     // Run every half an hour.
     private static final long runningRate = (long) (1000 * 3600 * 0.5);
 
