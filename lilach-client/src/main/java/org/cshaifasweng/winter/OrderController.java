@@ -184,6 +184,7 @@ public class OrderController implements Refreshable{
         else{
             selectionModel.selectPrevious();
         }
+        refresh();
 
     }
 
@@ -191,27 +192,35 @@ public class OrderController implements Refreshable{
     void next(ActionEvent event) {
         SingleSelectionModel<Tab> selectionModel = tabPane.getSelectionModel();
         if(tab5.isSelected()){
-            nextButton.setText("Send order");
             EventBus.getDefault().post(new DashboardSwitchEvent("primary"));
         }
         else{
-            nextButton.setText("Next");
             selectionModel.selectNext();
         }
+        refresh();
     }
+
+
 
     @Override
     public void refresh() {
         SingleSelectionModel<Tab> selectionModel = tabPane.getSelectionModel();
-        System.out.println(selectionModel.toString());
-        if(selectionModel.getSelectedIndex()==0){
+
+        System.out.println(selectionModel.getSelectedIndex());
+        if(selectionModel.getSelectedIndex() == 0){
             backButton.setText("Exit");
             cancelButton.setVisible(false);
         }
         else{
             backButton.setText("Back");
-            selectionModel.selectPrevious();
             cancelButton.setVisible(true);
+        }
+
+        if(selectionModel.getSelectedIndex() == 4){
+            nextButton.setText("Send order");
+        }
+        else{
+            nextButton.setText("Next");
         }
     }
 }

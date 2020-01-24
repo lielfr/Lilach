@@ -42,9 +42,9 @@
             </HBox>
          </bottom>
          <center>
-            <TabPane prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE" BorderPane.alignment="CENTER">
+            <TabPane fx:id="tabPane" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
               <tabs>
-                <Tab fx:id="tab1" text="1.Items">
+                <Tab fx:id="tab1" onSelectionChanged="#refresh" text="1.Items">
                   <content>
                     <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                            <children>
@@ -53,7 +53,7 @@
                         </AnchorPane>
                   </content>
                 </Tab>
-                  <Tab fx:id="tab2" text="2.Order details">
+                  <Tab fx:id="tab2" onSelectionChanged="#refresh" text="2.Order details">
                      <content>
                         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                            <children>
@@ -179,7 +179,7 @@
                         </AnchorPane>
                      </content>
                   </Tab>
-                  <Tab fx:id="tab3" text="3.Greeting">
+                  <Tab fx:id="tab3" onSelectionChanged="#refresh" text="3.Greeting">
                      <content>
                         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                            <children>
@@ -212,7 +212,7 @@
                         </AnchorPane>
                      </content>
                   </Tab>
-                  <Tab fx:id="tab4" text="4.Delivery">
+                  <Tab fx:id="tab4" onSelectionChanged="#refresh" text="4.Delivery">
                      <content>
                         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                            <children>
@@ -296,7 +296,7 @@
                         </AnchorPane>
                      </content>
                   </Tab>
-                  <Tab fx:id="tab5" text="5.Summery">
+                  <Tab fx:id="tab5" onSelectionChanged="#refresh" text="5.Summery">
                      <content>
                         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                            <children>
