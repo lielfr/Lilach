@@ -49,7 +49,6 @@ public class PrimaryController implements Refreshable {
                     TableColumn<CatalogItem, Long> idColumn = new TableColumn<>("Catalog Number");
                     TableColumn pictureColumn = new TableColumn("Picture");
                     TableColumn<CatalogItem, String> descriptionColumn = new TableColumn<CatalogItem, String>("Description");
-                    TableColumn<CatalogItem, String> dominantColorColumn = new TableColumn<>("Dominant Color");
                     TableColumn<CatalogItem, Double> priceColumn = new TableColumn<>("Price");
 
 
@@ -73,11 +72,10 @@ public class PrimaryController implements Refreshable {
                     });
                     pictureColumn.setCellValueFactory(new PropertyValueFactory<CatalogItem, byte[]>("picture"));
                     descriptionColumn.setCellValueFactory(new PropertyValueFactory<CatalogItem, String>("description"));
-                    dominantColorColumn.setCellValueFactory(new PropertyValueFactory<CatalogItem, String>("dominantColor"));
                     priceColumn.setCellValueFactory(new PropertyValueFactory<CatalogItem, Double>("price"));
 
                     dataTable.getColumns().addAll(idColumn, descriptionColumn,
-                            dominantColorColumn, priceColumn, pictureColumn);
+                            priceColumn, pictureColumn);
 
                     dataTable.setItems(FXCollections.observableList(items));
 

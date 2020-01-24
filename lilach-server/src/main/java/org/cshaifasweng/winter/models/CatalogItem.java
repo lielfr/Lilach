@@ -9,22 +9,16 @@ import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
-import static javax.persistence.CascadeType.ALL;
-
 @Entity
 @JsonTypeName("catalog_item")
 @JsonIgnoreProperties({"hibernateLazyInitializer"})
-public class CatalogItem extends Deliverable {
+public class CatalogItem extends Item {
 
     public CatalogItem() {
         super();
     }
 
-    private double price;
-
     private String description;
-
-    private String dominantColor;
 
     @Lob
     @Column(columnDefinition = "BLOB")
@@ -42,23 +36,27 @@ public class CatalogItem extends Deliverable {
     @JsonIgnore
     private List<CustomItem> customItems;
 
-    public CatalogItem(double price, String description, String dominantColor,
-                       byte[] picture, long availableCount, Store store) {
+    private boolean canBeAssembled;
+
+    private double discountAmount;
+
+    private double discountPercent;
+
+    private CatalogItemType itemType;
+
+    public CatalogItem(double price, String description,
+                       byte[] picture, long availableCount, Store store, boolean canBeAssembled,
+                       CatalogItemType itemType) {
         this.price = price;
         this.description = description;
-        this.dominantColor = dominantColor;
         this.picture = picture.clone();
         this.availableCount = availableCount;
         this.store = store;
         this.customItems = new ArrayList<>();
-    }
-
-    public double getPrice() {
-        return price;
-    }
-
-    public void setPrice(double price) {
-        this.price = price;
+        this.canBeAssembled = canBeAssembled;
+        this.discountAmount = 0.0;
+        this.discountPercent = 0.0;
+        this.itemType = itemType;
     }
 
     public String getDescription() {
@@ -67,14 +65,6 @@ public class CatalogItem extends Deliverable {
 
     public void setDescription(String description) {
         this.description = description;
-    }
-
-    public String getDominantColor() {
-        return dominantColor;
-    }
-
-    public void setDominantColor(String dominantColor) {
-        this.dominantColor = dominantColor;
     }
 
     public byte[] getPicture() {
@@ -115,5 +105,37 @@ public class CatalogItem extends Deliverable {
 
     public void setCustomItems(List<CustomItem> customItems) {
         this.customItems = customItems;
+    }
+
+    public boolean isCanBeAssembled() {
+        return canBeAssembled;
+    }
+
+    public void setCanBeAssembled(boolean canBeAssembled) {
+        this.canBeAssembled = canBeAssembled;
+    }
+
+    public double getDiscountAmount() {
+        return discountAmount;
+    }
+
+    public void setDiscountAmount(double discountAmount) {
+        this.discountAmount = discountAmount;
+    }
+
+    public double getDiscountPercent() {
+        return discountPercent;
+    }
+
+    public void setDiscountPercent(double discountPercent) {
+        this.discountPercent = discountPercent;
+    }
+
+    public CatalogItemType getItemType() {
+        return itemType;
+    }
+
+    public void setItemType(CatalogItemType itemType) {
+        this.itemType = itemType;
     }
 }

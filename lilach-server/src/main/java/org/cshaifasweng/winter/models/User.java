@@ -1,5 +1,6 @@
 package org.cshaifasweng.winter.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
@@ -30,6 +31,8 @@ public abstract class User {
     protected String phone;
 
     protected Boolean isLoggedIn;
+
+    private Boolean isDisabled = false;
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
@@ -71,6 +74,7 @@ public abstract class User {
         this.email = email;
     }
 
+    @JsonIgnore
     public String getPassword() {
         return password;
     }
@@ -117,5 +121,13 @@ public abstract class User {
 
     public void setLoggedIn(Boolean loggedIn) {
         isLoggedIn = loggedIn;
+    }
+
+    public Boolean getDisabled() {
+        return isDisabled;
+    }
+
+    public void setDisabled(Boolean disabled) {
+        isDisabled = disabled;
     }
 }

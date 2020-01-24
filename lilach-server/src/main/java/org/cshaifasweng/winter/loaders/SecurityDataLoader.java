@@ -55,6 +55,8 @@ public class SecurityDataLoader implements ApplicationListener<ContextRefreshedE
         Privilege rolesEditPrivilege = createOrReturnPrivilege(SecurityConstants.PRIVILEGE_ROLES_EDIT);
         Privilege ordersCreatePrivilege = createOrReturnPrivilege(SecurityConstants.PRIVILEGE_ORDERS_CREATE);
         Privilege ordersCancelPrivilege = createOrReturnPrivilege(SecurityConstants.PRIVILEGE_ORDERS_CANCEL);
+        Privilege reportsViewPrivilege = createOrReturnPrivilege(SecurityConstants.PRIVILEGE_REPORTS_VIEW);
+        Privilege reportsViewAllPrivilege = createOrReturnPrivilege(SecurityConstants.PRIVILEGE_REPORTS_VIEW_ALL);
 
         Role adminRole = createOrReturnRole(SecurityConstants.ROLE_ADMIN, Arrays.asList(
                 catalogEditPrivilege,
@@ -63,7 +65,9 @@ public class SecurityDataLoader implements ApplicationListener<ContextRefreshedE
                 complaintHandlePrivilege,
                 rolesEditPrivilege,
                 ordersCreatePrivilege,
-                ordersCancelPrivilege
+                ordersCancelPrivilege,
+                reportsViewAllPrivilege,
+                reportsViewPrivilege
         ));
 
         Role customerRole = createOrReturnRole(SecurityConstants.ROLE_CUSTOMER, Arrays.asList(
@@ -80,12 +84,15 @@ public class SecurityDataLoader implements ApplicationListener<ContextRefreshedE
         ));
 
         Role storeManagerEmployeeRole = createOrReturnRole(SecurityConstants.ROLE_STORE_MANAGER, Arrays.asList(
-                complaintHandlePrivilege
+                complaintHandlePrivilege,
+                reportsViewPrivilege
         ));
 
         Role storeChainManagerEmployeeRole = createOrReturnRole(SecurityConstants.ROLE_STORE_CHAIN_MANAGER, Arrays.asList(
                 complaintFilePrivilege,
-                usersEditPrivilege
+                usersEditPrivilege,
+                reportsViewAllPrivilege,
+                reportsViewPrivilege
         ));
 
         Store haifaUniBranch = createOrReturnStore("Haifa University Branch", "Abba Houshy Av. 199, Haifa",
@@ -131,22 +138,20 @@ public class SecurityDataLoader implements ApplicationListener<ContextRefreshedE
         List<CatalogItem> items = new ArrayList<>();
         try {
             items.add(createOrReturnItem(25, "Just another flower",
-                    "Blue",
                     imageAsBytes("flower1.jpg"),
-                    4, qiryatYamBranch));
+                    4, qiryatYamBranch, true, CatalogItemType.ONE_FLOWER));
             items.add(createOrReturnItem(15, "A cheaper flower",
-                    "White",
                     imageAsBytes("flower2.jpg"),
-                    3, qiryatYamBranch));
-            items.add(createOrReturnItem(30, "Classic Rose", "Red",
+                    3, qiryatYamBranch, true, CatalogItemType.ONE_FLOWER));
+            items.add(createOrReturnItem(30, "Classic Rose",
                     imageAsBytes("flower3.jpg"),
-                    1, haifaUniBranch));
-            items.add(createOrReturnItem(10, "Cheapest flower available", "White",
+                    1, haifaUniBranch, true, CatalogItemType.ONE_FLOWER));
+            items.add(createOrReturnItem(10, "Cheapest flower available",
                     imageAsBytes("flower4.jpg"),
-                    5, haifaUniBranch));
-            items.add(createOrReturnItem(40, "A flower in the sun (pun intended)", "Yellow",
+                    5, haifaUniBranch, true, CatalogItemType.ONE_FLOWER));
+            items.add(createOrReturnItem(40, "A flower in the sun (pun intended)",
                     imageAsBytes("flower5.jpg"),
-                    0, haifaUniBranch));
+                    0, haifaUniBranch, false, CatalogItemType.ONE_FLOWER));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -217,12 +222,13 @@ public class SecurityDataLoader implements ApplicationListener<ContextRefreshedE
     }
 
     @Transactional
-    CatalogItem createOrReturnItem(double price, String description, String dominantColor,
-                                   byte[] picture, long availableCount, Store store) {
+    CatalogItem createOrReturnItem(double price, String description,
+                                   byte[] picture, long availableCount, Store store, boolean canBeAssembled,
+                                   CatalogItemType type) {
         CatalogItem item = catalogItemsRepository.findByStoreAndDescription(store, description);
 
         if (item == null) {
-            item = new CatalogItem(price, description, dominantColor, picture, availableCount, store);
+            item = new CatalogItem(price, description, picture, availableCount, store, canBeAssembled, type);
             catalogItemsRepository.save(item);
         }
 

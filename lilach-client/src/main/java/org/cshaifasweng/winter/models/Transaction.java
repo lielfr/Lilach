@@ -4,8 +4,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import java.util.Date;
 
-public class Transaction {
 
+public class Transaction {
     private Long id;
 
     private Date date;
