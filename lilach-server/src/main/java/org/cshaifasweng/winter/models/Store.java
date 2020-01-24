@@ -1,5 +1,7 @@
 package org.cshaifasweng.winter.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -36,6 +38,10 @@ public class Store {
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "store")
     private List<Order> orders;
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "store")
+    @JsonIgnore
+    private List<Report> reports;
 
     public Store() {
 
