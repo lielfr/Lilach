@@ -65,7 +65,7 @@ public class DashboardController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        setPage("primary");
+        setPage("catalog");
         EventBus.getDefault().register(this);
         LoggerUtils.setupLogger(log);
     }
@@ -130,7 +130,7 @@ public class DashboardController implements Initializable {
 
     @FXML
     void backToCatalog(ActionEvent event) {
-        EventBus.getDefault().post(new DashboardSwitchEvent("primary"));
+        EventBus.getDefault().post(new DashboardSwitchEvent("catalog"));
     }
 
     @FXML
