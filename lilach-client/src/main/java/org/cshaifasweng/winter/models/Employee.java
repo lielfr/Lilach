@@ -1,6 +1,7 @@
 package org.cshaifasweng.winter.models;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 
 import java.util.Collection;
@@ -12,10 +13,13 @@ public class Employee extends User {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
     private Date employedSince;
 
+    @JsonIgnore
     private Store managedStore;
 
+    @JsonIgnore
     private Store assignedStore;
 
+    @JsonIgnore
     private Collection<Employee> subordinates;
 
     private Employee reportsTo;

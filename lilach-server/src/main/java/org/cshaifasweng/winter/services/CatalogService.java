@@ -30,7 +30,7 @@ public class CatalogService {
     public List<CatalogItem> findByStore(long id) {
         Store store = storeRepository.getOne(id);
 
-        return repository.findByStore(store);
+        return repository.findByStoreOrderByDiscountAmountAscDiscountPercentAsc(store);
     }
 
     @Transactional
@@ -39,7 +39,6 @@ public class CatalogService {
         CatalogItem dbItem = repository.getOne(id);
         dbItem.setDescription(item.getDescription());
         dbItem.setAvailableCount(item.getAvailableCount());
-        dbItem.setDominantColor(item.getDominantColor());
         dbItem.setItemsSold(item.getItemsSold());
         dbItem.setPicture(item.getPicture());
         dbItem.setPrice(item.getPrice());

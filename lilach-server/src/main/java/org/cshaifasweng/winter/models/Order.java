@@ -6,6 +6,7 @@ import java.util.Date;
 import java.util.List;
 
 @Entity
+@Table(name = "orders_table")
 public class Order {
 
     @Id
@@ -31,11 +32,11 @@ public class Order {
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Customer orderedBy;
 
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.EAGER)
     private Store store;
 
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private List<Deliverable> items;
+    private List<Item> items;
 
     private double price;
 
@@ -116,11 +117,11 @@ public class Order {
         this.store = store;
     }
 
-    public List<Deliverable> getItems() {
+    public List<Item> getItems() {
         return items;
     }
 
-    public void setItems(List<Deliverable> items) {
+    public void setItems(List<Item> items) {
         this.items = items;
     }
 

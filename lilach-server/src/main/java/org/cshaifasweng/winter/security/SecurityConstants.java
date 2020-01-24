@@ -22,6 +22,8 @@ public final class SecurityConstants {
     public static final String PRIVILEGE_ORDERS_CREATE = "ORDERS_CREATE_PRIVILEGE";
     public static final String PRIVILEGE_ORDERS_CANCEL = "ORDERS_CANCEL_PRIVILEGE";
     public static final String PRIVILEGE_ORDERS_CANCEL_ALL = "ORDERS_CANCEL_ALL_PRIVILEGE";
+    public static final String PRIVILEGE_REPORTS_VIEW = "REPORTS_VIEW_PRIVILEGE";
+    public static final String PRIVILEGE_REPORTS_VIEW_ALL = "REPORTS_VIEW_ALL_PRIVILEGE";
     public static final String ROLE_ADMIN = "ROLE_ADMIN";
     public static final String ROLE_CUSTOMER = "ROLE_CUSTOMER";
     public static final String ROLE_CUSTOMER_SERVICE_EMPLOYEE = "ROLE_CUSTOMER_SERVICE_EMPLOYEE";

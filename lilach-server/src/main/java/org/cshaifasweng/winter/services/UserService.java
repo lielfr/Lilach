@@ -64,6 +64,7 @@ public class UserService {
             requiredFields.put("phone", customer.getPhone());
             requiredFields.put("creditCard", customer.getCreditCard());
             requiredFields.put("dateOfBirth", customer.getDateOfBirth());
+            requiredFields.put("address", customer.getAddress());
         } catch (NullPointerException e) {
             throw new LogicalException("Received malformed object");
         }

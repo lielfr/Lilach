@@ -1,5 +1,7 @@
 package org.cshaifasweng.winter.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,7 +26,11 @@ public class Store {
 
     private List<CatalogItem> catalogItems;
 
+    @JsonIgnore
     private List<Order> orders;
+
+    @JsonIgnore
+    private List<Report> reports;
 
     public Store() {
 
