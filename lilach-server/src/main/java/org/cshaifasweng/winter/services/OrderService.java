@@ -54,6 +54,10 @@ public class OrderService {
         double price = 0.0;
         for (Item item : newOrder.getItems()) {
             price += item.getPrice();
+            if (item instanceof CustomItem) {
+                CustomItem customItem = (CustomItem) item;
+                // TODO: Add type check here.
+            }
         }
         newOrder.setPrice(price);
 
