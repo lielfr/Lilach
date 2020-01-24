@@ -1,12 +1,18 @@
 package org.cshaifasweng.winter.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonSubTypes;
 
 import javax.persistence.*;
 import java.util.Date;
 
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
+@JsonSubTypes({
+        @JsonSubTypes.Type(value = IncomeReport.class, name = "income_report"),
+        @JsonSubTypes.Type(value = OrdersReport.class, name = "orders_report"),
+        @JsonSubTypes.Type(value = ComplaintsReport.class, name = "complaints_report")
+})
 public abstract class Report {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

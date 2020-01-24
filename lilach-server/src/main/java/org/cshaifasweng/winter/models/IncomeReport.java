@@ -1,11 +1,18 @@
 package org.cshaifasweng.winter.models;
 
+import com.fasterxml.jackson.annotation.JsonTypeName;
+
+import javax.persistence.ElementCollection;
+import javax.persistence.Entity;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+@Entity
+@JsonTypeName("income_report")
 public class IncomeReport extends Report {
 
+    @ElementCollection
     private List<Double> incomeByDay;
 
     private Double totalIncome;
