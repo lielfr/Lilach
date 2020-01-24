@@ -31,6 +31,8 @@ public abstract class User {
 
     protected Boolean isLoggedIn;
 
+    private Boolean isDisabled = false;
+
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name="users_roles",
@@ -117,5 +119,13 @@ public abstract class User {
 
     public void setLoggedIn(Boolean loggedIn) {
         isLoggedIn = loggedIn;
+    }
+
+    public Boolean getDisabled() {
+        return isDisabled;
+    }
+
+    public void setDisabled(Boolean disabled) {
+        isDisabled = disabled;
     }
 }
