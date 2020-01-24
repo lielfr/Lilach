@@ -30,7 +30,7 @@ public class CatalogService {
     public List<CatalogItem> findByStore(long id) {
         Store store = storeRepository.getOne(id);
 
-        return repository.findByStore(store);
+        return repository.findByStoreOrderByDiscountAmountAscDiscountPercentAsc(store);
     }
 
     @Transactional

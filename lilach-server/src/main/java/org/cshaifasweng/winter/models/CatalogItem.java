@@ -38,6 +38,10 @@ public class CatalogItem extends Item {
 
     private boolean canBeAssembled;
 
+    private double discountAmount;
+
+    private double discountPercent;
+
     public CatalogItem(double price, String description,
                        byte[] picture, long availableCount, Store store, boolean canBeAssembled) {
         this.price = price;
@@ -47,6 +51,8 @@ public class CatalogItem extends Item {
         this.store = store;
         this.customItems = new ArrayList<>();
         this.canBeAssembled = canBeAssembled;
+        this.discountAmount = 0.0;
+        this.discountPercent = 0.0;
     }
 
     public String getDescription() {
@@ -103,5 +109,21 @@ public class CatalogItem extends Item {
 
     public void setCanBeAssembled(boolean canBeAssembled) {
         this.canBeAssembled = canBeAssembled;
+    }
+
+    public double getDiscountAmount() {
+        return discountAmount;
+    }
+
+    public void setDiscountAmount(double discountAmount) {
+        this.discountAmount = discountAmount;
+    }
+
+    public double getDiscountPercent() {
+        return discountPercent;
+    }
+
+    public void setDiscountPercent(double discountPercent) {
+        this.discountPercent = discountPercent;
     }
 }

@@ -10,4 +10,6 @@ public interface CatalogItemsRepository extends JpaRepository<CatalogItem, Long>
     CatalogItem findByStoreAndDescription(Store store, String description);
 
     List<CatalogItem> findByStore(Store store);
+
+    List<CatalogItem> findByStoreOrderByDiscountAmountAscDiscountPercentAsc(Store store);
 }
