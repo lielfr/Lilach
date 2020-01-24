@@ -17,10 +17,10 @@ public class AddItemController implements Refreshable {
     private TextField discountSumField;
 
     @FXML
-    private TextField discountPrecnetageField;
+    private TextField discountPercentageField;
 
     @FXML
-    private Button addImgaeButton;
+    private Button addImageButton;
 
     @FXML
     private ImageView imageViewer;
@@ -38,8 +38,12 @@ public class AddItemController implements Refreshable {
     private ChoiceBox<?> dominantColorChoiceBox;
 
     @FXML
-    private ChoiceBox<?> typeChiceBox;
+    private ChoiceBox<?> typeChoiceBox;
 
+    /**
+     * Choosing the Item Image you want to upload to the catalog.
+     * @param event
+     */
     @FXML
     void addImage(ActionEvent event) {
 
