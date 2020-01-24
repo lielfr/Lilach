@@ -1,9 +1,6 @@
 package org.cshaifasweng.winter.web;
 
-import org.cshaifasweng.winter.models.CatalogItem;
-import org.cshaifasweng.winter.models.Complaint;
-import org.cshaifasweng.winter.models.Customer;
-import org.cshaifasweng.winter.models.User;
+import org.cshaifasweng.winter.models.*;
 import retrofit2.Call;
 import retrofit2.http.*;
 
@@ -33,5 +30,8 @@ public interface LilachService {
 
     @PUT("/complaint/{id}")
     Call<Complaint> handleComplaint(@Path("id") long id, @Body Complaint complaint);
+
+    @GET("/store")
+    Call<List<Store>> getAllStores();
 
 }
