@@ -132,19 +132,19 @@ public class SecurityDataLoader implements ApplicationListener<ContextRefreshedE
         try {
             items.add(createOrReturnItem(25, "Just another flower",
                     imageAsBytes("flower1.jpg"),
-                    4, qiryatYamBranch, true));
+                    4, qiryatYamBranch, true, CatalogItemType.ONE_FLOWER));
             items.add(createOrReturnItem(15, "A cheaper flower",
                     imageAsBytes("flower2.jpg"),
-                    3, qiryatYamBranch, true));
+                    3, qiryatYamBranch, true, CatalogItemType.ONE_FLOWER));
             items.add(createOrReturnItem(30, "Classic Rose",
                     imageAsBytes("flower3.jpg"),
-                    1, haifaUniBranch, true));
+                    1, haifaUniBranch, true, CatalogItemType.ONE_FLOWER));
             items.add(createOrReturnItem(10, "Cheapest flower available",
                     imageAsBytes("flower4.jpg"),
-                    5, haifaUniBranch, true));
+                    5, haifaUniBranch, true, CatalogItemType.ONE_FLOWER));
             items.add(createOrReturnItem(40, "A flower in the sun (pun intended)",
                     imageAsBytes("flower5.jpg"),
-                    0, haifaUniBranch, false));
+                    0, haifaUniBranch, false, CatalogItemType.ONE_FLOWER));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -216,11 +216,12 @@ public class SecurityDataLoader implements ApplicationListener<ContextRefreshedE
 
     @Transactional
     CatalogItem createOrReturnItem(double price, String description,
-                                   byte[] picture, long availableCount, Store store, boolean canBeAssembled) {
+                                   byte[] picture, long availableCount, Store store, boolean canBeAssembled,
+                                   CatalogItemType type) {
         CatalogItem item = catalogItemsRepository.findByStoreAndDescription(store, description);
 
         if (item == null) {
-            item = new CatalogItem(price, description, picture, availableCount, store, canBeAssembled);
+            item = new CatalogItem(price, description, picture, availableCount, store, canBeAssembled, type);
             catalogItemsRepository.save(item);
         }
 

@@ -42,8 +42,11 @@ public class CatalogItem extends Item {
 
     private double discountPercent;
 
+    private CatalogItemType itemType;
+
     public CatalogItem(double price, String description,
-                       byte[] picture, long availableCount, Store store, boolean canBeAssembled) {
+                       byte[] picture, long availableCount, Store store, boolean canBeAssembled,
+                       CatalogItemType itemType) {
         this.price = price;
         this.description = description;
         this.picture = picture.clone();
@@ -53,6 +56,7 @@ public class CatalogItem extends Item {
         this.canBeAssembled = canBeAssembled;
         this.discountAmount = 0.0;
         this.discountPercent = 0.0;
+        this.itemType = itemType;
     }
 
     public String getDescription() {
@@ -125,5 +129,13 @@ public class CatalogItem extends Item {
 
     public void setDiscountPercent(double discountPercent) {
         this.discountPercent = discountPercent;
+    }
+
+    public CatalogItemType getItemType() {
+        return itemType;
+    }
+
+    public void setItemType(CatalogItemType itemType) {
+        this.itemType = itemType;
     }
 }
