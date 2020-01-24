@@ -126,7 +126,32 @@
                                                             <Insets left="10.0" />
                                                          </padding>
                                                       </Label>
-                                                      <Label fx:id="invalid" text="sdfgfdg" textFill="RED" GridPane.columnIndex="2">
+                                                      <Label fx:id="invalidFirstNameVerLabel" text="Invalid value" textFill="RED" visible="false" GridPane.columnIndex="2">
+                                                         <padding>
+                                                            <Insets left="10.0" />
+                                                         </padding>
+                                                      </Label>
+                                                      <Label fx:id="invalidLastNameVerLabel" text="Invalid value" textFill="RED" visible="false" GridPane.columnIndex="2" GridPane.rowIndex="1">
+                                                         <padding>
+                                                            <Insets left="10.0" />
+                                                         </padding>
+                                                      </Label>
+                                                      <Label fx:id="invalidIdVerLabel" text="Invalid value" textFill="RED" visible="false" GridPane.columnIndex="2" GridPane.rowIndex="2">
+                                                         <padding>
+                                                            <Insets left="10.0" />
+                                                         </padding>
+                                                      </Label>
+                                                      <Label fx:id="invalidEmailVerLabel" text="Invalid value" textFill="RED" visible="false" GridPane.columnIndex="2" GridPane.rowIndex="3">
+                                                         <padding>
+                                                            <Insets left="10.0" />
+                                                         </padding>
+                                                      </Label>
+                                                      <Label fx:id="invalidPhoneVerLabel" text="Invalid value" textFill="RED" visible="false" GridPane.columnIndex="2" GridPane.rowIndex="4">
+                                                         <padding>
+                                                            <Insets left="10.0" />
+                                                         </padding>
+                                                      </Label>
+                                                      <Label fx:id="invalidAddressVerLabel" text="Invalid value" textFill="RED" visible="false" GridPane.columnIndex="2" GridPane.rowIndex="5">
                                                          <padding>
                                                             <Insets left="10.0" />
                                                          </padding>
