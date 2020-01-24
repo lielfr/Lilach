@@ -13,7 +13,7 @@ import java.util.*;
 @Component
 public class ReportMakingService {
     // TODO: Move this to the configuration file
-    private static final long runningRate = 1000 * 3600;
+    private static final long runningRate = 1000 * 10;
 
     private static final Logger log = LoggerFactory.getLogger(ReportMakingService.class);
 
