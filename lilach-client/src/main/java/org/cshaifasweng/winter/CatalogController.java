@@ -146,7 +146,7 @@ public class CatalogController implements Refreshable {
                 CatalogItem item = items.get(index);
                 controller.setItemLabel(item.getDescription());
                 controller.setItemImage(new Image(new ByteArrayInputStream(item.getPicture())));
-                controller.setItemPriceLabel(String.valueOf(item.getPrice()) + "NIS");
+                controller.setItemPriceLabel(item.getPrice() + " NIS");
                 double discountedPrice = item.getPrice();
                 discountedPrice *= (100 - item.getDiscountPercent()) / 100;
                 discountedPrice -= item.getDiscountAmount();
