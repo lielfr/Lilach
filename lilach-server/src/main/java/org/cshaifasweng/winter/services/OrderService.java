@@ -53,7 +53,14 @@ public class OrderService {
 
         double price = 0.0;
         for (Item item : newOrder.getItems()) {
-            price += item.getPrice();
+            double itemPrice = item.getPrice();
+            // Handling discount
+            if (item instanceof CatalogItem) {
+                CatalogItem catalogItem = (CatalogItem) item;
+                itemPrice -= catalogItem.getDiscountAmount();
+                itemPrice *= (100 - catalogItem.getDiscountPercent()) / 100;
+            }
+            price += itemPrice;
             if (item instanceof CustomItem) {
                 CustomItem customItem = (CustomItem) item;
                 for (CatalogItem customItemChild : customItem.getItems()) {
