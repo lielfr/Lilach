@@ -2,6 +2,8 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.RadioButton?>
 <?import javafx.scene.control.ScrollPane?>
@@ -42,7 +44,7 @@
             </HBox>
          </bottom>
          <center>
-            <TabPane fx:id="tabPane" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+            <TabPane fx:id="tabPane" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
               <tabs>
                 <Tab fx:id="tab1" onSelectionChanged="#refresh" text="1.Items">
                   <content>
@@ -222,90 +224,109 @@
                                        <children>
                                           <Label text="Delivery details:" />
                                           <Separator prefWidth="200.0" />
-                                          <HBox prefHeight="81.0" prefWidth="866.0" spacing="10.0">
+                                          <VBox prefHeight="323.0" prefWidth="866.0">
                                              <children>
-                                                <GridPane prefHeight="61.0" prefWidth="389.0">
-                                                  <columnConstraints>
-                                                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                                                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                                                  </columnConstraints>
-                                                  <rowConstraints>
-                                                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                                  </rowConstraints>
+                                                <HBox prefHeight="81.0" prefWidth="866.0" spacing="10.0">
                                                    <children>
-                                                      <RadioButton fx:id="sendToMyAddRadio" mnemonicParsing="false" onMouseClicked="#selectMyAddRadio" text="Send to my address" />
-                                                      <RadioButton fx:id="sendToAnotherAddRadio" mnemonicParsing="false" onMouseClicked="#selectOtherAddRadio" text="Send to another address" GridPane.rowIndex="1" />
+                                                      <GridPane prefHeight="61.0" prefWidth="389.0">
+                                                        <columnConstraints>
+                                                          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                                          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                                        </columnConstraints>
+                                                        <rowConstraints>
+                                                          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                        </rowConstraints>
+                                                         <children>
+                                                            <RadioButton fx:id="sendToMyAddRadio" mnemonicParsing="false" onMouseClicked="#selectMyAddRadio" text="Send to my address" />
+                                                            <RadioButton fx:id="sendToAnotherAddRadio" mnemonicParsing="false" onMouseClicked="#selectOtherAddRadio" text="Send to another address" GridPane.rowIndex="1" />
+                                                         </children>
+                                                      </GridPane>
                                                    </children>
-                                                </GridPane>
-                                             </children>
-                                             <padding>
-                                                <Insets left="10.0" right="10.0" top="10.0" />
-                                             </padding>
-                                          </HBox>
-                                          <HBox prefHeight="81.0" prefWidth="866.0" spacing="20.0">
-                                             <children>
-                                                <GridPane prefHeight="61.0" prefWidth="459.0">
-                                                  <columnConstraints>
-                                                    <ColumnConstraints hgrow="SOMETIMES" maxWidth="137.0" minWidth="10.0" prefWidth="123.0" />
-                                                    <ColumnConstraints hgrow="SOMETIMES" maxWidth="168.0" minWidth="10.0" prefWidth="168.0" />
-                                                      <ColumnConstraints hgrow="SOMETIMES" maxWidth="168.0" minWidth="10.0" prefWidth="168.0" />
-                                                  </columnConstraints>
-                                                  <rowConstraints>
-                                                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                                  </rowConstraints>
+                                                   <padding>
+                                                      <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                                                   </padding>
+                                                </HBox>
+                                                <HBox prefHeight="81.0" prefWidth="866.0" spacing="20.0">
                                                    <children>
-                                                      <Label fx:id="deliveryAddressLabel" disable="true" text="Delivery address:" />
-                                                      <Label fx:id="recipientMailLabel" disable="true" text="Recipient mail:" GridPane.rowIndex="1" />
-                                                      <TextField fx:id="deliveryAddressField" disable="true" prefWidth="143.0" GridPane.columnIndex="1" />
-                                                      <TextField fx:id="recipientMailField" disable="true" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                                                      <Label fx:id="deliveryAddressEmpty" text="Can't be empty" textFill="RED" visible="false" GridPane.columnIndex="2">
-                                                         <padding>
-                                                            <Insets left="10.0" />
-                                                         </padding>
-                                                      </Label>
-                                                      <Label fx:id="recipientMailEmpty" text="Can't be empty" textFill="RED" visible="false" GridPane.columnIndex="2" GridPane.rowIndex="1">
-                                                         <GridPane.margin>
-                                                            <Insets />
-                                                         </GridPane.margin>
-                                                         <padding>
-                                                            <Insets left="10.0" />
-                                                         </padding>
-                                                      </Label>
-                                                      <Label fx:id="invalidEmailAddressLabel" text="Invalid email address" textFill="RED" visible="false" GridPane.columnIndex="2" GridPane.rowIndex="1">
-                                                         <padding>
-                                                            <Insets left="10.0" />
-                                                         </padding>
-                                                      </Label>
+                                                      <GridPane prefHeight="61.0" prefWidth="459.0">
+                                                        <columnConstraints>
+                                                          <ColumnConstraints hgrow="SOMETIMES" maxWidth="137.0" minWidth="10.0" prefWidth="123.0" />
+                                                          <ColumnConstraints hgrow="SOMETIMES" maxWidth="168.0" minWidth="10.0" prefWidth="168.0" />
+                                                            <ColumnConstraints hgrow="SOMETIMES" maxWidth="168.0" minWidth="10.0" prefWidth="168.0" />
+                                                        </columnConstraints>
+                                                        <rowConstraints>
+                                                          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                        </rowConstraints>
+                                                         <children>
+                                                            <Label fx:id="deliveryAddressLabel" disable="true" text="Delivery address:" />
+                                                            <Label fx:id="recipientMailLabel" disable="true" text="Recipient mail:" GridPane.rowIndex="1" />
+                                                            <TextField fx:id="deliveryAddressField" disable="true" prefWidth="143.0" GridPane.columnIndex="1">
+                                                               <GridPane.margin>
+                                                                  <Insets />
+                                                               </GridPane.margin>
+                                                            </TextField>
+                                                            <TextField fx:id="recipientMailField" disable="true" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                                                            <Label fx:id="deliveryAddressEmpty" text="Can't be empty" textFill="RED" visible="false" GridPane.columnIndex="2">
+                                                               <padding>
+                                                                  <Insets left="10.0" />
+                                                               </padding>
+                                                            </Label>
+                                                            <Label fx:id="recipientMailEmpty" text="Can't be empty" textFill="RED" visible="false" GridPane.columnIndex="2" GridPane.rowIndex="1">
+                                                               <GridPane.margin>
+                                                                  <Insets />
+                                                               </GridPane.margin>
+                                                               <padding>
+                                                                  <Insets left="10.0" />
+                                                               </padding>
+                                                            </Label>
+                                                            <Label fx:id="invalidEmailAddressLabel" text="Invalid email address" textFill="RED" visible="false" GridPane.columnIndex="2" GridPane.rowIndex="1">
+                                                               <padding>
+                                                                  <Insets left="10.0" />
+                                                               </padding>
+                                                            </Label>
+                                                         </children>
+                                                      </GridPane>
                                                    </children>
-                                                </GridPane>
-                                             </children>
-                                             <padding>
-                                                <Insets left="50.0" right="20.0" />
-                                             </padding>
-                                          </HBox>
-                                          <HBox prefHeight="100.0" prefWidth="200.0" spacing="10.0">
-                                             <padding>
-                                                <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-                                             </padding>
-                                             <children>
-                                                <GridPane prefHeight="80.0" prefWidth="323.0">
-                                                  <columnConstraints>
-                                                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                                                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                                                  </columnConstraints>
-                                                  <rowConstraints>
-                                                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                                  </rowConstraints>
+                                                   <padding>
+                                                      <Insets bottom="10.0" left="50.0" right="20.0" top="10.0" />
+                                                   </padding>
+                                                </HBox>
+                                                <HBox prefHeight="101.0" prefWidth="866.0" spacing="10.0">
+                                                   <padding>
+                                                      <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                                                   </padding>
                                                    <children>
-                                                      <Label text="Label" />
+                                                      <GridPane prefHeight="80.0" prefWidth="497.0">
+                                                        <columnConstraints>
+                                                          <ColumnConstraints hgrow="SOMETIMES" maxWidth="159.0" minWidth="10.0" prefWidth="95.0" />
+                                                          <ColumnConstraints hgrow="SOMETIMES" maxWidth="270.0" minWidth="10.0" prefWidth="198.0" />
+                                                            <ColumnConstraints hgrow="SOMETIMES" maxWidth="188.0" minWidth="10.0" prefWidth="188.0" />
+                                                        </columnConstraints>
+                                                        <rowConstraints>
+                                                          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                        </rowConstraints>
+                                                         <children>
+                                                            <Label text="Delivery Date:" />
+                                                            <Label text="Delivery hour:" GridPane.rowIndex="1" />
+                                                            <HBox prefHeight="27.0" prefWidth="143.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                                                               <children>
+                                                                  <ChoiceBox fx:id="hourChooseBox" prefHeight="26.0" prefWidth="50.0" />
+                                                                  <Label text=":" />
+                                                                  <ChoiceBox fx:id="minuteChooseBox" prefHeight="26.0" prefWidth="49.0" />
+                                                               </children>
+                                                            </HBox>
+                                                            <DatePicker fx:id="datePicker" promptText="Choos date" GridPane.columnIndex="1" />
+                                                            <Label fx:id="invalidDate" text="Invalid date" textFill="RED" visible="false" GridPane.columnIndex="2" />
+                                                            <Label fx:id="invalidHour" text="Invalid hour" textFill="RED" visible="false" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+                                                         </children>
+                                                      </GridPane>
                                                    </children>
-                                                </GridPane>
+                                                </HBox>
                                              </children>
-                                          </HBox>
+                                          </VBox>
                                        </children>
                                        <padding>
                                           <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
@@ -319,91 +340,95 @@
                   </Tab>
                   <Tab fx:id="tab5" disable="true" onSelectionChanged="#refresh" text="5.Summery">
                      <content>
-                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                        <AnchorPane maxHeight="1.7976931348623157E308" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                            <children>
-                              <ScrollPane fitToWidth="true" hbarPolicy="NEVER" maxWidth="1.7976931348623157E308" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                              <ScrollPane fitToWidth="true" hbarPolicy="NEVER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="519.0" prefWidth="904.0" AnchorPane.bottomAnchor="-147.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                  <content>
-                                    <VBox prefHeight="480.0" prefWidth="886.0" spacing="10.0">
+                                    <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="480.0" prefWidth="886.0" spacing="10.0">
                                        <children>
                                           <Label text="Order summery:" />
                                           <Separator prefWidth="200.0" />
-                                          <HBox prefHeight="180.0" prefWidth="866.0">
+                                          <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="465.0" prefWidth="866.0" VBox.vgrow="ALWAYS">
                                              <children>
-                                                <GridPane prefWidth="346.0">
-                                                   <columnConstraints>
-                                                      <ColumnConstraints maxWidth="417.0" minWidth="10.0" prefWidth="82.0" />
-                                                      <ColumnConstraints maxWidth="767.0" minWidth="10.0" prefWidth="264.0" />
-                                                   </columnConstraints>
-                                                   <rowConstraints>
-                                                      <RowConstraints minHeight="10.0" prefHeight="30.0" />
-                                                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                                   </rowConstraints>
+                                                <HBox prefHeight="180.0" prefWidth="866.0">
                                                    <children>
-                                                      <Label text="First name:" />
-                                                      <Label text="Email:" GridPane.rowIndex="3" />
-                                                      <Label text="Phone" GridPane.rowIndex="4" />
-                                                      <Label text="ID:" GridPane.rowIndex="2" />
-                                                      <Label text="Last name:" GridPane.rowIndex="1" />
-                                                      <TextField fx:id="firstNameField" GridPane.columnIndex="1" />
-                                                      <TextField fx:id="lastNameField" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                                                      <TextField fx:id="idNumField" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-                                                      <TextField fx:id="emailField" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-                                                      <TextField fx:id="phoneNumberField" GridPane.columnIndex="1" GridPane.rowIndex="4" />
-                                                      <Label text="Address:" GridPane.rowIndex="5" />
-                                                      <TextField fx:id="addressField" GridPane.columnIndex="1" GridPane.rowIndex="5" />
-                                                   </children>
-                                                </GridPane>
-                                             </children>
-                                             <padding>
-                                                <Insets left="20.0" />
-                                             </padding>
-                                          </HBox>
-                                          <VBox prefHeight="123.0" prefWidth="866.0">
-                                             <children>
-                                                <Label text="Greeting:" />
-                                                <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0">
-                                                   <children>
-                                                      <TextArea fx:id="greetingTextArea" prefHeight="100.0" prefWidth="373.0" />
+                                                      <GridPane prefWidth="346.0">
+                                                         <columnConstraints>
+                                                            <ColumnConstraints maxWidth="417.0" minWidth="10.0" prefWidth="82.0" />
+                                                            <ColumnConstraints maxWidth="767.0" minWidth="10.0" prefWidth="264.0" />
+                                                         </columnConstraints>
+                                                         <rowConstraints>
+                                                            <RowConstraints minHeight="10.0" prefHeight="30.0" />
+                                                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                         </rowConstraints>
+                                                         <children>
+                                                            <Label text="First name:" />
+                                                            <Label text="Email:" GridPane.rowIndex="3" />
+                                                            <Label text="Phone" GridPane.rowIndex="4" />
+                                                            <Label text="ID:" GridPane.rowIndex="2" />
+                                                            <Label text="Last name:" GridPane.rowIndex="1" />
+                                                            <TextField fx:id="firstNameField" GridPane.columnIndex="1" />
+                                                            <TextField fx:id="lastNameField" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                                                            <TextField fx:id="idNumField" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                                                            <TextField fx:id="emailField" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                                                            <TextField fx:id="phoneNumberField" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                                                            <Label text="Address:" GridPane.rowIndex="5" />
+                                                            <TextField fx:id="addressField" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+                                                         </children>
+                                                      </GridPane>
                                                    </children>
                                                    <padding>
-                                                      <Insets left="80.0" right="10.0" top="10.0" />
+                                                      <Insets left="20.0" />
+                                                   </padding>
+                                                </HBox>
+                                                <VBox prefHeight="123.0" prefWidth="866.0">
+                                                   <children>
+                                                      <Label text="Greeting:" />
+                                                      <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0">
+                                                         <children>
+                                                            <TextArea fx:id="greetingTextArea" prefHeight="100.0" prefWidth="373.0" />
+                                                         </children>
+                                                         <padding>
+                                                            <Insets left="80.0" right="10.0" top="10.0" />
+                                                         </padding>
+                                                      </HBox>
+                                                   </children>
+                                                   <opaqueInsets>
+                                                      <Insets left="20.0" />
+                                                   </opaqueInsets>
+                                                   <padding>
+                                                      <Insets left="20.0" />
+                                                   </padding>
+                                                </VBox>
+                                                <HBox prefHeight="95.0" prefWidth="882.0">
+                                                   <children>
+                                                      <GridPane prefHeight="63.0" prefWidth="347.0">
+                                                        <columnConstraints>
+                                                          <ColumnConstraints hgrow="SOMETIMES" maxWidth="136.0" minWidth="10.0" prefWidth="112.0" />
+                                                          <ColumnConstraints hgrow="SOMETIMES" maxWidth="216.0" minWidth="10.0" prefWidth="216.0" />
+                                                        </columnConstraints>
+                                                        <rowConstraints>
+                                                          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                        </rowConstraints>
+                                                         <children>
+                                                            <Label text="Delivery address:" />
+                                                            <Label text="Recipient mail:" GridPane.rowIndex="1" />
+                                                            <TextField fx:id="deliveryAddressField" GridPane.columnIndex="1" />
+                                                            <TextField fx:id="recipientMailField" prefWidth="119.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                                                         </children>
+                                                      </GridPane>
+                                                   </children>
+                                                   <padding>
+                                                      <Insets left="20.0" />
                                                    </padding>
                                                 </HBox>
                                              </children>
-                                             <opaqueInsets>
-                                                <Insets left="20.0" />
-                                             </opaqueInsets>
-                                             <padding>
-                                                <Insets left="20.0" />
-                                             </padding>
                                           </VBox>
-                                          <HBox prefHeight="63.0" prefWidth="866.0">
-                                             <children>
-                                                <GridPane prefHeight="63.0" prefWidth="347.0">
-                                                  <columnConstraints>
-                                                    <ColumnConstraints hgrow="SOMETIMES" maxWidth="136.0" minWidth="10.0" prefWidth="112.0" />
-                                                    <ColumnConstraints hgrow="SOMETIMES" maxWidth="216.0" minWidth="10.0" prefWidth="216.0" />
-                                                  </columnConstraints>
-                                                  <rowConstraints>
-                                                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                                  </rowConstraints>
-                                                   <children>
-                                                      <Label text="Delivery address:" />
-                                                      <Label text="Recipient mail:" GridPane.rowIndex="1" />
-                                                      <TextField fx:id="deliveryAddressField" GridPane.columnIndex="1" />
-                                                      <TextField fx:id="recipientMailField" prefWidth="119.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                                                   </children>
-                                                </GridPane>
-                                             </children>
-                                             <padding>
-                                                <Insets left="20.0" />
-                                             </padding>
-                                          </HBox>
                                        </children>
                                        <padding>
                                           <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />

@@ -125,6 +125,22 @@ public class OrderController implements Refreshable{
     private Label invalidEmailAddressLabel;
 
     @FXML
+    private ChoiceBox<?> hourChooseBox;
+
+    @FXML
+    private ChoiceBox<?> minuteChooseBox;
+
+    @FXML
+    private DatePicker datePicker;
+
+    @FXML
+    private Label invalidDate;
+
+    @FXML
+    private Label invalidHour;
+
+
+    @FXML
     private Tab tab5;
 
     @FXML
@@ -183,8 +199,10 @@ public class OrderController implements Refreshable{
     }
 
     private void setSelected(boolean status){
+        if (sendToAnotherAddRadio != null){
         sendToAnotherAddRadio.setSelected(status);
         sendToMyAddRadio.setSelected(!status);
+        }
     }
 
     @FXML
