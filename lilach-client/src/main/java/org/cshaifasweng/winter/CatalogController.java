@@ -2,14 +2,15 @@ package org.cshaifasweng.winter;
 
 import javafx.application.Platform;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.Node;
-import javafx.scene.control.Button;
-import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.layout.GridPane;
-import org.cshaifasweng.winter.events.LoginChangeEvent;
+import javafx.stage.Stage;
+import org.cshaifasweng.winter.events.*;
 import org.cshaifasweng.winter.models.*;
 import org.cshaifasweng.winter.web.APIAccess;
 import org.cshaifasweng.winter.web.LilachService;
@@ -21,18 +22,22 @@ import retrofit2.Response;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.ResourceBundle;
 import java.util.stream.Collectors;
 
-public class CatalogController implements Refreshable {
+public class CatalogController implements Refreshable, Initializable {
 
     private LilachService service;
 
     private List<Store> stores = Collections.synchronizedList(new ArrayList<>());
 
     private List<CatalogItem> items;
+
+    private List<Item> cart;
 
     private static final int NUM_COLS = 3;
     private static final int NUM_ROWS = 3;
@@ -59,21 +64,31 @@ public class CatalogController implements Refreshable {
     private Label totalPages;
 
     @FXML
-    void backPage() {
+    private Button cartButton;
+
+    @FXML
+    public void goToCart() {
+        EventBus.getDefault().post(new DashboardSwitchEvent("order"));
+        EventBus.getDefault().post(new OrderCreateEvent(cart));
+        cart.clear();
+    }
+
+    @FXML
+    public void backPage() {
         if (page == 1) return;
         page--;
         updatePages();
     }
 
     @FXML
-    void nextPage() {
+    public void nextPage() {
         if (page == pages) return;
         page++;
         updatePages();
     }
 
     @FXML
-    void pageNumChanged() {
+    public void pageNumChanged() {
         int pageNumVal = Integer.parseInt(pageNum.getText());
         if (pageNumVal > 1 && pageNumVal <= pages) {
             page = pageNumVal;
@@ -144,6 +159,7 @@ public class CatalogController implements Refreshable {
                 if (index >= items.size())
                     break;
                 CatalogItem item = items.get(index);
+                controller.setItem(item);
                 controller.setItemLabel(item.getDescription());
                 controller.setItemImage(new Image(new ByteArrayInputStream(item.getPicture())));
                 controller.setItemPriceLabel(item.getPrice() + " NIS");
@@ -203,6 +219,35 @@ public class CatalogController implements Refreshable {
                         return;
                     getCatalog(stores.get
                             (selectedIndex).getId());
+                    cart.clear();
+                    updateCartButton();
                 });
+    }
+
+    private void updateCartButton() {
+        String builder = "Go to cart (" +
+                cart.size() +
+                " " +
+                (cart.size() == 1 ? "item" : "items") +
+                ")";
+        cartButton.setText(builder);
+    }
+
+    @Subscribe
+    public void handleItemBuy(CatalogItemBuyEvent event) throws IOException {
+        cart.add(event.getItem());
+        updateCartButton();
+
+        Parent dialog = LayoutManager.getInstance().getFXML("popup_add_item");
+        Stage popupStage = new Stage();
+        Scene popupScene = new Scene(dialog);
+        EventBus.getDefault().post(new PopupAddItemEvent(cart, popupStage));
+        popupStage.setScene(popupScene);
+        popupStage.show();
+    }
+
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+        cart = new ArrayList<>();
     }
 }

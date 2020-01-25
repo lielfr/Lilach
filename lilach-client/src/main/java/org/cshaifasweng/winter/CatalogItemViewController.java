@@ -6,6 +6,9 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import org.cshaifasweng.winter.events.CatalogItemBuyEvent;
+import org.cshaifasweng.winter.models.CatalogItem;
+import org.greenrobot.eventbus.EventBus;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -25,9 +28,11 @@ public class CatalogItemViewController implements Initializable {
 
     private PseudoClass strikethrough;
 
+    private CatalogItem item;
+
     @FXML
     void buyItem() {
-
+        EventBus.getDefault().post(new CatalogItemBuyEvent(item));
     }
 
     @Override
@@ -55,5 +60,13 @@ public class CatalogItemViewController implements Initializable {
         itemPriceLabel.pseudoClassStateChanged(strikethrough, true);
         itemPriceLabelDiscount.setVisible(true);
         itemPriceLabelDiscount.setText("Now "+ discountedPrice + " NIS");
+    }
+
+    public CatalogItem getItem() {
+        return item;
+    }
+
+    public void setItem(CatalogItem item) {
+        this.item = item;
     }
 }
