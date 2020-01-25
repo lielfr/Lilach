@@ -87,6 +87,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .hasAnyAuthority(SecurityConstants.PRIVILEGE_REPORTS_VIEW, SecurityConstants.PRIVILEGE_REPORTS_VIEW_ALL)
                 .antMatchers(HttpMethod.GET, "/store")
                 .permitAll()
+                .antMatchers(HttpMethod.GET, "/image/**")
+                .permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .addFilter(new AuthenticationFilter(authenticationManager(), userRepository, userService))

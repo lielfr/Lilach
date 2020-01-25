@@ -5,9 +5,11 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 import org.cshaifasweng.winter.events.DashboardSwitchEvent;
 import org.cshaifasweng.winter.events.OrderCreateEvent;
 import org.cshaifasweng.winter.models.Customer;
+import org.cshaifasweng.winter.models.Item;
 import org.cshaifasweng.winter.models.Order;
 import org.cshaifasweng.winter.models.User;
 import org.cshaifasweng.winter.web.APIAccess;
@@ -22,6 +24,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 public class OrderController implements Refreshable{
 
@@ -41,7 +44,7 @@ public class OrderController implements Refreshable{
     private Tab tab1;
 
     @FXML
-    private TableView<?> itemTable;
+    private TableView<Item> itemTable;
 
     @FXML
     private Tab tab2;
@@ -185,7 +188,8 @@ public class OrderController implements Refreshable{
 
     @Subscribe
     public void handleOrderCreateEvent(OrderCreateEvent event) {
-        // TODO: Use the event
+        currentOrder.setItems(event.getCart().stream().collect(Collectors.toList()));
+        populateTable();
     }
 
     private void resetVisibleTab2()
@@ -465,9 +469,20 @@ public class OrderController implements Refreshable{
         }
     }
 
+    private void populateTable() {
+        itemTable.getColumns().clear();
+        TableColumn<Item, Double> priceColumn = new TableColumn<>("Price");
+        priceColumn.setCellValueFactory(new PropertyValueFactory<>("price"));
+        TableColumn<Item, Double> quantityColumn = new TableColumn<>("Quantity");
+        quantityColumn.setCellValueFactory(new PropertyValueFactory<>("quantity"));
+
+        itemTable.getColumns().addAll(priceColumn, quantityColumn);
+        itemTable.setItems(FXCollections.observableList(currentOrder.getItems()));
+    }
+
     @Override
     public void refresh() {
-
+        EventBus.getDefault().register(this);
         currentOrder.setOrderedBy((Customer)currentUser);
         //SingleSelectionModel<Tab> selectionModel = tabPane.getSelectionModel();
         //setting the default to 'send to my address'.
@@ -481,8 +496,6 @@ public class OrderController implements Refreshable{
             minuteChooseBox.setItems(minuteList);
             minuteChooseBox.setValue("00");
         }
-
-
 
 
         //System.out.println(selectionModel.getSelectedIndex());
