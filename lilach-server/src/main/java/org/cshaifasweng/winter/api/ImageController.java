@@ -11,6 +11,7 @@ import java.util.UUID;
 public class ImageController {
     @GetMapping("/image/{id}")
     public byte[] getImage(@PathVariable("id") String id) throws IOException {
+        System.out.println("ID: " + id);
         File file = new File(String.valueOf(SpringServer.class.getResource("uploads/" + id)));
         return new FileInputStream(file).readAllBytes();
     }

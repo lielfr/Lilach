@@ -3,19 +3,19 @@ package org.cshaifasweng.winter.events;
 import javafx.stage.Stage;
 import org.cshaifasweng.winter.models.Item;
 
-import java.util.List;
+import java.util.Set;
 
 public class PopupAddItemEvent {
 
-    private List<Item> cart;
+    private Set<Item> cart;
     Stage popupStage;
 
-    public PopupAddItemEvent(List<Item> cart, Stage popupStage) {
+    public PopupAddItemEvent(Set<Item> cart, Stage popupStage) {
         this.cart = cart;
         this.popupStage = popupStage;
     }
 
-    public List<Item> getCart() {
+    public Set<Item> getCart() {
         return cart;
     }
 

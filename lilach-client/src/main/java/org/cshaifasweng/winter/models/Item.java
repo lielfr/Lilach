@@ -20,6 +20,8 @@ public abstract class Item {
 
     protected double price;
 
+    protected int quantity;
+
     public Item() {
         orders = new ArrayList<>();
     }
@@ -46,5 +48,13 @@ public abstract class Item {
 
     public void setPrice(double price) {
         this.price = price;
+    }
+
+    public int getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
     }
 }
