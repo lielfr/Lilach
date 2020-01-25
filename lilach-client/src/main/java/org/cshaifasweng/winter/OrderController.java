@@ -170,9 +170,18 @@ public class OrderController implements Refreshable{
         EventBus.getDefault().post(new DashboardSwitchEvent("primary"));
     }
 
+    /**
+     * allow change in the personal details.
+     * @param event
+     */
     @FXML
     void changeDetails(ActionEvent event) {
-
+        firstNameVerField.setDisable(false);
+        lastNameVerField.setDisable(false);
+        idNumVerField.setDisable(false);
+        emailVerField.setDisable(false);
+        phoneNumVerField.setDisable(false);
+        addressVerField.setDisable(false);
     }
 
     @FXML
@@ -188,14 +197,29 @@ public class OrderController implements Refreshable{
 
     }
 
+    boolean finalTab (){
+        if (tab5.isSelected())
+            return true;
+        return false;
+    }
+
+    boolean firstTab(){
+        if(tab1.isSelected())
+            return true;
+        return false;
+    }
+
     @FXML
     void next(ActionEvent event) {
         SingleSelectionModel<Tab> selectionModel = tabPane.getSelectionModel();
-        if(tab5.isSelected()){
+        // If the current tub is the final tub. send the order and go back to the main screen.
+        if(finalTab()){
             EventBus.getDefault().post(new DashboardSwitchEvent("primary"));
         }
         else{
+            // move to the next tab and enable it.
             selectionModel.selectNext();
+            selectionModel.getSelectedItem().setDisable(false);
         }
         refresh();
     }
@@ -207,7 +231,8 @@ public class OrderController implements Refreshable{
         SingleSelectionModel<Tab> selectionModel = tabPane.getSelectionModel();
 
         System.out.println(selectionModel.getSelectedIndex());
-        if(selectionModel.getSelectedIndex() == 0){
+        //if(selectionModel.getSelectedIndex() == 0){
+        if(firstTab()){
             backButton.setText("Exit");
             cancelButton.setVisible(false);
         }

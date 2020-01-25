@@ -53,7 +53,7 @@
                         </AnchorPane>
                   </content>
                 </Tab>
-                  <Tab fx:id="tab2" onSelectionChanged="#refresh" text="2.Order details">
+                  <Tab fx:id="tab2" disable="true" onSelectionChanged="#refresh" text="2.Order details">
                      <content>
                         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                            <children>
@@ -84,18 +84,18 @@
                                                       <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                                   </rowConstraints>
                                                    <children>
-                                                      <Label text="First name:" />
-                                                      <Label text="Email:" GridPane.rowIndex="3" />
-                                                      <Label text="Phone" GridPane.rowIndex="4" />
-                                                      <Label text="ID:" GridPane.rowIndex="2" />
-                                                      <Label text="Last name:" GridPane.rowIndex="1" />
-                                                      <TextField fx:id="firstNameVerField" GridPane.columnIndex="1" />
-                                                      <TextField fx:id="lastNameVerField" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                                                      <TextField fx:id="idNumVerField" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-                                                      <TextField fx:id="emailVerField" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-                                                      <TextField fx:id="phoneNumVerField" GridPane.columnIndex="1" GridPane.rowIndex="4" />
-                                                      <Label text="Address:" GridPane.rowIndex="5" />
-                                                      <TextField fx:id="addressVerField" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+                                                      <Label disable="true" style="-fx-opacity: 1;" text="First name:" />
+                                                      <Label disable="true" style="-fx-opacity: 1;" text="Email:" GridPane.rowIndex="3" />
+                                                      <Label disable="true" style="-fx-opacity: 1;" text="Phone" GridPane.rowIndex="4" />
+                                                      <Label disable="true" style="-fx-opacity: 1;" text="ID:" GridPane.rowIndex="2" />
+                                                      <Label disable="true" style="-fx-opacity: 1;" text="Last name:" GridPane.rowIndex="1" />
+                                                      <TextField fx:id="firstNameVerField" disable="true" GridPane.columnIndex="1" />
+                                                      <TextField fx:id="lastNameVerField" disable="true" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                                                      <TextField fx:id="idNumVerField" disable="true" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                                                      <TextField fx:id="emailVerField" disable="true" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                                                      <TextField fx:id="phoneNumVerField" disable="true" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                                                      <Label disable="true" style="-fx-opacity: 1;" text="Address:" GridPane.rowIndex="5" />
+                                                      <TextField fx:id="addressVerField" disable="true" GridPane.columnIndex="1" GridPane.rowIndex="5" />
                                                       <Label fx:id="firstNameVerEmptyLabel" text="Can't be empty" textFill="RED" visible="false" GridPane.columnIndex="2">
                                                          <padding>
                                                             <Insets left="10.0" />
@@ -179,7 +179,7 @@
                         </AnchorPane>
                      </content>
                   </Tab>
-                  <Tab fx:id="tab3" onSelectionChanged="#refresh" text="3.Greeting">
+                  <Tab fx:id="tab3" disable="true" onSelectionChanged="#refresh" text="3.Greeting">
                      <content>
                         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                            <children>
@@ -212,7 +212,7 @@
                         </AnchorPane>
                      </content>
                   </Tab>
-                  <Tab fx:id="tab4" onSelectionChanged="#refresh" text="4.Delivery">
+                  <Tab fx:id="tab4" disable="true" onSelectionChanged="#refresh" text="4.Delivery">
                      <content>
                         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                            <children>
@@ -296,7 +296,7 @@
                         </AnchorPane>
                      </content>
                   </Tab>
-                  <Tab fx:id="tab5" onSelectionChanged="#refresh" text="5.Summery">
+                  <Tab fx:id="tab5" disable="true" onSelectionChanged="#refresh" text="5.Summery">
                      <content>
                         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                            <children>
