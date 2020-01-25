@@ -6,11 +6,13 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import org.cshaifasweng.winter.events.DashboardSwitchEvent;
+import org.cshaifasweng.winter.events.OrderCreateEvent;
 import org.cshaifasweng.winter.models.Customer;
 import org.cshaifasweng.winter.models.Order;
 import org.cshaifasweng.winter.models.User;
 import org.cshaifasweng.winter.web.APIAccess;
 import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 
 import java.time.Instant;
 import java.time.LocalDate;
@@ -180,6 +182,11 @@ public class OrderController implements Refreshable{
     private boolean radioStatus = false;
     Order currentOrder = new Order();
     User currentUser = APIAccess.getCurrentUser();
+
+    @Subscribe
+    public void handleOrderCreateEvent(OrderCreateEvent event) {
+        // TODO: Use the event
+    }
 
     private void resetVisibleTab2()
     {
