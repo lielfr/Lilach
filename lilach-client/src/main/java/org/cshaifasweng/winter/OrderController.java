@@ -1,5 +1,7 @@
 package org.cshaifasweng.winter;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -123,10 +125,10 @@ public class OrderController implements Refreshable{
     private Label invalidEmailAddressLabel;
 
     @FXML
-    private ChoiceBox<?> hourChooseBox;
+    private ChoiceBox<String> hourChooseBox;
 
     @FXML
-    private ChoiceBox<?> minuteChooseBox;
+    private ChoiceBox<String> minuteChooseBox;
 
     @FXML
     private DatePicker datePicker;
@@ -229,7 +231,7 @@ public class OrderController implements Refreshable{
 
     /**
      * allow change in the personal details.
-     * @param event
+     * @param event entered event
      */
     @FXML
     void changeDetails(ActionEvent event) {
@@ -255,15 +257,11 @@ public class OrderController implements Refreshable{
     }
 
     boolean finalTab (){
-        if (tab5.isSelected())
-            return true;
-        return false;
+        return tab5.isSelected();
     }
 
     boolean firstTab(){
-        if(tab1.isSelected())
-            return true;
-        return false;
+        return tab1.isSelected();
     }
 
     @FXML
@@ -282,12 +280,29 @@ public class OrderController implements Refreshable{
     }
 
 
+    private ObservableList<String> hourList = FXCollections.observableArrayList(""+
+                    "00","01","02","03","04","05","06","07","08","09",
+                    "10","11","12","13","14","15","16","17","18","19",
+                    "20","21","22","23");
 
-    @Override
+    private ObservableList<String> minuteList = FXCollections.observableArrayList("" +
+                    "00","01","02","03","04","05","06","07","08","09",
+                    "10","11","12","13","14","15","16","17","18","19",
+                    "20","21","22","23","24","25","26","27","28","29",
+                    "30","31","32","33","34","35","36","37","38","39",
+                    "40","41","42","43","44","45","46","47","48","49",
+                    "50","51","52","53","54","55","56","57","58","59");
+
+        @Override
     public void refresh() {
         SingleSelectionModel<Tab> selectionModel = tabPane.getSelectionModel();
         //setting the default to 'send to my address'.
         selectMyAddRadio();
+        hourChooseBox.setItems(hourList);
+        hourChooseBox.setValue("00");
+        minuteChooseBox.setItems(minuteList);
+        minuteChooseBox.setValue("00");
+
         System.out.println(selectionModel.getSelectedIndex());
         //if(selectionModel.getSelectedIndex() == 0){
         if(firstTab()){
