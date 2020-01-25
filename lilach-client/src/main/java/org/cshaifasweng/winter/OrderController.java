@@ -460,7 +460,6 @@ public class OrderController implements Refreshable{
         else{
             nextButton.setText("Next");
         }
-        EventBus.getDefault().register(this);
         if (tab2 != null && tab2.isSelected()){
             updateShownFieldsTab2();
         }
