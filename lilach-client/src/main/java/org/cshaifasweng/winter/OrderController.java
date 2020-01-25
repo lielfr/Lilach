@@ -6,6 +6,8 @@ import javafx.scene.control.*;
 import org.cshaifasweng.winter.events.DashboardSwitchEvent;
 import org.greenrobot.eventbus.EventBus;
 
+import java.awt.event.MouseEvent;
+
 public class OrderController implements Refreshable{
 
     @FXML
@@ -102,6 +104,12 @@ public class OrderController implements Refreshable{
     private RadioButton sendToAnotherAddRadio;
 
     @FXML
+    private Label deliveryAddressLabel;
+
+    @FXML
+    private Label recipientMailLabel;
+
+    @FXML
     private TextField deliveryAddressField;
 
     @FXML
@@ -140,6 +148,8 @@ public class OrderController implements Refreshable{
     @FXML
     private TextArea greetingTextArea;
 
+    private boolean radioStatus = false;
+
     private void restVisibleTab2()
     {
         //empty labels
@@ -163,6 +173,30 @@ public class OrderController implements Refreshable{
         deliveryAddressEmpty.setVisible(false);
         recipientMailEmpty.setVisible(false);
         invalidEmailAddressLabel.setVisible(false);
+    }
+
+    @FXML
+    private void selectMyAddRadio() {
+       radioStatus = false;
+        sendToAnotherAddRadio.setSelected(radioStatus);
+        sendToMyAddRadio.setSelected(!radioStatus);
+        deliveryAddressField.setDisable(!radioStatus);
+        deliveryAddressLabel.setDisable(!radioStatus);
+        recipientMailLabel.setDisable(!radioStatus);
+        recipientMailField.setDisable(!radioStatus);
+
+    }
+
+    @FXML
+    private void selectOtherAddRadio() {
+        radioStatus = true;
+        sendToAnotherAddRadio.setSelected(radioStatus);
+        sendToMyAddRadio.setSelected(!radioStatus);
+        deliveryAddressField.setDisable(!radioStatus);
+        deliveryAddressLabel.setDisable(!radioStatus);
+        recipientMailLabel.setDisable(!radioStatus);
+        recipientMailField.setDisable(!radioStatus);
+
     }
 
     @FXML
