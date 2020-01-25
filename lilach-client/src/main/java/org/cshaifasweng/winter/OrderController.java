@@ -102,6 +102,12 @@ public class OrderController implements Refreshable{
     private RadioButton sendToAnotherAddRadio;
 
     @FXML
+    private Label deliveryAddressLabel;
+
+    @FXML
+    private Label recipientMailLabel;
+
+    @FXML
     private TextField deliveryAddressField;
 
     @FXML
@@ -115,6 +121,22 @@ public class OrderController implements Refreshable{
 
     @FXML
     private Label invalidEmailAddressLabel;
+
+    @FXML
+    private ChoiceBox<?> hourChooseBox;
+
+    @FXML
+    private ChoiceBox<?> minuteChooseBox;
+
+    @FXML
+    private DatePicker datePicker;
+
+    @FXML
+    private Label invalidDate;
+
+    @FXML
+    private Label invalidHour;
+
 
     @FXML
     private Tab tab5;
@@ -139,6 +161,8 @@ public class OrderController implements Refreshable{
 
     @FXML
     private TextArea greetingTextArea;
+
+    private boolean radioStatus = false;
 
     private void restVisibleTab2()
     {
@@ -165,14 +189,56 @@ public class OrderController implements Refreshable{
         invalidEmailAddressLabel.setVisible(false);
     }
 
+    private void setDisable(boolean status){
+        if (deliveryAddressField != null)
+            deliveryAddressField.setDisable(!status);
+        if (deliveryAddressLabel != null)
+            deliveryAddressLabel.setDisable(!status);
+        if (recipientMailLabel != null)
+            recipientMailLabel.setDisable(!status);
+        if (recipientMailField != null)
+            recipientMailField.setDisable(!status);
+    }
+
+    private void setSelected(boolean status){
+        if (sendToAnotherAddRadio != null){
+        sendToAnotherAddRadio.setSelected(status);
+        sendToMyAddRadio.setSelected(!status);
+        }
+    }
+
+    @FXML
+    private void selectMyAddRadio() {
+        radioStatus = false;
+        setSelected(false);
+        setDisable(radioStatus);
+
+    }
+
+    @FXML
+    private void selectOtherAddRadio() {
+        radioStatus = true;
+        setSelected(true);
+        setDisable(radioStatus);
+    }
+
     @FXML
     void cancel(ActionEvent event) {
         EventBus.getDefault().post(new DashboardSwitchEvent("primary"));
     }
 
+    /**
+     * allow change in the personal details.
+     * @param event
+     */
     @FXML
     void changeDetails(ActionEvent event) {
-
+        firstNameVerField.setDisable(false);
+        lastNameVerField.setDisable(false);
+        idNumVerField.setDisable(false);
+        emailVerField.setDisable(false);
+        phoneNumVerField.setDisable(false);
+        addressVerField.setDisable(false);
     }
 
     @FXML
@@ -188,14 +254,29 @@ public class OrderController implements Refreshable{
 
     }
 
+    boolean finalTab (){
+        if (tab5.isSelected())
+            return true;
+        return false;
+    }
+
+    boolean firstTab(){
+        if(tab1.isSelected())
+            return true;
+        return false;
+    }
+
     @FXML
     void next(ActionEvent event) {
         SingleSelectionModel<Tab> selectionModel = tabPane.getSelectionModel();
-        if(tab5.isSelected()){
+        // If the current tub is the final tub. send the order and go back to the main screen.
+        if(finalTab()){
             EventBus.getDefault().post(new DashboardSwitchEvent("primary"));
         }
         else{
+            // move to the next tab and enable it.
             selectionModel.selectNext();
+            selectionModel.getSelectedItem().setDisable(false);
         }
         refresh();
     }
@@ -205,9 +286,11 @@ public class OrderController implements Refreshable{
     @Override
     public void refresh() {
         SingleSelectionModel<Tab> selectionModel = tabPane.getSelectionModel();
-
+        //setting the default to 'send to my address'.
+        selectMyAddRadio();
         System.out.println(selectionModel.getSelectedIndex());
-        if(selectionModel.getSelectedIndex() == 0){
+        //if(selectionModel.getSelectedIndex() == 0){
+        if(firstTab()){
             backButton.setText("Exit");
             cancelButton.setVisible(false);
         }
