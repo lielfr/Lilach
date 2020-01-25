@@ -4,7 +4,6 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import org.cshaifasweng.winter.events.DashboardSwitchEvent;
 import org.cshaifasweng.winter.models.Customer;
@@ -18,6 +17,8 @@ import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.regex.Pattern;
 
 public class OrderController implements Refreshable{
@@ -199,35 +200,30 @@ public class OrderController implements Refreshable{
         invalidAddressVerLabel.setVisible(false);
     }
 
+    private boolean checkFields(Map<TextField, Label> fields) {
+        boolean found = false;
+        for (Map.Entry<TextField, Label> entry : fields.entrySet()) {
+            if (entry.getKey() == null) break;
+            if (entry.getKey().getText() == null || entry.getKey().getText().isEmpty()) {
+                entry.getValue().setVisible(true);
+                found = true;
+            }
+        }
+        return found;
+    }
+
     private boolean isInputEmpty(){
         boolean val = false;
 
-        if(firstNameVerField.getText().isEmpty())
-        {
-            firstNameVerEmptyLabel.setVisible(true);
-            val = true;
-        }
-        if(lastNameVerField.getText().isEmpty()){
-            lastNameVerEmptyLabel.setVisible(true);
-            val = true;
-        }
-        if(idNumVerField.getText().isEmpty()){
-            idVerEmptyLabel.setVisible(true);
-            val = true;
-        }
-        if(emailVerField.getText().isEmpty()){
-            emailVerEmptyLabel.setVisible(true);
-            val = true;
-        }
-        if(phoneNumVerField.getText().isEmpty()){
-            phoneVerEmptyLabel.setVisible(true);
-            val = true;
-        }
-        if(addressVerField.getText().isEmpty()){
-            addressVerEmptyLabel.setVisible(true);
-            val = true;
-        }
-        return val;
+        Map<TextField, Label> fieldsMap = new HashMap<>();
+        fieldsMap.put(firstNameVerField, firstNameVerEmptyLabel);
+        fieldsMap.put(lastNameVerField, lastNameVerEmptyLabel);
+        fieldsMap.put(idNumVerField, idVerEmptyLabel);
+        fieldsMap.put(emailVerField, emailVerEmptyLabel);
+        fieldsMap.put(phoneNumVerField, phoneVerEmptyLabel);
+        fieldsMap.put(addressVerField, addressVerEmptyLabel);
+
+        return checkFields(fieldsMap);
     }
 
     private boolean inputCheck() {
@@ -270,7 +266,7 @@ public class OrderController implements Refreshable{
     }
 
     private void updateFieldsTab2(){
-        Customer temp = new Customer();
+        Customer temp;
         temp = (Customer)currentUser.copy();
         temp.setFirstName(firstNameVerField.getText());
         temp.setLastName(lastNameVerField.getText());
@@ -364,7 +360,7 @@ public class OrderController implements Refreshable{
         else{
             selectionModel.selectPrevious();
         }
-        refresh();
+        updateButtons();
 
     }
 
@@ -383,11 +379,9 @@ public class OrderController implements Refreshable{
         if (tab2.isSelected()) {
             if (!(firstNameVerField.isDisabled())) {
                 resetVisibleTab2();
-                if (isInputEmpty()) {
-                    return;
-                }
-                if (!(inputCheck())) {
-                    System.out.println(inputCheck());
+                boolean firstCheck = isInputEmpty();
+                boolean secondCheck = inputCheck();
+                if (firstCheck || !secondCheck) {
                     return;
                 }
                 updateFieldsTab2();
@@ -403,7 +397,7 @@ public class OrderController implements Refreshable{
             selectionModel.selectNext();
             selectionModel.getSelectedItem().setDisable(false);
         }
-        refresh();
+        updateButtons();
 
     }
 
@@ -433,11 +427,6 @@ public class OrderController implements Refreshable{
         return (now.getTime().before(new Date()));
     }
 
-    private void fillOrder(){
-        currentOrder.setOrderedBy((Customer)currentUser);
-
-    }
-
     private void updateShownFieldsTab2(){
         firstNameVerField.setText(currentOrder.getOrderedBy().getFirstName());
         lastNameVerField.setText(currentOrder.getOrderedBy().getLastName());
@@ -447,22 +436,8 @@ public class OrderController implements Refreshable{
         addressVerField.setText(currentOrder.getOrderedBy().getAddress());
     }
 
-    @Override
-    public void refresh() {
-
-
-        currentOrder.setOrderedBy((Customer)currentUser);
+    private void updateButtons() {
         SingleSelectionModel<Tab> selectionModel = tabPane.getSelectionModel();
-        //setting the default to 'send to my address'.
-        selectMyAddRadio();
-        hourChooseBox.setItems(hourList);
-        hourChooseBox.setValue("00");
-        minuteChooseBox.setItems(minuteList);
-        minuteChooseBox.setValue("00");
-
-
-        System.out.println(selectionModel.getSelectedIndex());
-        //if(selectionModel.getSelectedIndex() == 0){
         if(firstTab()){
             backButton.setText("Exit");
             cancelButton.setVisible(false);
@@ -478,9 +453,34 @@ public class OrderController implements Refreshable{
         else{
             nextButton.setText("Next");
         }
-        if (tab2.isSelected()){
+        if (tab2 != null && tab2.isSelected()){
             updateShownFieldsTab2();
         }
+    }
 
+    @Override
+    public void refresh() {
+
+        currentOrder.setOrderedBy((Customer)currentUser);
+        //SingleSelectionModel<Tab> selectionModel = tabPane.getSelectionModel();
+        //setting the default to 'send to my address'.
+        selectMyAddRadio();
+        if (hourChooseBox != null) {
+            hourChooseBox.setItems(hourList);
+            hourChooseBox.setValue("00");
+        }
+
+        if (minuteChooseBox != null) {
+            minuteChooseBox.setItems(minuteList);
+            minuteChooseBox.setValue("00");
+        }
+
+
+
+
+        //System.out.println(selectionModel.getSelectedIndex());
+        //if(selectionModel.getSelectedIndex() == 0){
+
+        updateButtons();
     }
 }
