@@ -128,7 +128,7 @@ public class ReportMakingService {
                                                 .filter(item -> item instanceof CatalogItem)
                                                 .map(item -> (CatalogItem) item)
                                                 .filter(item -> item.getItemType() == type)
-                                                .count() > 1
+                                                .count() >= 1
                                 )
                                 .count()
                 );
