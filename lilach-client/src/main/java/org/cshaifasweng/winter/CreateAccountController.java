@@ -262,8 +262,10 @@ public class CreateAccountController implements Refreshable{
           //  calendarB.set(calendar.YEAR,Integer.parseInt(Tbirthy.getText()));
             calendarB.set(Integer.parseInt(Tbirthd.getText()), Integer.parseInt(Tbirthm.getText()),Integer.parseInt(Tbirthy.getText()));
             Date datebirth = calendarB.getTime();
+            /* *************************************************************************************************************************************************/
             Customer newCustomer = new Customer(Temail.getText(),Tpassword.getText(),TFname.getText(),TLname.getText(),
                     Tphone.getText(),Long.valueOf(Tcredit.getText()),date,Integer.parseInt(Tcvv.getText()),datebirth);
+            /* *************************************************************************************************************************************************/
             newCustomer.setAddress(addressField.getText());
             newCustomer.setSubscriberType(choice1);
             LilachService service = APIAccess.getService();
