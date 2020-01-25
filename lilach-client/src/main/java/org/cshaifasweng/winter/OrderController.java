@@ -4,9 +4,16 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import org.cshaifasweng.winter.events.DashboardSwitchEvent;
 import org.greenrobot.eventbus.EventBus;
+
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.Calendar;
+import java.util.Date;
 
 public class OrderController implements Refreshable{
 
@@ -293,7 +300,19 @@ public class OrderController implements Refreshable{
                     "40","41","42","43","44","45","46","47","48","49",
                     "50","51","52","53","54","55","56","57","58","59");
 
-        @Override
+    private boolean isPast(){
+        boolean flag = true;
+        Calendar now = Calendar.getInstance();
+        LocalDate localDate = datePicker.getValue();
+        Instant instant = Instant.from(localDate.atStartOfDay(ZoneId.systemDefault()));
+        Date date = Date.from(instant);
+        now.set(Calendar.HOUR_OF_DAY, Integer.parseInt(hourChooseBox.getValue()));
+        now.set(Calendar.MINUTE, Integer.parseInt((minuteChooseBox.getValue())));
+
+        return (now.getTime().before(new Date()));
+    }
+
+    @Override
     public void refresh() {
         SingleSelectionModel<Tab> selectionModel = tabPane.getSelectionModel();
         //setting the default to 'send to my address'.
