@@ -34,4 +34,7 @@ public interface LilachService {
     @GET("/store")
     Call<List<Store>> getAllStores();
 
+    @GET("/store/{id}/catalog")
+    Call<List<CatalogItem>> getCatalogByStore(@Path("id") long id);
+
 }

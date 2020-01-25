@@ -69,7 +69,7 @@ public class LoginScreenController implements Refreshable, Initializable {
                         }
                     });
                     Platform.runLater(() -> {
-                        EventBus.getDefault().post(new DashboardSwitchEvent("primary"));
+                        EventBus.getDefault().post(new DashboardSwitchEvent("catalog"));
                     });
 
                 }

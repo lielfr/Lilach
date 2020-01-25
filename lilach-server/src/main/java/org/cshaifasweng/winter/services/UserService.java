@@ -111,12 +111,7 @@ public class UserService {
         if (user == null)
             throw new LogicalException("User does not exist");
 
-        User userCopy = user.copy();
-        userCopy.setPassword(null);
-
-        System.out.println("Type: " + user.getClass());
-
-        return userCopy;
+        return user;
     }
 
     @Transactional
