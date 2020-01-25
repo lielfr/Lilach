@@ -180,7 +180,7 @@ public class OrderController implements Refreshable{
     Order currentOrder = new Order();
     User currentUser = APIAccess.getCurrentUser();
 
-    private void restVisibleTab2()
+    private void resetVisibleTab2()
     {
         //empty labels
         firstNameVerEmptyLabel.setVisible(false);
@@ -200,32 +200,32 @@ public class OrderController implements Refreshable{
     }
 
     private boolean isInputEmpty(){
-        boolean val = true;
+        boolean val = false;
 
         if(firstNameVerField.getText().isEmpty())
         {
             firstNameVerEmptyLabel.setVisible(true);
-            val = false;
+            val = true;
         }
         if(lastNameVerField.getText().isEmpty()){
             lastNameVerEmptyLabel.setVisible(true);
-            val = false;
+            val = true;
         }
         if(idNumVerField.getText().isEmpty()){
             idVerEmptyLabel.setVisible(true);
-            val = false;
+            val = true;
         }
         if(emailVerField.getText().isEmpty()){
             emailVerEmptyLabel.setVisible(true);
-            val = false;
+            val = true;
         }
         if(phoneNumVerField.getText().isEmpty()){
             phoneVerEmptyLabel.setVisible(true);
-            val = false;
+            val = true;
         }
         if(addressVerField.getText().isEmpty()){
             addressVerEmptyLabel.setVisible(true);
-            val = false;
+            val = true;
         }
         return val;
     }
@@ -273,6 +273,11 @@ public class OrderController implements Refreshable{
         Customer temp = new Customer();
         temp = (Customer)currentUser.copy();
         temp.setFirstName(firstNameVerField.getText());
+        temp.setLastName(lastNameVerField.getText());
+//        temp.setId(idNumVerField.getText());
+        temp.setEmail(emailVerField.getText());
+        temp.setPhone(phoneNumVerField.getText());
+        temp.setAddress(addressVerField.getText());
 
         currentOrder.setOrderedBy(temp);
     }
@@ -321,18 +326,33 @@ public class OrderController implements Refreshable{
         EventBus.getDefault().post(new DashboardSwitchEvent("primary"));
     }
 
+
     /**
      * allow change in the personal details.
      * @param event entered event
      */
     @FXML
     void changeDetails(ActionEvent event) {
+
         firstNameVerField.setDisable(false);
         lastNameVerField.setDisable(false);
         idNumVerField.setDisable(false);
         emailVerField.setDisable(false);
         phoneNumVerField.setDisable(false);
         addressVerField.setDisable(false);
+
+       /* boolean val = true;
+        resetVisibleTab2();
+        if(isInputEmpty()) {
+            val = false;
+        }
+        if(!(inputCheck())){
+            val = false;
+        }
+        if (val == true){
+            updateShownFieldsTab2();
+        }
+*/
     }
 
     @FXML
@@ -358,19 +378,45 @@ public class OrderController implements Refreshable{
 
     @FXML
     void next(ActionEvent event) {
+        boolean val = true;
         SingleSelectionModel<Tab> selectionModel = tabPane.getSelectionModel();
-        // If the current tub is the final tub. send the order and go back to the main screen.
-        if(finalTab()){
-            EventBus.getDefault().post(new DashboardSwitchEvent("primary"));
+        if (tab2.isSelected()) {
+            if (!(firstNameVerField.isDisabled())) {
+                resetVisibleTab2();
+                if (isInputEmpty()) {
+                    val = false;
+                }
+                if (!(inputCheck())) {
+                    System.out.println(inputCheck());
+                    val = false;
+                }
+            }
+            if (val == true) {
+                updateShownFieldsTab2();
+                // If the current tub is the final tub. send the order and go back to the main screen.
+                if (finalTab()) {
+                    EventBus.getDefault().post(new DashboardSwitchEvent("primary"));
+                } else {
+                    // move to the next tab and enable it.
+                    selectionModel.selectNext();
+                    selectionModel.getSelectedItem().setDisable(false);
+                }
+                refresh();
+                ;
+            }
         }
-        else{
-            // move to the next tab and enable it.
-            selectionModel.selectNext();
-            selectionModel.getSelectedItem().setDisable(false);
+        else {
+            // If the current tub is the final tub. send the order and go back to the main screen.
+            if (finalTab()) {
+                EventBus.getDefault().post(new DashboardSwitchEvent("primary"));
+            } else {
+                // move to the next tab and enable it.
+                selectionModel.selectNext();
+                selectionModel.getSelectedItem().setDisable(false);
+            }
+            refresh();
         }
-        refresh();
     }
-
 
     private ObservableList<String> hourList = FXCollections.observableArrayList(""+
                     "00","01","02","03","04","05","06","07","08","09",
