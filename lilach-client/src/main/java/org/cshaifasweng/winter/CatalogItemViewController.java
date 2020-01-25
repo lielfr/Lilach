@@ -20,6 +20,9 @@ public class CatalogItemViewController implements Initializable {
     private Label itemPriceLabel;
 
     @FXML
+    private Label itemPriceLabelDiscount;
+
+    @FXML
     void buyItem() {
 
     }
@@ -43,5 +46,11 @@ public class CatalogItemViewController implements Initializable {
 
     public void setItemPriceLabel(String itemPriceLabel) {
         this.itemPriceLabel.setText(itemPriceLabel);
+    }
+
+    public void setDiscount(double discountedPrice) {
+        itemPriceLabel.setStyle("-fx-strikethrough: true");
+        itemPriceLabelDiscount.setVisible(true);
+        itemPriceLabelDiscount.setText("Now "+ discountedPrice + " NIS");
     }
 }
