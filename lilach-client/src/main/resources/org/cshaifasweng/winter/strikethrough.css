@@ -1,3 +1,4 @@
+/*noinspection CssInvalidPseudoSelector*/
 .label:strikethrough .text{
     -fx-strikethrough: true;
 }
