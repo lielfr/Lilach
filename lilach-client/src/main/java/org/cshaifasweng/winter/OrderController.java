@@ -6,8 +6,6 @@ import javafx.scene.control.*;
 import org.cshaifasweng.winter.events.DashboardSwitchEvent;
 import org.greenrobot.eventbus.EventBus;
 
-import java.awt.event.MouseEvent;
-
 public class OrderController implements Refreshable{
 
     @FXML
@@ -192,10 +190,14 @@ public class OrderController implements Refreshable{
     }
 
     private void setDisable(boolean status){
-        deliveryAddressField.setDisable(!status);
-        deliveryAddressLabel.setDisable(!status);
-        recipientMailLabel.setDisable(!status);
-        recipientMailField.setDisable(!status);
+        if (deliveryAddressField != null)
+            deliveryAddressField.setDisable(!status);
+        if (deliveryAddressLabel != null)
+            deliveryAddressLabel.setDisable(!status);
+        if (recipientMailLabel != null)
+            recipientMailLabel.setDisable(!status);
+        if (recipientMailField != null)
+            recipientMailField.setDisable(!status);
     }
 
     private void setSelected(boolean status){

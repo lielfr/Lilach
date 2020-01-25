@@ -42,6 +42,7 @@ public class DashboardController implements Initializable {
             containerPane.setContent(LayoutManager.getInstance().getFXML(page));
             Refreshable controller = (Refreshable) LayoutManager.getInstance().getController(page);
             controller.refresh();
+            containerPane.autosize();
         } catch (IOException e) {
             e.printStackTrace();
         }
