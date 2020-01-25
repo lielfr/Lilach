@@ -27,10 +27,6 @@ import java.util.logging.Logger;
 public class DashboardController implements Initializable {
     protected static final Logger log = Logger.getLogger(DashboardController.class.getName());
 
-
-    private boolean CartIsEmpty=false;   // Needs to be setup
-    private boolean LoggedIn=true;       // Needs to be setup
-
     @FXML
     private ScrollPane containerPane;
 
