@@ -2,15 +2,11 @@ package org.cshaifasweng.winter;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.RadioButton;
-import javafx.scene.control.Tab;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
+import org.cshaifasweng.winter.events.DashboardSwitchEvent;
+import org.greenrobot.eventbus.EventBus;
 
-public class OrderController {
+public class OrderController implements Refreshable{
 
     @FXML
     private Button backButton;
@@ -20,6 +16,9 @@ public class OrderController {
 
     @FXML
     private Button nextButton;
+
+    @FXML
+    private TabPane tabPane;
 
     @FXML
     private Tab tab1;
@@ -168,7 +167,7 @@ public class OrderController {
 
     @FXML
     void cancel(ActionEvent event) {
-
+        EventBus.getDefault().post(new DashboardSwitchEvent("primary"));
     }
 
     @FXML
@@ -178,12 +177,50 @@ public class OrderController {
 
     @FXML
     void goBack(ActionEvent event) {
+        SingleSelectionModel<Tab> selectionModel = tabPane.getSelectionModel();
+        if(selectionModel.getSelectedIndex()==0){
+            EventBus.getDefault().post(new DashboardSwitchEvent("primary"));
+        }
+        else{
+            selectionModel.selectPrevious();
+        }
+        refresh();
 
     }
 
     @FXML
     void next(ActionEvent event) {
-
+        SingleSelectionModel<Tab> selectionModel = tabPane.getSelectionModel();
+        if(tab5.isSelected()){
+            EventBus.getDefault().post(new DashboardSwitchEvent("primary"));
+        }
+        else{
+            selectionModel.selectNext();
+        }
+        refresh();
     }
 
+
+
+    @Override
+    public void refresh() {
+        SingleSelectionModel<Tab> selectionModel = tabPane.getSelectionModel();
+
+        System.out.println(selectionModel.getSelectedIndex());
+        if(selectionModel.getSelectedIndex() == 0){
+            backButton.setText("Exit");
+            cancelButton.setVisible(false);
+        }
+        else{
+            backButton.setText("Back");
+            cancelButton.setVisible(true);
+        }
+
+        if(selectionModel.getSelectedIndex() == 4){
+            nextButton.setText("Send order");
+        }
+        else{
+            nextButton.setText("Next");
+        }
+    }
 }
