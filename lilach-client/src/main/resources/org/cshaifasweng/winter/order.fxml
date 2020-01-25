@@ -257,12 +257,12 @@
                                                    <children>
                                                       <Label fx:id="deliveryAddressLabel" disable="true" text="Delivery address:" />
                                                       <Label fx:id="recipientMailLabel" disable="true" text="Recipient mail:" GridPane.rowIndex="1" />
-                                                      <TextField fx:id="deliveryAddressField" disable="true" prefWidth="143.0" GridPane.columnIndex="1">
+                                                      <TextField fx:id="setDeliveryAddressField" disable="true" prefWidth="143.0" GridPane.columnIndex="1">
                                                          <GridPane.margin>
                                                             <Insets />
                                                          </GridPane.margin>
                                                       </TextField>
-                                                      <TextField fx:id="recipientMailField" disable="true" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                                                      <TextField fx:id="setRecipientMailField" disable="true" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                                                       <Label fx:id="deliveryAddressEmpty" text="Can't be empty" textFill="RED" visible="false" GridPane.columnIndex="2">
                                                          <padding>
                                                             <Insets left="10.0" />
@@ -309,7 +309,7 @@
                                                       <HBox prefHeight="27.0" prefWidth="143.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
                                                          <children>
                                                             <ChoiceBox fx:id="hourChooseBox" prefHeight="26.0" prefWidth="50.0" />
-                                                            <Label text=":" />
+                                                            <Label text=" : " />
                                                             <ChoiceBox fx:id="minuteChooseBox" prefHeight="26.0" prefWidth="49.0" />
                                                          </children>
                                                       </HBox>

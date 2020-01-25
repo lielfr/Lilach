@@ -1,10 +1,19 @@
 package org.cshaifasweng.winter;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import org.cshaifasweng.winter.events.DashboardSwitchEvent;
 import org.greenrobot.eventbus.EventBus;
+
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.Calendar;
+import java.util.Date;
 
 public class OrderController implements Refreshable{
 
@@ -108,10 +117,10 @@ public class OrderController implements Refreshable{
     private Label recipientMailLabel;
 
     @FXML
-    private TextField deliveryAddressField;
+    private TextField setDeliveryAddressField;
 
     @FXML
-    private TextField recipientMailField;
+    private TextField setRecipientMailField;
 
     @FXML
     private Label deliveryAddressEmpty;
@@ -123,10 +132,10 @@ public class OrderController implements Refreshable{
     private Label invalidEmailAddressLabel;
 
     @FXML
-    private ChoiceBox<?> hourChooseBox;
+    private ChoiceBox<String> hourChooseBox;
 
     @FXML
-    private ChoiceBox<?> minuteChooseBox;
+    private ChoiceBox<String> minuteChooseBox;
 
     @FXML
     private DatePicker datePicker;
@@ -190,14 +199,14 @@ public class OrderController implements Refreshable{
     }
 
     private void setDisable(boolean status){
-        if (deliveryAddressField != null)
-            deliveryAddressField.setDisable(!status);
+        if (setDeliveryAddressField != null)
+            setDeliveryAddressField.setDisable(!status);
         if (deliveryAddressLabel != null)
             deliveryAddressLabel.setDisable(!status);
         if (recipientMailLabel != null)
             recipientMailLabel.setDisable(!status);
-        if (recipientMailField != null)
-            recipientMailField.setDisable(!status);
+        if (setRecipientMailField != null)
+            setRecipientMailField.setDisable(!status);
     }
 
     private void setSelected(boolean status){
@@ -229,7 +238,7 @@ public class OrderController implements Refreshable{
 
     /**
      * allow change in the personal details.
-     * @param event
+     * @param event entered event
      */
     @FXML
     void changeDetails(ActionEvent event) {
@@ -255,15 +264,11 @@ public class OrderController implements Refreshable{
     }
 
     boolean finalTab (){
-        if (tab5.isSelected())
-            return true;
-        return false;
+        return tab5.isSelected();
     }
 
     boolean firstTab(){
-        if(tab1.isSelected())
-            return true;
-        return false;
+        return tab1.isSelected();
     }
 
     @FXML
@@ -282,12 +287,41 @@ public class OrderController implements Refreshable{
     }
 
 
+    private ObservableList<String> hourList = FXCollections.observableArrayList(""+
+                    "00","01","02","03","04","05","06","07","08","09",
+                    "10","11","12","13","14","15","16","17","18","19",
+                    "20","21","22","23");
+
+    private ObservableList<String> minuteList = FXCollections.observableArrayList("" +
+                    "00","01","02","03","04","05","06","07","08","09",
+                    "10","11","12","13","14","15","16","17","18","19",
+                    "20","21","22","23","24","25","26","27","28","29",
+                    "30","31","32","33","34","35","36","37","38","39",
+                    "40","41","42","43","44","45","46","47","48","49",
+                    "50","51","52","53","54","55","56","57","58","59");
+
+    private boolean isPast(){
+        boolean flag = true;
+        Calendar now = Calendar.getInstance();
+        LocalDate localDate = datePicker.getValue();
+        Instant instant = Instant.from(localDate.atStartOfDay(ZoneId.systemDefault()));
+        Date date = Date.from(instant);
+        now.set(Calendar.HOUR_OF_DAY, Integer.parseInt(hourChooseBox.getValue()));
+        now.set(Calendar.MINUTE, Integer.parseInt((minuteChooseBox.getValue())));
+
+        return (now.getTime().before(new Date()));
+    }
 
     @Override
     public void refresh() {
         SingleSelectionModel<Tab> selectionModel = tabPane.getSelectionModel();
         //setting the default to 'send to my address'.
         selectMyAddRadio();
+        hourChooseBox.setItems(hourList);
+        hourChooseBox.setValue("00");
+        minuteChooseBox.setItems(minuteList);
+        minuteChooseBox.setValue("00");
+
         System.out.println(selectionModel.getSelectedIndex());
         //if(selectionModel.getSelectedIndex() == 0){
         if(firstTab()){
