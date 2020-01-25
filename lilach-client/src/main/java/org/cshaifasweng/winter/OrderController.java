@@ -175,28 +175,31 @@ public class OrderController implements Refreshable{
         invalidEmailAddressLabel.setVisible(false);
     }
 
+    private void setDisable(boolean status){
+        deliveryAddressField.setDisable(!status);
+        deliveryAddressLabel.setDisable(!status);
+        recipientMailLabel.setDisable(!status);
+        recipientMailField.setDisable(!status);
+    }
+
+    private void setSelected(boolean status){
+        sendToAnotherAddRadio.setSelected(status);
+        sendToMyAddRadio.setSelected(!status);
+    }
+
     @FXML
     private void selectMyAddRadio() {
-       radioStatus = false;
-        sendToAnotherAddRadio.setSelected(radioStatus);
-        sendToMyAddRadio.setSelected(!radioStatus);
-        deliveryAddressField.setDisable(!radioStatus);
-        deliveryAddressLabel.setDisable(!radioStatus);
-        recipientMailLabel.setDisable(!radioStatus);
-        recipientMailField.setDisable(!radioStatus);
+        radioStatus = false;
+        setSelected(false);
+        setDisable(radioStatus);
 
     }
 
     @FXML
     private void selectOtherAddRadio() {
         radioStatus = true;
-        sendToAnotherAddRadio.setSelected(radioStatus);
-        sendToMyAddRadio.setSelected(!radioStatus);
-        deliveryAddressField.setDisable(!radioStatus);
-        deliveryAddressLabel.setDisable(!radioStatus);
-        recipientMailLabel.setDisable(!radioStatus);
-        recipientMailField.setDisable(!radioStatus);
-
+        setSelected(true);
+        setDisable(radioStatus);
     }
 
     @FXML
@@ -263,7 +266,8 @@ public class OrderController implements Refreshable{
     @Override
     public void refresh() {
         SingleSelectionModel<Tab> selectionModel = tabPane.getSelectionModel();
-
+        //setting the default to 'send to my address'.
+        selectMyAddRadio();
         System.out.println(selectionModel.getSelectedIndex());
         //if(selectionModel.getSelectedIndex() == 0){
         if(firstTab()){
