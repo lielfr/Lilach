@@ -257,12 +257,12 @@
                                                    <children>
                                                       <Label fx:id="deliveryAddressLabel" disable="true" text="Delivery address:" />
                                                       <Label fx:id="recipientMailLabel" disable="true" text="Recipient mail:" GridPane.rowIndex="1" />
-                                                      <TextField fx:id="deliveryAddressField" disable="true" prefWidth="143.0" GridPane.columnIndex="1">
+                                                      <TextField fx:id="setDeliveryAddressField" disable="true" prefWidth="143.0" GridPane.columnIndex="1">
                                                          <GridPane.margin>
                                                             <Insets />
                                                          </GridPane.margin>
                                                       </TextField>
-                                                      <TextField fx:id="recipientMailField" disable="true" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                                                      <TextField fx:id="setRecipientMailField" disable="true" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                                                       <Label fx:id="deliveryAddressEmpty" text="Can't be empty" textFill="RED" visible="false" GridPane.columnIndex="2">
                                                          <padding>
                                                             <Insets left="10.0" />
@@ -341,7 +341,7 @@
                            <children>
                               <Label text="Order summary:" />
                               <Separator prefWidth="200.0" />
-                              <GridPane prefWidth="346.0" vgap="20.0" VBox.vgrow="NEVER">
+                              <GridPane prefWidth="346.0" vgap="2.0" VBox.vgrow="NEVER">
                                  <columnConstraints>
                                     <ColumnConstraints maxWidth="417.0" minWidth="10.0" prefWidth="82.0" />
                                     <ColumnConstraints maxWidth="767.0" minWidth="10.0" prefWidth="264.0" />

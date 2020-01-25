@@ -108,10 +108,10 @@ public class OrderController implements Refreshable{
     private Label recipientMailLabel;
 
     @FXML
-    private TextField deliveryAddressField;
+    private TextField setDeliveryAddressField;
 
     @FXML
-    private TextField recipientMailField;
+    private TextField setRecipientMailField;
 
     @FXML
     private Label deliveryAddressEmpty;
@@ -190,14 +190,14 @@ public class OrderController implements Refreshable{
     }
 
     private void setDisable(boolean status){
-        if (deliveryAddressField != null)
-            deliveryAddressField.setDisable(!status);
+        if (setDeliveryAddressField != null)
+            setDeliveryAddressField.setDisable(!status);
         if (deliveryAddressLabel != null)
             deliveryAddressLabel.setDisable(!status);
         if (recipientMailLabel != null)
             recipientMailLabel.setDisable(!status);
-        if (recipientMailField != null)
-            recipientMailField.setDisable(!status);
+        if (setRecipientMailField != null)
+            setRecipientMailField.setDisable(!status);
     }
 
     private void setSelected(boolean status){
