@@ -7,6 +7,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
 import javafx.scene.layout.GridPane;
 import org.cshaifasweng.winter.events.LoginChangeEvent;
 import org.cshaifasweng.winter.models.*;
@@ -18,6 +19,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -143,7 +145,9 @@ public class CatalogController implements Refreshable {
                     break;
                 CatalogItem item = items.get(index);
                 controller.setItemLabel(item.getDescription());
-                catalogGrid.add(itemCell, i, j);
+                controller.setItemImage(new Image(new ByteArrayInputStream(item.getPicture())));
+                controller.setItemPriceLabel("Only " + String.valueOf(item.getPrice()) + "NIS");
+                catalogGrid.add(itemCell, j, i);
             }
         }
         updatePages();
