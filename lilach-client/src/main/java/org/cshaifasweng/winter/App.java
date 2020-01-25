@@ -3,12 +3,12 @@ package org.cshaifasweng.winter;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import org.cshaifasweng.winter.web.APIAccess;
+import org.cshaifasweng.winter.web.LilachService;
 
 import java.io.IOException;
-import java.net.URI;
 
 /**
  * JavaFX App
@@ -28,6 +28,16 @@ public class App extends Application {
             System.exit(0);
         });
         stage.show();
+        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+            if (APIAccess.getCurrentUser() != null) {
+                LilachService service = APIAccess.getService();
+                try {
+                    service.logout().execute();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }));
     }
 
     static void setRoot(String fxml) throws IOException {

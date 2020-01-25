@@ -9,10 +9,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import org.cshaifasweng.winter.events.LoginChangeEvent;
-import org.cshaifasweng.winter.models.CatalogItem;
-import org.cshaifasweng.winter.models.Customer;
-import org.cshaifasweng.winter.models.Employee;
-import org.cshaifasweng.winter.models.Store;
+import org.cshaifasweng.winter.models.*;
 import org.cshaifasweng.winter.web.APIAccess;
 import org.cshaifasweng.winter.web.LilachService;
 import org.greenrobot.eventbus.EventBus;
@@ -22,6 +19,8 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -29,7 +28,7 @@ public class CatalogController implements Refreshable {
 
     private LilachService service;
 
-    private List<Store> stores;
+    private List<Store> stores = Collections.synchronizedList(new ArrayList<>());
 
     private List<CatalogItem> items;
 
@@ -84,7 +83,18 @@ public class CatalogController implements Refreshable {
 
     @Subscribe
     public void handleLogin(LoginChangeEvent changeEvent) {
-        updateStoresList();
+        User user = APIAccess.getCurrentUser();
+        if (user == null || user instanceof Employee)
+            return;
+        Customer customer = (Customer) APIAccess.getCurrentUser();
+        if (customer.getStores() == null) return;
+        storeChoiceBox.getItems().clear();
+        storeChoiceBox.getItems().addAll(
+                customer
+                        .getStores()
+                        .stream()
+                        .map(Store::getName).collect(Collectors.toList()));
+        storeChoiceBox.getSelectionModel().select(0);
     }
 
     private void updateStoresList() {
@@ -93,8 +103,9 @@ public class CatalogController implements Refreshable {
             service.getAllStores().enqueue(new Callback<>() {
                 @Override
                 public void onResponse(Call<List<Store>> call, Response<List<Store>> response) {
-                    if (response.code() != 200) return;
-                    stores = response.body();
+                    if (response.code() != 200 || response.body() == null) return;
+                    stores.clear();
+                    stores.addAll(response.body());
                     if (stores == null) return;
                     List<String> storeNames = stores
                             .stream()
@@ -104,6 +115,8 @@ public class CatalogController implements Refreshable {
                     Platform.runLater(() -> {
                         storeChoiceBox.getItems().addAll(storeNames);
                         storeChoiceBox.setValue(storeNames.get(0));
+                        // We have to do that because we may override the user's stores here
+                        handleLogin(null);
                     });
 
                 }
@@ -114,15 +127,7 @@ public class CatalogController implements Refreshable {
                 }
             });
         } else {
-            Customer customer = (Customer) APIAccess.getCurrentUser();
-            System.out.println("Got stores: " + customer.getStores());
-            if (customer.getStores() == null) return;
-            storeChoiceBox.getItems().clear();
-            storeChoiceBox.getItems().addAll(
-                    customer
-                            .getStores()
-                            .stream()
-                            .map(Store::getName).collect(Collectors.toList()));
+            handleLogin(null);
         }
     }
 
@@ -183,7 +188,12 @@ public class CatalogController implements Refreshable {
         service = APIAccess.getService();
         updateStoresList();
         storeChoiceBox.getSelectionModel().selectedIndexProperty().addListener(
-                (observableValue, number, t1) -> getCatalog(stores.get
-                        (storeChoiceBox.getSelectionModel().getSelectedIndex()).getId()));
+                (observableValue, number, t1) -> {
+                    int selectedIndex = storeChoiceBox.getSelectionModel().getSelectedIndex();
+                    if (selectedIndex < 0 || selectedIndex >= stores.size())
+                        return;
+                    getCatalog(stores.get
+                            (selectedIndex).getId());
+                });
     }
 }
