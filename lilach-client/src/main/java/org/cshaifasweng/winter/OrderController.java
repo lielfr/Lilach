@@ -7,6 +7,10 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import org.cshaifasweng.winter.events.DashboardSwitchEvent;
+import org.cshaifasweng.winter.models.Customer;
+import org.cshaifasweng.winter.models.Order;
+import org.cshaifasweng.winter.models.User;
+import org.cshaifasweng.winter.web.APIAccess;
 import org.greenrobot.eventbus.EventBus;
 
 import java.time.Instant;
@@ -14,6 +18,7 @@ import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.regex.Pattern;
 
 public class OrderController implements Refreshable{
 
@@ -172,6 +177,8 @@ public class OrderController implements Refreshable{
     private TextArea greetingTextArea;
 
     private boolean radioStatus = false;
+    Order currentOrder = new Order();
+    User currentUser = APIAccess.getCurrentUser();
 
     private void restVisibleTab2()
     {
@@ -190,6 +197,84 @@ public class OrderController implements Refreshable{
         invalidEmailVerLabel.setVisible(false);
         invalidPhoneVerLabel.setVisible(false);
         invalidAddressVerLabel.setVisible(false);
+    }
+
+    private boolean isInputEmpty(){
+        boolean val = true;
+
+        if(firstNameVerField.getText().isEmpty())
+        {
+            firstNameVerEmptyLabel.setVisible(true);
+            val = false;
+        }
+        if(lastNameVerField.getText().isEmpty()){
+            lastNameVerEmptyLabel.setVisible(true);
+            val = false;
+        }
+        if(idNumVerField.getText().isEmpty()){
+            idVerEmptyLabel.setVisible(true);
+            val = false;
+        }
+        if(emailVerField.getText().isEmpty()){
+            emailVerEmptyLabel.setVisible(true);
+            val = false;
+        }
+        if(phoneNumVerField.getText().isEmpty()){
+            phoneVerEmptyLabel.setVisible(true);
+            val = false;
+        }
+        if(addressVerField.getText().isEmpty()){
+            addressVerEmptyLabel.setVisible(true);
+            val = false;
+        }
+        return val;
+    }
+
+    private boolean inputCheck() {
+        boolean val = true;
+        String check;
+        check = firstNameVerField.getText();
+        if ((Pattern.matches("[a-zA-Z]+", check) == false) && (check.isEmpty() == false)) {
+            invalidFirstNameVerLabel.setVisible(true);
+            val = false;
+        }
+        check = lastNameVerField.getText();
+        if ((Pattern.matches("[a-zA-Z]+", check) == false) && (check.isEmpty() == false)) {
+            invalidLastNameVerLabel.setVisible(true);
+            val = false;
+        }
+        check = idNumVerField.getText();
+        if ((check.length() != 9) && (check.isEmpty() == false)) {
+            invalidIdVerLabel.setVisible(true);
+            val = false;
+
+        }
+        check = emailVerField.getText();
+        if (check.matches("(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|\"(?:[\\x01-" +
+                "\\x08\\x0b\\x0c\\x0e-\\x1f\\x21\\x23-\\x5b\\x5d-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])*\")@(?:" +
+                "(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\\[(?:(?:25[0-5]|2[0-4][0-9]|" +
+                "[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\\x01-\\x08\\x0b\\" +
+                "x0c\\x0e-\\x1f\\x21-\\x5a\\x53-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])+)\\])") == false &&
+                (check.isEmpty() == false)) {
+            invalidEmailVerLabel.setVisible(true);
+            val = false;
+        }
+        check = phoneNumVerField.getText();
+        if ((Pattern.matches("^((\\+|00)?972\\-?|0)(([23489]|[57]\\d)\\-?\\d{7})$", check) == false) &&
+                (check.isEmpty() == false)) {
+            invalidPhoneVerLabel.setVisible(true);
+            val = false;
+        }
+
+        return val;
+    }
+
+    private void updateFields(){
+        Customer temp = new Customer();
+        temp = (Customer)currentUser.copy();
+        temp.setFirstName(firstNameVerField.getText());
+
+        currentOrder.setOrderedBy(temp);
     }
 
     private void resetVisibleTab4(){
@@ -312,8 +397,25 @@ public class OrderController implements Refreshable{
         return (now.getTime().before(new Date()));
     }
 
+    private void fillOrder(){
+        currentOrder.setOrderedBy((Customer)currentUser);
+
+    }
+
+    private void updateShownFieldsTab2(){
+        firstNameVerField.setText(currentOrder.getOrderedBy().getFirstName());
+        lastNameVerField.setText(currentOrder.getOrderedBy().getLastName());
+        idNumVerField.setText(currentOrder.getOrderedBy().getId().toString());
+        emailVerField.setText(currentOrder.getOrderedBy().getEmail());
+        phoneNumVerField.setText(currentOrder.getOrderedBy().getPhone());
+        addressVerField.setText(currentOrder.getOrderedBy().getAddress());
+    }
+
     @Override
     public void refresh() {
+
+
+        currentOrder.setOrderedBy((Customer)currentUser);
         SingleSelectionModel<Tab> selectionModel = tabPane.getSelectionModel();
         //setting the default to 'send to my address'.
         selectMyAddRadio();
@@ -321,6 +423,7 @@ public class OrderController implements Refreshable{
         hourChooseBox.setValue("00");
         minuteChooseBox.setItems(minuteList);
         minuteChooseBox.setValue("00");
+
 
         System.out.println(selectionModel.getSelectedIndex());
         //if(selectionModel.getSelectedIndex() == 0){
@@ -339,5 +442,9 @@ public class OrderController implements Refreshable{
         else{
             nextButton.setText("Next");
         }
+        if (tab2.isSelected()){
+            updateShownFieldsTab2();
+        }
+
     }
 }
