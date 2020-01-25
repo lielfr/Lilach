@@ -21,6 +21,7 @@ public class App extends Application {
     @Override
     public void start(Stage stage) throws IOException {
         scene = new Scene(LayoutManager.getInstance().getFXML("connection"));
+        scene.getStylesheets().add(String.valueOf(App.class.getResource("strikethrough.css")));
         stage.setScene(scene);
         // We have to set it manually in order to make it actually close on Mac
         stage.setOnCloseRequest((event) -> {

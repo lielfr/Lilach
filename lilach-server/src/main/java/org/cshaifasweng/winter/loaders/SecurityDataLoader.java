@@ -137,9 +137,11 @@ public class SecurityDataLoader implements ApplicationListener<ContextRefreshedE
 
         List<CatalogItem> items = new ArrayList<>();
         try {
-            items.add(createOrReturnItem(25, "Just another flower",
+            CatalogItem item1 = createOrReturnItem(25, "Just another flower",
                     imageAsBytes("flower1.jpg"),
-                    4, qiryatYamBranch, true, CatalogItemType.ONE_FLOWER));
+                    4, qiryatYamBranch, true, CatalogItemType.ONE_FLOWER);
+            item1.setDiscountAmount(5);
+            items.add(item1);
             items.add(createOrReturnItem(15, "A cheaper flower",
                     imageAsBytes("flower2.jpg"),
                     3, qiryatYamBranch, true, CatalogItemType.ONE_FLOWER));
@@ -152,6 +154,8 @@ public class SecurityDataLoader implements ApplicationListener<ContextRefreshedE
             items.add(createOrReturnItem(40, "A flower in the sun (pun intended)",
                     imageAsBytes("flower5.jpg"),
                     0, haifaUniBranch, false, CatalogItemType.ONE_FLOWER));
+
+            catalogItemsRepository.saveAll(items);
         } catch (IOException e) {
             e.printStackTrace();
         }

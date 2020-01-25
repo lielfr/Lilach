@@ -1,5 +1,6 @@
 package org.cshaifasweng.winter;
 
+import javafx.css.PseudoClass;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
@@ -22,6 +23,8 @@ public class CatalogItemViewController implements Initializable {
     @FXML
     private Label itemPriceLabelDiscount;
 
+    private PseudoClass strikethrough;
+
     @FXML
     void buyItem() {
 
@@ -29,7 +32,7 @@ public class CatalogItemViewController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-
+        strikethrough = PseudoClass.getPseudoClass("strikethrough");
     }
 
     public void setItemLabel(String itemLabel) {
@@ -49,7 +52,7 @@ public class CatalogItemViewController implements Initializable {
     }
 
     public void setDiscount(double discountedPrice) {
-        itemPriceLabel.setStyle("-fx-strikethrough: true");
+        itemPriceLabel.pseudoClassStateChanged(strikethrough, true);
         itemPriceLabelDiscount.setVisible(true);
         itemPriceLabelDiscount.setText("Now "+ discountedPrice + " NIS");
     }
