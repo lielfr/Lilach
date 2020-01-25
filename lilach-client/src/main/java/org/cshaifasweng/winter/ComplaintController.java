@@ -91,7 +91,7 @@ public class ComplaintController implements Refreshable {
     private boolean isValidOrderNum (TextField fieldA){
         for (int i = 0; i<fieldA.getText().length() ; i++){
             char temp = fieldA.getText().charAt(i);
-            if(!(temp >= '0') && (temp <= '9')){
+            if(!((temp >= '0') && (temp <= '9'))){
                 return false;
             }
         }

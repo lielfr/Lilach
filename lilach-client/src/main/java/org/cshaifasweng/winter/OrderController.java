@@ -269,12 +269,12 @@ public class OrderController implements Refreshable{
         return val;
     }
 
-    private void updateFields(){
+    private void updateFieldsTab2(){
         Customer temp = new Customer();
         temp = (Customer)currentUser.copy();
         temp.setFirstName(firstNameVerField.getText());
         temp.setLastName(lastNameVerField.getText());
-//        temp.setId(idNumVerField.getText());
+        temp.setId(Long.valueOf(idNumVerField.getText()));
         temp.setEmail(emailVerField.getText());
         temp.setPhone(phoneNumVerField.getText());
         temp.setAddress(addressVerField.getText());
@@ -384,39 +384,29 @@ public class OrderController implements Refreshable{
             if (!(firstNameVerField.isDisabled())) {
                 resetVisibleTab2();
                 if (isInputEmpty()) {
-                    val = false;
+                    return;
                 }
                 if (!(inputCheck())) {
                     System.out.println(inputCheck());
-                    val = false;
+                    return;
                 }
-            }
-            if (val == true) {
-                updateShownFieldsTab2();
-                // If the current tub is the final tub. send the order and go back to the main screen.
-                if (finalTab()) {
-                    EventBus.getDefault().post(new DashboardSwitchEvent("primary"));
-                } else {
-                    // move to the next tab and enable it.
-                    selectionModel.selectNext();
-                    selectionModel.getSelectedItem().setDisable(false);
-                }
-                refresh();
-                ;
+                updateFieldsTab2();
+//                fillOrder();
             }
         }
-        else {
-            // If the current tub is the final tub. send the order and go back to the main screen.
-            if (finalTab()) {
-                EventBus.getDefault().post(new DashboardSwitchEvent("primary"));
-            } else {
-                // move to the next tab and enable it.
-                selectionModel.selectNext();
-                selectionModel.getSelectedItem().setDisable(false);
-            }
-            refresh();
+
+        // If the current tub is the final tub. send the order and go back to the main screen.
+        if (finalTab()) {
+            EventBus.getDefault().post(new DashboardSwitchEvent("primary"));
+        } else {
+            // move to the next tab and enable it.
+            selectionModel.selectNext();
+            selectionModel.getSelectedItem().setDisable(false);
         }
+        refresh();
+
     }
+
 
     private ObservableList<String> hourList = FXCollections.observableArrayList(""+
                     "00","01","02","03","04","05","06","07","08","09",
