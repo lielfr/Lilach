@@ -35,7 +35,7 @@ public class Customer extends User {
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "openedBy")
     private Collection<Complaint> complaints;
 
-    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "customers_stores",
             joinColumns = @JoinColumn(name = "customer_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "store_id", referencedColumnName = "id")
@@ -136,6 +136,14 @@ public class Customer extends User {
 
     public void setTransactions(List<Transaction> transactions) {
         this.transactions = transactions;
+    }
+
+    public Collection<Store> getStores() {
+        return stores;
+    }
+
+    public void setStores(Collection<Store> stores) {
+        this.stores = stores;
     }
 }
 

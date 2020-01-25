@@ -103,7 +103,7 @@ public class DashboardController implements Initializable {
                         APIAccess.setCurrentUser(null);
                         EventBus.getDefault().post(new TokenSetEvent(""));
                         EventBus.getDefault().post(new LoginChangeEvent());
-                        EventBus.getDefault().post(new DashboardSwitchEvent("primary"));
+                        EventBus.getDefault().post(new DashboardSwitchEvent("catalog"));
                     });
                 }
 

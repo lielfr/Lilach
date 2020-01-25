@@ -1,7 +1,6 @@
 package org.cshaifasweng.winter;
 
 import javafx.application.Platform;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
@@ -37,6 +36,9 @@ public class CatalogController implements Refreshable {
     private static final int NUM_COLS = 3;
     private static final int NUM_ROWS = 3;
 
+    private int page = 1;
+    private int pages = 1;
+
     @FXML
     private ChoiceBox<String> storeChoiceBox;
 
@@ -56,36 +58,47 @@ public class CatalogController implements Refreshable {
     private Label totalPages;
 
     @FXML
-    void backPage(ActionEvent event) {
-
+    void backPage() {
+        if (page == 1) return;
+        page--;
+        updatePages();
     }
 
     @FXML
-    void nextPage(ActionEvent event) {
-
+    void nextPage() {
+        if (page == pages) return;
+        page++;
+        updatePages();
     }
 
     @FXML
-    void pageNumChanged(ActionEvent event) {
-
+    void pageNumChanged() {
+        int pageNumVal = Integer.parseInt(pageNum.getText());
+        if (pageNumVal > 1 && pageNumVal <= pages) {
+            page = pageNumVal;
+            updatePages();
+        } else {
+            pageNum.setText(String.valueOf(page));
+        }
     }
 
     @Subscribe
     public void handleLogin(LoginChangeEvent changeEvent) {
-
+        updateStoresList();
     }
 
     private void updateStoresList() {
         if (APIAccess.getCurrentUser() == null || APIAccess.getCurrentUser() instanceof Employee) {
             storeChoiceBox.getItems().clear();
-            service.getAllStores().enqueue(new Callback<List<Store>>() {
+            service.getAllStores().enqueue(new Callback<>() {
                 @Override
                 public void onResponse(Call<List<Store>> call, Response<List<Store>> response) {
                     if (response.code() != 200) return;
                     stores = response.body();
+                    if (stores == null) return;
                     List<String> storeNames = stores
                             .stream()
-                            .map((store) -> store.getName())
+                            .map(Store::getName)
                             .collect(Collectors.toList());
 
                     Platform.runLater(() -> {
@@ -101,12 +114,15 @@ public class CatalogController implements Refreshable {
                 }
             });
         } else {
+            Customer customer = (Customer) APIAccess.getCurrentUser();
+            System.out.println("Got stores: " + customer.getStores());
+            if (customer.getStores() == null) return;
             storeChoiceBox.getItems().clear();
             storeChoiceBox.getItems().addAll(
-                    ((Customer) APIAccess.getCurrentUser())
+                    customer
                             .getStores()
                             .stream()
-                            .map((store) -> store.getName()).collect(Collectors.toList()));
+                            .map(Store::getName).collect(Collectors.toList()));
         }
     }
 
@@ -117,14 +133,28 @@ public class CatalogController implements Refreshable {
                 Node itemCell = LayoutManager.getInstance().getFXML("catalog_item");
                 CatalogItemViewController controller =
                         (CatalogItemViewController) LayoutManager.getInstance().getController("catalog_item");
-                controller.setItemLabel(items.get(i * NUM_COLS + j).getDescription());
+                int index = (page - 1) + i * NUM_COLS + j;
+                if (index >= items.size())
+                    break;
+                CatalogItem item = items.get(index);
+                controller.setItemLabel(item.getDescription());
                 catalogGrid.add(itemCell, i, j);
             }
         }
+        updatePages();
+    }
+
+    private void updatePages() {
+        pageNum.setText(String.valueOf(page));
+        pages = (int) Math.ceil((double)items.size() / ((double)NUM_ROWS * (double)NUM_COLS));
+        totalPages.setText(String.valueOf(pages));
+
+        backButton.setDisable(page == 1);
+        forwardButton.setDisable(page == pages);
     }
 
     private void getCatalog(long id) {
-        service.getCatalogByStore(id).enqueue(new Callback<List<CatalogItem>>() {
+        service.getCatalogByStore(id).enqueue(new Callback<>() {
             @Override
             public void onResponse(Call<List<CatalogItem>> call, Response<List<CatalogItem>> response) {
                 if (response.code() != 200) return;
