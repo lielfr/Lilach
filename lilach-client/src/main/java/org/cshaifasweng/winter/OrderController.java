@@ -4,10 +4,11 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import org.cshaifasweng.winter.events.DashboardSwitchEvent;
+import org.cshaifasweng.winter.events.OrderCreateEvent;
 import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 
 import java.time.Instant;
 import java.time.LocalDate;
@@ -172,6 +173,11 @@ public class OrderController implements Refreshable{
     private TextArea greetingTextArea;
 
     private boolean radioStatus = false;
+
+    @Subscribe
+    public void handleOrderCreateEvent(OrderCreateEvent event) {
+        // TODO: Use the event
+    }
 
     private void restVisibleTab2()
     {
@@ -339,5 +345,6 @@ public class OrderController implements Refreshable{
         else{
             nextButton.setText("Next");
         }
+        EventBus.getDefault().register(this);
     }
 }
