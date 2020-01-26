@@ -8,10 +8,7 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import org.cshaifasweng.winter.events.DashboardSwitchEvent;
 import org.cshaifasweng.winter.events.OrderCreateEvent;
-import org.cshaifasweng.winter.models.Customer;
-import org.cshaifasweng.winter.models.Item;
-import org.cshaifasweng.winter.models.Order;
-import org.cshaifasweng.winter.models.User;
+import org.cshaifasweng.winter.models.*;
 import org.cshaifasweng.winter.web.APIAccess;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -22,12 +19,11 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.ZoneId;
-import java.util.Calendar;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Pattern;
-import java.util.stream.Collectors;
 
 public class OrderController implements Refreshable{
 
@@ -206,8 +202,37 @@ public class OrderController implements Refreshable{
 
     @Subscribe
     public void handleOrderCreateEvent(OrderCreateEvent event) {
-        currentOrder.setItems(event.getCart().stream().collect(Collectors.toList()));
+        currentOrder.setItems(new ArrayList<>(event.getCart()));
         populateTable();
+
+        double price = 0.0;
+        for (Item item : currentOrder.getItems()) {
+            double itemPrice = item.getPrice();
+            // Handling discount
+            if (item instanceof CatalogItem) {
+                CatalogItem catalogItem = (CatalogItem) item;
+                itemPrice -= catalogItem.getDiscountAmount();
+                itemPrice *= (100 - catalogItem.getDiscountPercent()) / 100;
+            }
+            price += itemPrice;
+        }
+
+
+        // Discount price for subscribers.
+        SubscriberType subscriberType = ((Customer) currentUser).getSubscriberType();
+        if (subscriberType != null) {
+            switch (subscriberType) {
+                case MONTHLY:
+                    price = price * 0.75;
+                    break;
+                case YEARLY:
+                    price = price * 0.65;
+                    break;
+            }
+        }
+
+
+        currentOrder.setPrice(price);
     }
 
     private void resetVisibleTab2()
