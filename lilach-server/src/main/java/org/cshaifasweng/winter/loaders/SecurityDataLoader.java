@@ -107,22 +107,22 @@ public class SecurityDataLoader implements ApplicationListener<ContextRefreshedE
         Calendar customerCreditCardExpire = Calendar.getInstance();
         customerCreditCardExpire.set(2022, 1, 1);
 
-        Customer customer = createOrReturnCustomer("customer@lilach.com", "moo",
+        Customer customer = createOrReturnCustomer("000000999", "customer@lilach.com", "moo",
                 Collections.singletonList(customerRole), "Lilach", "Customer", "0509999999",
                 11, customerCreditCardExpire.getTime(), 222, customerBirth.getTime(), Arrays.asList(haifaUniBranch));
 
-        Employee admin = createOrReturnEmployee("lielft@gmail.com", "AdminBaby!",
+        Employee admin = createOrReturnEmployee("000000998", "lielft@gmail.com", "AdminBaby!",
                 "Liel", "Fridman", "0509999999",
                 Collections.singletonList(adminRole));
 
-        Employee haifaUniManager = createOrReturnEmployee("haifa.uni.manager@lilach.com", "haifarocks",
+        Employee haifaUniManager = createOrReturnEmployee("000000997", "haifa.uni.manager@lilach.com", "haifarocks",
                 "Aharon", "Cohen", "0500009000",
                 Collections.singletonList(storeManagerEmployeeRole));
         haifaUniManager.setManagedStore(haifaUniBranch);
         haifaUniManager.setAssignedStore(haifaUniBranch);
         haifaUniBranch.setManager(haifaUniManager);
 
-        Employee qiryatYamManager = createOrReturnEmployee("qy.manager@lilach.com", "iloveky",
+        Employee qiryatYamManager = createOrReturnEmployee("000000996", "qy.manager@lilach.com", "iloveky",
                 "Lilach", "Schwartzman", "0509811999",
                 Collections.singletonList(storeManagerEmployeeRole));
         qiryatYamBranch.setManager(qiryatYamManager);
@@ -186,12 +186,12 @@ public class SecurityDataLoader implements ApplicationListener<ContextRefreshedE
     }
 
     @Transactional
-    Customer createOrReturnCustomer(String email, String password, Collection<Role> roles,
+    Customer createOrReturnCustomer(String misparZehut, String email, String password, Collection<Role> roles,
                                     String firstName, String lastName, String phone,
                                     long creditCard, Date expireDate, int cvv, Date dateOfBirth, List<Store> stores) {
         Customer customer = customerRepository.findByEmail(email);
         if (customer == null) {
-            customer = new Customer(email, new BCryptPasswordEncoder().encode(password),
+            customer = new Customer(misparZehut, email, new BCryptPasswordEncoder().encode(password),
                     firstName, lastName, phone, roles, creditCard, expireDate, cvv, dateOfBirth);
             customer.setStores(stores);
             customerRepository.save(customer);
@@ -201,12 +201,12 @@ public class SecurityDataLoader implements ApplicationListener<ContextRefreshedE
     }
 
     @Transactional
-    Employee createOrReturnEmployee(String email, String password,
+    Employee createOrReturnEmployee(String misparZehut, String email, String password,
                                     String firstName, String lastName, String phone,
                                     Collection<Role> roles) {
         Employee employee = employeeRepository.findByEmail(email);
         if (employee == null) {
-            employee = new Employee(email, new BCryptPasswordEncoder().encode(password), firstName,
+            employee = new Employee(misparZehut, email, new BCryptPasswordEncoder().encode(password), firstName,
                     lastName, phone, roles, new Date());
             employeeRepository.save(employee);
         }

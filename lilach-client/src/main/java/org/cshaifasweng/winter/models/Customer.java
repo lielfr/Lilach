@@ -34,8 +34,8 @@ public class Customer extends User {
     private Collection<Store> stores;
 
 
-    public Customer(String email, String password, String firstName, String lastName, String phone, long creditCard, Date expireDate, int cvv, Date dateOfBirth) {
-        super(email, password, firstName, lastName, phone);
+    public Customer(String misparZehut, String email, String password, String firstName, String lastName, String phone, long creditCard, Date expireDate, int cvv, Date dateOfBirth) {
+        super(misparZehut, email, password, firstName, lastName, phone);
         this.creditCard = creditCard;
         this.dateOfBirth = dateOfBirth;
         this.expireDate = expireDate;
@@ -48,7 +48,7 @@ public class Customer extends User {
 
     @Override
     public User copy() {
-        Customer copy = new Customer(email, password, firstName, lastName, phone,
+        Customer copy = new Customer(misparZehut, email, password, firstName, lastName, phone,
                 creditCard, expireDate, cvv, (Date)dateOfBirth.clone());
         return copy;
     }

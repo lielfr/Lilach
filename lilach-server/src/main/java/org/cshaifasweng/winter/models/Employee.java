@@ -5,10 +5,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 
 import javax.persistence.*;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
-import java.util.List;
 
 @Entity
 @JsonTypeName("employee")
@@ -39,7 +37,7 @@ public class Employee extends User {
 
     @Override
     public User copy() {
-        Employee copy = new Employee(email, password, firstName, lastName, phone, roles, (Date) employedSince.clone());
+        Employee copy = new Employee(misparZehut, email, password, firstName, lastName, phone, roles, (Date) employedSince.clone());
         if (managedStore != null)
             copy.setManagedStore(new Store(managedStore));
         if (reportsTo != null)
@@ -50,9 +48,9 @@ public class Employee extends User {
         return copy;
     }
 
-    public Employee(String email, String password, String firstName, String lastName,
+    public Employee(String misparZehut, String email, String password, String firstName, String lastName,
                     String phone, Collection<Role> roles, Date employedSince) {
-        super(email, password, firstName, lastName, phone, roles);
+        super(misparZehut, email, password, firstName, lastName, phone, roles);
         this.employedSince = employedSince;
     }
 

@@ -14,6 +14,8 @@ import java.util.Collection;
 public abstract class User {
     protected Long id;
 
+    protected String misparZehut;
+
     protected String email;
 
     protected String password;
@@ -33,7 +35,8 @@ public abstract class User {
     public User() {
     }
 
-    public User(String email, String password, String firstName, String lastName, String phone) {
+    public User(String misparZehut, String email, String password, String firstName, String lastName, String phone) {
+        this.misparZehut = misparZehut;
         this.email = email;
         this.password = password;
         this.firstName = firstName;
@@ -116,5 +119,13 @@ public abstract class User {
 
     public void setDisabled(Boolean disabled) {
         isDisabled = disabled;
+    }
+
+    public String getMisparZehut() {
+        return misparZehut;
+    }
+
+    public void setMisparZehut(String misparZehut) {
+        this.misparZehut = misparZehut;
     }
 }

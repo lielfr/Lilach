@@ -30,7 +30,8 @@ public class Employee extends User {
 
     @Override
     public User copy() {
-        Employee copy = new Employee(email, password, firstName, lastName, phone, (Date) employedSince.clone());
+        Employee copy = new Employee(misparZehut, email, password,
+                firstName, lastName, phone, (Date) employedSince.clone());
         if (managedStore != null)
             copy.setManagedStore(new Store(managedStore));
         if (reportsTo != null)
@@ -41,9 +42,9 @@ public class Employee extends User {
         return copy;
     }
 
-    public Employee(String email, String password, String firstName, String lastName,
+    public Employee(String misparZehut, String email, String password, String firstName, String lastName,
                     String phone, Date employedSince) {
-        super(email, password, firstName, lastName, phone);
+        super(misparZehut, email, password, firstName, lastName, phone);
         this.employedSince = employedSince;
     }
 
