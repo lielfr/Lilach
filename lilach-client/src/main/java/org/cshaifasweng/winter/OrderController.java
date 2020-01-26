@@ -16,10 +16,14 @@ import org.cshaifasweng.winter.web.APIAccess;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
+import java.text.Format;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.ZoneId;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Pattern;
@@ -472,7 +476,7 @@ public class OrderController implements Refreshable{
 //                fillOrder();
             }
             LocalDate localDate = datePicker.getValue();
-            boolean a = localDate.isBefore(LocalDate.now());
+//            boolean a = localDate.isBefore(LocalDate.now());
             LocalTime localTime = LocalTime.of(Integer.parseInt(hourChooseBox.getValue()), Integer.parseInt(minuteChooseBox.getValue()), 0);
             LocalDateTime localDateTime = LocalDateTime.of(localDate, localTime);
 
@@ -480,7 +484,13 @@ public class OrderController implements Refreshable{
                 return;
             }
             else {
+                ZoneId zoneId = ZoneId.of("Asia/Jerusalem");
 
+                Date date = Date.from( localDateTime.atZone( zoneId).toInstant());
+                Format formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                String s = formatter.format(date);
+                currentOrder.setSupplyDate(date);
+                System.out.println(formatter.format(currentOrder.getSupplyDate()));
             }
 
         }
@@ -517,7 +527,7 @@ public class OrderController implements Refreshable{
 
     private boolean isPast(LocalDateTime localDateTime){
         boolean flag = true;
-        Calendar now = Calendar.getInstance();
+//        Calendar now = Calendar.getInstance();
 //        LocalDate localDate = datePicker.getValue();
 //        boolean a = localDate.isBefore(LocalDate.now());
 //        LocalTime localTime = LocalTime.of(Integer.parseInt(hourChooseBox.getValue()), Integer.parseInt(minuteChooseBox.getValue()), 0);
