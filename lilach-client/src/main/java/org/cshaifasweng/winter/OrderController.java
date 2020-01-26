@@ -304,9 +304,9 @@ public class OrderController implements Refreshable{
         return val;
     }
 
-    private boolean dateCheckTab4(){
+    private boolean dateCheckTab4(LocalDateTime localDateTime){
         resetVisibleTab4();
-        boolean isPast1 = isPast();
+        boolean isPast1 = isPast(localDateTime);
         if (isPast1){
             invalidDate.setVisible(true);
             System.out.println("current date is newer than the entered date");
@@ -466,8 +466,16 @@ public class OrderController implements Refreshable{
                 updateFieldsTab4();
 //                fillOrder();
             }
-            if(dateCheckTab4()){
+            LocalDate localDate = datePicker.getValue();
+            boolean a = localDate.isBefore(LocalDate.now());
+            LocalTime localTime = LocalTime.of(Integer.parseInt(hourChooseBox.getValue()), Integer.parseInt(minuteChooseBox.getValue()), 0);
+            LocalDateTime localDateTime = LocalDateTime.of(localDate, localTime);
+
+            if(dateCheckTab4(localDateTime)){
                 return;
+            }
+            else {
+
             }
 
         }
@@ -502,14 +510,14 @@ public class OrderController implements Refreshable{
                     "40","41","42","43","44","45","46","47","48","49",
                     "50","51","52","53","54","55","56","57","58","59");
 
-    private boolean isPast(){
+    private boolean isPast(LocalDateTime localDateTime){
         boolean flag = true;
         Calendar now = Calendar.getInstance();
-        LocalDate localDate = datePicker.getValue();
-        boolean a = localDate.isBefore(LocalDate.now());
-        LocalTime localTime = LocalTime.of(Integer.parseInt(hourChooseBox.getValue()), Integer.parseInt(minuteChooseBox.getValue()), 0);
-
-        LocalDateTime localDateTime = LocalDateTime.of(localDate, localTime);
+//        LocalDate localDate = datePicker.getValue();
+//        boolean a = localDate.isBefore(LocalDate.now());
+//        LocalTime localTime = LocalTime.of(Integer.parseInt(hourChooseBox.getValue()), Integer.parseInt(minuteChooseBox.getValue()), 0);
+//
+//        LocalDateTime localDateTime = LocalDateTime.of(localDate, localTime);
         return localDateTime.isBefore(LocalDateTime.now());
 
       /*  Instant instant = Instant.from(localDate.atStartOfDay(ZoneId.systemDefault()));
