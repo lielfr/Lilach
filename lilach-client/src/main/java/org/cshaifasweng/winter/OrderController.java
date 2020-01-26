@@ -14,10 +14,7 @@ import org.cshaifasweng.winter.web.APIAccess;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
-import java.time.Instant;
-import java.time.LocalDate;
-import java.time.LocalTime;
-import java.time.ZoneId;
+import java.time.*;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
@@ -309,11 +306,12 @@ public class OrderController implements Refreshable{
 
     private boolean dateCheckTab4(){
         resetVisibleTab4();
-        if (isPast()){
+        boolean isPast1 = isPast();
+        if (isPast1){
             invalidDate.setVisible(true);
             System.out.println("current date is newer than the entered date");
         }
-        return !isPast();
+        return isPast1;
     }
 
 
@@ -331,12 +329,14 @@ public class OrderController implements Refreshable{
     }
 
     private void updateFieldsTab4(){
-        Customer temp;
+       /* Customer temp;
         temp = (Customer)currentUser.copy();
         temp.setEmail(setRecipientMailField.getText());
         temp.setAddress(setDeliveryAddressField.getText());
 
-        currentOrder.setOrderedBy(temp);
+        currentOrder.setOrderedBy(temp);*/
+       currentOrder.setDeliveryAddress(setDeliveryAddressField.getText());
+       currentOrder.setRecipientMail(setRecipientMailField.getText());
     }
     private void resetVisibleTab4(){
         deliveryAddressEmpty.setVisible(false);
@@ -466,7 +466,7 @@ public class OrderController implements Refreshable{
                 updateFieldsTab4();
 //                fillOrder();
             }
-            if(!dateCheckTab4()){
+            if(dateCheckTab4()){
                 return;
             }
 
@@ -506,12 +506,18 @@ public class OrderController implements Refreshable{
         boolean flag = true;
         Calendar now = Calendar.getInstance();
         LocalDate localDate = datePicker.getValue();
-        Instant instant = Instant.from(localDate.atStartOfDay(ZoneId.systemDefault()));
+        boolean a = localDate.isBefore(LocalDate.now());
+        LocalTime localTime = LocalTime.of(Integer.parseInt(hourChooseBox.getValue()), Integer.parseInt(minuteChooseBox.getValue()), 0);
+
+        LocalDateTime localDateTime = LocalDateTime.of(localDate, localTime);
+        return localDateTime.isBefore(LocalDateTime.now());
+
+      /*  Instant instant = Instant.from(localDate.atStartOfDay(ZoneId.systemDefault()));
         Date date = Date.from(instant);
         now.set(Calendar.HOUR_OF_DAY, Integer.parseInt(hourChooseBox.getValue()));
         now.set(Calendar.MINUTE, Integer.parseInt((minuteChooseBox.getValue())));
 
-        return (now.getTime().before(new Date()));
+        return (now.getTime().before(new Date()));*/
     }
 
     private void updateShownFieldsTab2(){
@@ -545,10 +551,10 @@ public class OrderController implements Refreshable{
             greetingTextArea.setText(currentOrder.getGreeting());
         }
         if(deliveryAddressField1 != null) {
-            deliveryAddressField1.setText(currentOrder.getOrderedBy().getAddress());
+            deliveryAddressField1.setText(currentOrder.getDeliveryAddress());
         }
         if(recipientMailField1 != null) {
-            recipientMailField1.setText(currentOrder.getOrderedBy().getEmail());
+            recipientMailField1.setText(currentOrder.getRecipientMail());
         }
 
     }

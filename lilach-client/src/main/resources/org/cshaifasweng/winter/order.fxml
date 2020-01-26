@@ -314,7 +314,7 @@
                                                          </children>
                                                       </HBox>
                                                       <DatePicker fx:id="datePicker" promptText="Choos date" GridPane.columnIndex="1" />
-                                                      <Label fx:id="invalidDate" text="Invalid date" textFill="RED" visible="false" GridPane.columnIndex="2" />
+                                                      <Label fx:id="invalidDate" text="This time has passed" textFill="RED" visible="false" GridPane.columnIndex="2" />
                                                       <Label fx:id="invalidHour" text="Invalid hour" textFill="RED" visible="false" GridPane.columnIndex="2" GridPane.rowIndex="1" />
                                                    </children>
                                                 </GridPane>
