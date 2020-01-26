@@ -30,7 +30,7 @@ public class CatalogService {
     public List<CatalogItem> findByStore(long id) {
         Store store = storeRepository.getOne(id);
 
-        return repository.findByStoreOrderByDiscountAmountAscDiscountPercentAsc(store);
+        return repository.findByStoreOrderByDiscountAmountDescDiscountPercentDesc(store);
     }
 
     @Transactional
@@ -47,8 +47,9 @@ public class CatalogService {
     }
 
     @Transactional
-    public CatalogItem addItem(CatalogItem item) {
+    public CatalogItem addItem(long storeId, CatalogItem item) {
         // TODO: Add validation
+        item.setStore(storeRepository.getOne(storeId));
         repository.save(item);
         return item;
     }

@@ -12,11 +12,16 @@ import javafx.scene.image.ImageView;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.util.StringConverter;
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
+import org.cshaifasweng.winter.events.DashboardSwitchEvent;
 import org.cshaifasweng.winter.models.CatalogItem;
 import org.cshaifasweng.winter.models.CatalogItemType;
 import org.cshaifasweng.winter.models.Store;
 import org.cshaifasweng.winter.web.APIAccess;
 import org.cshaifasweng.winter.web.LilachService;
+import org.greenrobot.eventbus.EventBus;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -68,6 +73,8 @@ public class AddItemController implements Refreshable {
 
     private List<Store> stores;
 
+    byte[] imageAsBytes;
+
     /**
      * Choosing the Item Image you want to upload to the catalog.
      * @param event
@@ -78,9 +85,8 @@ public class AddItemController implements Refreshable {
         fileChooser.setTitle("Choose image");
         File file = fileChooser.showOpenDialog(new Stage());
         if (file == null) return;
-        byte[] imageAsBytes = new FileInputStream(file).readAllBytes();
+        imageAsBytes = new FileInputStream(file).readAllBytes();
         imageViewer.setImage(new Image(new ByteArrayInputStream(imageAsBytes)));
-        createdItem.setPicture(imageAsBytes);
     }
 
     @FXML
@@ -91,24 +97,47 @@ public class AddItemController implements Refreshable {
         createdItem.setPrice(Double.parseDouble(itemPriceField.getText()));
         createdItem.setDiscountAmount(Double.parseDouble(discountSumField.getText()));
         createdItem.setDiscountPercent(Double.parseDouble(discountPercentageField.getText()));
-        lilachService.newCatalogItem(createdItem).enqueue(new Callback<CatalogItem>() {
+        System.out.println("MOO: " + storeChoiceBox.getValue().getName());
+        createdItem.setStore(storeChoiceBox.getValue());
+        createdItem.setItemType(typeChoiceBox.getValue());
+        RequestBody reqFileBody = RequestBody.create(MediaType.parse("multipart/form-data"), imageAsBytes);
+        lilachService.uploadImage(MultipartBody.Part.createFormData("file", "name", reqFileBody)).enqueue(new Callback<String>() {
             @Override
-            public void onResponse(Call<CatalogItem> call, Response<CatalogItem> response) {
-                if (response.code() != 200) {
-                    // TODO: Add code when there is an error
-                    log.severe("Got response code " + response.code());
-                    return;
-                }
+            public void onResponse(Call<String> call, Response<String> response) {
+                log.severe("Got response code " + response.code());
+                if (response.code() != 200) return;
+                createdItem.setPicture(response.body());
+                lilachService.newCatalogItem(storeChoiceBox.getValue().getId(), createdItem).enqueue(new Callback<CatalogItem>() {
+                    @Override
+                    public void onResponse(Call<CatalogItem> call, Response<CatalogItem> response) {
+                        if (response.code() != 200) {
+                            // TODO: Add code when there is an error
+                            log.severe("Got response code " + response.code());
+                            return;
+                        }
 
-                // TODO: Add code when successful
-                log.info("Successfully created item");
+                        // TODO: Add code when successful
+                        log.info("Successfully created item");
+
+                        Platform.runLater(() -> {
+                            EventBus.getDefault().post(new DashboardSwitchEvent("catalog"));
+                        });
+
+                    }
+
+                    @Override
+                    public void onFailure(Call<CatalogItem> call, Throwable throwable) {
+                        throwable.printStackTrace();
+                    }
+                });
             }
 
             @Override
-            public void onFailure(Call<CatalogItem> call, Throwable throwable) {
-
+            public void onFailure(Call<String> call, Throwable throwable) {
+                throwable.printStackTrace();
             }
         });
+
     }
 
     @FXML

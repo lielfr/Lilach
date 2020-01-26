@@ -3,7 +3,6 @@ package org.cshaifasweng.winter.api;
 import org.cshaifasweng.winter.da.CatalogItemsRepository;
 import org.cshaifasweng.winter.da.StoreRepository;
 import org.cshaifasweng.winter.models.CatalogItem;
-import org.cshaifasweng.winter.models.Store;
 import org.cshaifasweng.winter.services.CatalogService;
 import org.springframework.web.bind.annotation.*;
 
@@ -37,8 +36,8 @@ public class CatalogItemController {
         return catalogService.updateItem(id, item);
     }
 
-    @PostMapping("/catalog")
-    public CatalogItem newItem(@RequestBody CatalogItem item) {
-        return catalogService.addItem(item);
+    @PostMapping("/store/{id}/catalog")
+    public CatalogItem newItem(@PathVariable("id") long id, @RequestBody CatalogItem item) {
+        return catalogService.addItem(id, item);
     }
 }
