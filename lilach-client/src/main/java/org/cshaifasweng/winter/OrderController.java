@@ -191,7 +191,16 @@ public class OrderController implements Refreshable{
     @FXML
     private TextField recipientMailField1;
 
+    @FXML
+    private TextField dateAndTimeShowField;
+
+    @FXML
+    private TextField totalPriceShowField;
+
+
     private boolean radioStatus = false;
+    private String output;
+
     Order currentOrder = new Order();
     User currentUser = APIAccess.getCurrentUser();
 
@@ -475,6 +484,11 @@ public class OrderController implements Refreshable{
                 updateFieldsTab4();
 //                fillOrder();
             }
+            else {
+                currentOrder.setDeliveryAddress(currentOrder.getOrderedBy().getAddress());
+                currentOrder.setRecipientMail(currentOrder.getOrderedBy().getEmail());
+                updateFieldsTab4();
+            }
             LocalDate localDate = datePicker.getValue();
 //            boolean a = localDate.isBefore(LocalDate.now());
             LocalTime localTime = LocalTime.of(Integer.parseInt(hourChooseBox.getValue()), Integer.parseInt(minuteChooseBox.getValue()), 0);
@@ -490,7 +504,7 @@ public class OrderController implements Refreshable{
                 Format formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                 String s = formatter.format(date);
                 currentOrder.setSupplyDate(date);
-                System.out.println(formatter.format(currentOrder.getSupplyDate()));
+                output= formatter.format(currentOrder.getSupplyDate());
             }
 
         }
@@ -579,9 +593,14 @@ public class OrderController implements Refreshable{
         if(recipientMailField1 != null) {
             recipientMailField1.setText(currentOrder.getRecipientMail());
         }
-
+        if(dateAndTimeShowField != null){
+            dateAndTimeShowField.setText(output);
+        }
+//        if(totalPriceShowField != null){
+//            totalPriceShowField.setText(Double.toString(currentOrder.getPrice()));
+//        }
     }
-
+    @FXML
     private void updateButtons() {
         SingleSelectionModel<Tab> selectionModel = tabPane.getSelectionModel();
         if(firstTab()){
@@ -602,9 +621,9 @@ public class OrderController implements Refreshable{
         if (tab2 != null && tab2.isSelected()){
             updateShownFieldsTab2();
         }
-//        if (tab5 != null && tab5.isSelected()){
-//            updateShownFieldsTab5();
-//        }
+        if (tab5 != null && tab5.isSelected()){
+            updateShownFieldsTab5();
+        }
     }
 
     private void populateTable() {
