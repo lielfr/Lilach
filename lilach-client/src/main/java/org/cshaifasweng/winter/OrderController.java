@@ -16,9 +16,10 @@ import org.cshaifasweng.winter.web.APIAccess;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
-import java.time.*;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Pattern;
@@ -324,7 +325,7 @@ public class OrderController implements Refreshable{
         temp = (Customer)currentUser.copy();
         temp.setFirstName(firstNameVerField.getText());
         temp.setLastName(lastNameVerField.getText());
-        temp.setId(Long.valueOf(idNumVerField.getText()));
+        temp.setMisparZehut(idNumVerField.getText());
         temp.setEmail(emailVerField.getText());
         temp.setPhone(phoneNumVerField.getText());
         temp.setAddress(addressVerField.getText());
@@ -527,7 +528,7 @@ public class OrderController implements Refreshable{
     private void updateShownFieldsTab2(){
         firstNameVerField.setText(currentOrder.getOrderedBy().getFirstName());
         lastNameVerField.setText(currentOrder.getOrderedBy().getLastName());
-        idNumVerField.setText(currentOrder.getOrderedBy().getId().toString());
+        idNumVerField.setText(currentOrder.getOrderedBy().getMisparZehut());
         emailVerField.setText(currentOrder.getOrderedBy().getEmail());
         phoneNumVerField.setText(currentOrder.getOrderedBy().getPhone());
         addressVerField.setText(currentOrder.getOrderedBy().getAddress());
@@ -540,7 +541,7 @@ public class OrderController implements Refreshable{
             lastNameField.setText(currentOrder.getOrderedBy().getLastName());
         }
         if(idNumField != null) {
-            idNumField.setText(currentOrder.getOrderedBy().getId().toString());
+            idNumField.setText(currentOrder.getOrderedBy().getMisparZehut());
         }
         if(emailField != null) {
             emailField.setText(currentOrder.getOrderedBy().getEmail());
