@@ -1,5 +1,6 @@
 package org.cshaifasweng.winter;
 
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -10,8 +11,12 @@ import org.cshaifasweng.winter.events.DashboardSwitchEvent;
 import org.cshaifasweng.winter.events.OrderCreateEvent;
 import org.cshaifasweng.winter.models.*;
 import org.cshaifasweng.winter.web.APIAccess;
+import org.cshaifasweng.winter.web.LilachService;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 import java.text.Format;
 import java.text.SimpleDateFormat;
@@ -25,7 +30,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Pattern;
 
-public class OrderController implements Refreshable{
+public class OrderController implements Refreshable {
 
     @FXML
     private Button backButton;
@@ -235,8 +240,7 @@ public class OrderController implements Refreshable{
         currentOrder.setPrice(price);
     }
 
-    private void resetVisibleTab2()
-    {
+    private void resetVisibleTab2() {
         //empty labels
         firstNameVerEmptyLabel.setVisible(false);
         lastNameVerEmptyLabel.setVisible(false);
@@ -267,7 +271,7 @@ public class OrderController implements Refreshable{
         return found;
     }
 
-    private boolean isInputEmpty(){
+    private boolean isInputEmpty() {
         boolean val = false;
 
         Map<TextField, Label> fieldsMap = new HashMap<>();
@@ -281,7 +285,7 @@ public class OrderController implements Refreshable{
         return checkFields(fieldsMap);
     }
 
-    private boolean isInputEmptyTab4(){
+    private boolean isInputEmptyTab4() {
         Map<TextField, Label> fieldsMap = new HashMap<>();
         fieldsMap.put(setDeliveryAddressField, deliveryAddressEmpty);
         fieldsMap.put(setRecipientMailField, recipientMailEmpty);
@@ -347,10 +351,10 @@ public class OrderController implements Refreshable{
         return val;
     }
 
-    private boolean dateCheckTab4(LocalDateTime localDateTime){
+    private boolean dateCheckTab4(LocalDateTime localDateTime) {
         resetVisibleTab4();
         boolean isPast1 = isPast(localDateTime);
-        if (isPast1){
+        if (isPast1) {
             invalidDate.setVisible(true);
             System.out.println("current date is newer than the entered date");
         }
@@ -358,9 +362,9 @@ public class OrderController implements Refreshable{
     }
 
 
-    private void updateFieldsTab2(){
+    private void updateFieldsTab2() {
         Customer temp;
-        temp = (Customer)currentUser.copy();
+        temp = (Customer) currentUser.copy();
         temp.setFirstName(firstNameVerField.getText());
         temp.setLastName(lastNameVerField.getText());
         temp.setMisparZehut(idNumVerField.getText());
@@ -372,24 +376,25 @@ public class OrderController implements Refreshable{
 
     }
 
-    private void updateFieldsTab4(){
+    private void updateFieldsTab4() {
        /* Customer temp;
         temp = (Customer)currentUser.copy();
         temp.setEmail(setRecipientMailField.getText());
         temp.setAddress(setDeliveryAddressField.getText());
 
         currentOrder.setOrderedBy(temp);*/
-       currentOrder.setDeliveryAddress(setDeliveryAddressField.getText());
-       currentOrder.setRecipientMail(setRecipientMailField.getText());
+        currentOrder.setDeliveryAddress(setDeliveryAddressField.getText());
+        currentOrder.setRecipientMail(setRecipientMailField.getText());
     }
-    private void resetVisibleTab4(){
+
+    private void resetVisibleTab4() {
         deliveryAddressEmpty.setVisible(false);
         recipientMailEmpty.setVisible(false);
         invalidEmailAddressLabel.setVisible(false);
         invalidDate.setVisible(false);
     }
 
-    private void setDisable(boolean status){
+    private void setDisable(boolean status) {
         if (setDeliveryAddressField != null)
             setDeliveryAddressField.setDisable(!status);
         if (deliveryAddressLabel != null)
@@ -401,10 +406,10 @@ public class OrderController implements Refreshable{
     }
 
 
-    private void setSelected(boolean status){
-        if (sendToAnotherAddRadio != null){
-        sendToAnotherAddRadio.setSelected(status);
-        sendToMyAddRadio.setSelected(!status);
+    private void setSelected(boolean status) {
+        if (sendToAnotherAddRadio != null) {
+            sendToAnotherAddRadio.setSelected(status);
+            sendToMyAddRadio.setSelected(!status);
         }
     }
 
@@ -431,6 +436,7 @@ public class OrderController implements Refreshable{
 
     /**
      * allow change in the personal details.
+     *
      * @param event entered event
      */
     @FXML
@@ -460,21 +466,20 @@ public class OrderController implements Refreshable{
     @FXML
     void goBack(ActionEvent event) {
         SingleSelectionModel<Tab> selectionModel = tabPane.getSelectionModel();
-        if(selectionModel.getSelectedIndex()==0){
+        if (selectionModel.getSelectedIndex() == 0) {
             EventBus.getDefault().post(new DashboardSwitchEvent("primary"));
-        }
-        else{
+        } else {
             selectionModel.selectPrevious();
         }
         updateButtons();
 
     }
 
-    boolean finalTab (){
+    boolean finalTab() {
         return tab5.isSelected();
     }
 
-    boolean firstTab(){
+    boolean firstTab() {
         return tab1.isSelected();
     }
 
@@ -495,7 +500,7 @@ public class OrderController implements Refreshable{
             }
             updateFieldsTab2();
         }
-        if(tab3.isSelected()){
+        if (tab3.isSelected()) {
             currentOrder.setGreeting(greetingEntryTextArea.getText());
         }
         if (tab4.isSelected()) {
@@ -509,8 +514,7 @@ public class OrderController implements Refreshable{
                 }
                 updateFieldsTab4();
 //                fillOrder();
-            }
-            else {
+            } else {
                 currentOrder.setDeliveryAddress(currentOrder.getOrderedBy().getAddress());
                 currentOrder.setRecipientMail(currentOrder.getOrderedBy().getEmail());
 
@@ -520,28 +524,26 @@ public class OrderController implements Refreshable{
             LocalTime localTime = LocalTime.of(Integer.parseInt(hourChooseBox.getValue()), Integer.parseInt(minuteChooseBox.getValue()), 0);
             LocalDateTime localDateTime = LocalDateTime.of(localDate, localTime);
 
-            if(dateCheckTab4(localDateTime)){
+            if (dateCheckTab4(localDateTime)) {
                 return;
-            }
-            else {
+            } else {
                 ZoneId zoneId = ZoneId.of("Asia/Jerusalem");
 
-                Date date = Date.from( localDateTime.atZone( zoneId).toInstant());
+                Date date = Date.from(localDateTime.atZone(zoneId).toInstant());
                 Format formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                 String s = formatter.format(date);
                 currentOrder.setSupplyDate(date);
-                output= formatter.format(currentOrder.getSupplyDate());
+                output = formatter.format(currentOrder.getSupplyDate());
             }
 
         }
 
-            updateShownFieldsTab5();
-
+        updateShownFieldsTab5();
 
 
         // If the current tub is the final tub. send the order and go back to the main screen.
         if (finalTab()) {
-            EventBus.getDefault().post(new DashboardSwitchEvent("primary"));
+          sendOrder();
         } else {
             // move to the next tab and enable it.
             selectionModel.selectNext();
@@ -552,20 +554,20 @@ public class OrderController implements Refreshable{
     }
 
 
-    private ObservableList<String> hourList = FXCollections.observableArrayList(""+
-                    "00","01","02","03","04","05","06","07","08","09",
-                    "10","11","12","13","14","15","16","17","18","19",
-                    "20","21","22","23");
+    private ObservableList<String> hourList = FXCollections.observableArrayList("" +
+                    "00", "01", "02", "03", "04", "05", "06", "07", "08", "09",
+            "10", "11", "12", "13", "14", "15", "16", "17", "18", "19",
+            "20", "21", "22", "23");
 
     private ObservableList<String> minuteList = FXCollections.observableArrayList("" +
-                    "00","01","02","03","04","05","06","07","08","09",
-                    "10","11","12","13","14","15","16","17","18","19",
-                    "20","21","22","23","24","25","26","27","28","29",
-                    "30","31","32","33","34","35","36","37","38","39",
-                    "40","41","42","43","44","45","46","47","48","49",
-                    "50","51","52","53","54","55","56","57","58","59");
+                    "00", "01", "02", "03", "04", "05", "06", "07", "08", "09",
+            "10", "11", "12", "13", "14", "15", "16", "17", "18", "19",
+            "20", "21", "22", "23", "24", "25", "26", "27", "28", "29",
+            "30", "31", "32", "33", "34", "35", "36", "37", "38", "39",
+            "40", "41", "42", "43", "44", "45", "46", "47", "48", "49",
+            "50", "51", "52", "53", "54", "55", "56", "57", "58", "59");
 
-    private boolean isPast(LocalDateTime localDateTime){
+    private boolean isPast(LocalDateTime localDateTime) {
         boolean flag = true;
 //        Calendar now = Calendar.getInstance();
 //        LocalDate localDate = datePicker.getValue();
@@ -583,7 +585,7 @@ public class OrderController implements Refreshable{
         return (now.getTime().before(new Date()));*/
     }
 
-    private void updateShownFieldsTab2(){
+    private void updateShownFieldsTab2() {
         firstNameVerField.setText(currentOrder.getOrderedBy().getFirstName());
         lastNameVerField.setText(currentOrder.getOrderedBy().getLastName());
         idNumVerField.setText(currentOrder.getOrderedBy().getMisparZehut());
@@ -591,63 +593,63 @@ public class OrderController implements Refreshable{
         phoneNumVerField.setText(currentOrder.getOrderedBy().getPhone());
         addressVerField.setText(currentOrder.getOrderedBy().getAddress());
     }
-    private void updateShownFieldsTab5(){
-        if(firstNameField != null) {
+
+    private void updateShownFieldsTab5() {
+        if (firstNameField != null) {
             firstNameField.setText(currentOrder.getOrderedBy().getFirstName());
         }
-        if(lastNameField != null){
+        if (lastNameField != null) {
             lastNameField.setText(currentOrder.getOrderedBy().getLastName());
         }
-        if(idNumField != null) {
+        if (idNumField != null) {
             idNumField.setText(currentOrder.getOrderedBy().getMisparZehut());
         }
-        if(emailField != null) {
+        if (emailField != null) {
             emailField.setText(currentOrder.getOrderedBy().getEmail());
         }
-        if(phoneNumberField != null) {
+        if (phoneNumberField != null) {
             phoneNumberField.setText(currentOrder.getOrderedBy().getPhone());
         }
-        if(addressField != null) {
+        if (addressField != null) {
             addressField.setText(currentOrder.getOrderedBy().getAddress());
         }
-        if(greetingTextArea != null) {
+        if (greetingTextArea != null) {
             greetingTextArea.setText(currentOrder.getGreeting());
         }
-        if(deliveryAddressField1 != null) {
+        if (deliveryAddressField1 != null) {
             deliveryAddressField1.setText(currentOrder.getDeliveryAddress());
         }
-        if(recipientMailField1 != null) {
+        if (recipientMailField1 != null) {
             recipientMailField1.setText(currentOrder.getRecipientMail());
         }
-        if(dateAndTimeShowField != null){
+        if (dateAndTimeShowField != null) {
             dateAndTimeShowField.setText(output);
         }
-        if(totalPriceShowField != null){
+        if (totalPriceShowField != null) {
             totalPriceShowField.setText(Double.toString(currentOrder.getPrice()));
         }
     }
+
     @FXML
     private void updateButtons() {
         SingleSelectionModel<Tab> selectionModel = tabPane.getSelectionModel();
-        if(firstTab()){
+        if (firstTab()) {
             backButton.setText("Exit");
             cancelButton.setVisible(false);
-        }
-        else{
+        } else {
             backButton.setText("Back");
             cancelButton.setVisible(true);
         }
 
-        if(selectionModel.getSelectedIndex() == 4){
+        if (selectionModel.getSelectedIndex() == 4) {
             nextButton.setText("Send order");
-        }
-        else{
+        } else {
             nextButton.setText("Next");
         }
-        if (tab2 != null && tab2.isSelected()){
+        if (tab2 != null && tab2.isSelected()) {
             updateShownFieldsTab2();
         }
-        if (tab5 != null && tab5.isSelected()){
+        if (tab5 != null && tab5.isSelected()) {
             updateShownFieldsTab5();
         }
     }
@@ -663,10 +665,30 @@ public class OrderController implements Refreshable{
         itemTable.setItems(FXCollections.observableList(currentOrder.getItems()));
     }
 
+    private void sendOrder() {
+        LilachService service = APIAccess.getService();
+
+        service.newOrder(currentOrder).enqueue((new Callback<Order>() {
+            @Override
+            public void onResponse(Call<Order> call, Response<Order> response) {
+                if (response.code() == 200) {
+                    Platform.runLater(() -> {
+                        EventBus.getDefault().post(new DashboardSwitchEvent("catalog"));
+                    });
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Order> call, Throwable throwable) {
+
+            }
+        }));
+    }
+
     @Override
     public void refresh() {
         EventBus.getDefault().register(this);
-        currentOrder.setOrderedBy((Customer)currentUser);
+        currentOrder.setOrderedBy((Customer) currentUser);
         LocalTime currentTime = LocalTime.now();
         //SingleSelectionModel<Tab> selectionModel = tabPane.getSelectionModel();
         //setting the default to 'send to my address'.
@@ -675,7 +697,7 @@ public class OrderController implements Refreshable{
             hourChooseBox.setItems(hourList);
 //            int time  = currentTime.getHour();
             String hour = Integer.toString(currentTime.getHour());
-            if(hour.length() ==1){
+            if (hour.length() == 1) {
                 hour = "0" + hour;
             }
             hourChooseBox.setValue(hour);
@@ -686,7 +708,7 @@ public class OrderController implements Refreshable{
         if (minuteChooseBox != null) {
             minuteChooseBox.setItems(minuteList);
             String minute = Integer.toString(currentTime.getMinute());
-            if(minute.length() ==1){
+            if (minute.length() == 1) {
                 minute = "0" + minute;
             }
             minuteChooseBox.setValue(minute);
@@ -700,4 +722,9 @@ public class OrderController implements Refreshable{
 
         updateButtons();
     }
+
+
 }
+
+
+
