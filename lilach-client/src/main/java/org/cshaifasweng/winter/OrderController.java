@@ -344,6 +344,7 @@ public class OrderController implements Refreshable{
         temp.setAddress(addressVerField.getText());
 
         currentOrder.setOrderedBy(temp);
+
     }
 
     private void updateFieldsTab4(){
@@ -464,9 +465,10 @@ public class OrderController implements Refreshable{
                 if (firstCheck || !secondCheck) {
                     return;
                 }
-                updateFieldsTab2();
+
 //                fillOrder();
             }
+            updateFieldsTab2();
         }
         if(tab3.isSelected()){
             currentOrder.setGreeting(greetingEntryTextArea.getText());
@@ -487,7 +489,7 @@ public class OrderController implements Refreshable{
             else {
                 currentOrder.setDeliveryAddress(currentOrder.getOrderedBy().getAddress());
                 currentOrder.setRecipientMail(currentOrder.getOrderedBy().getEmail());
-                updateFieldsTab4();
+
             }
             LocalDate localDate = datePicker.getValue();
 //            boolean a = localDate.isBefore(LocalDate.now());
@@ -596,9 +598,9 @@ public class OrderController implements Refreshable{
         if(dateAndTimeShowField != null){
             dateAndTimeShowField.setText(output);
         }
-//        if(totalPriceShowField != null){
-//            totalPriceShowField.setText(Double.toString(currentOrder.getPrice()));
-//        }
+        if(totalPriceShowField != null){
+            totalPriceShowField.setText(Double.toString(currentOrder.getPrice()));
+        }
     }
     @FXML
     private void updateButtons() {
