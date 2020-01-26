@@ -2,16 +2,18 @@ package org.cshaifasweng.winter.services;
 
 import org.cshaifasweng.winter.da.CustomerRepository;
 import org.cshaifasweng.winter.da.OrderRepository;
+import org.cshaifasweng.winter.da.UserRepository;
 import org.cshaifasweng.winter.exceptions.LogicalException;
 import org.cshaifasweng.winter.models.*;
+import org.cshaifasweng.winter.security.SecurityConstants;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Calendar;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class OrderService {
@@ -19,12 +21,14 @@ public class OrderService {
     private final OrderRepository orderRepository;
     private final MailService mailService;
     private final CustomerRepository customerRepository;
+    private final UserRepository userRepository;
 
     @Autowired
-    public OrderService(OrderRepository orderRepository, MailService mailService, CustomerRepository customerRepository) {
+    public OrderService(OrderRepository orderRepository, MailService mailService, CustomerRepository customerRepository, UserRepository userRepository) {
         this.orderRepository = orderRepository;
         this.mailService = mailService;
         this.customerRepository = customerRepository;
+        this.userRepository = userRepository;
     }
 
     public Order newOrder(Order newOrder, Customer customer) throws LogicalException {
@@ -140,5 +144,17 @@ public class OrderService {
         order.setStatus(OrderStatus.CANCELLED);
 
         return new OrderCompensation(0.0);
+    }
+
+    @Transactional
+    public List<Order> findByCustomer(long id, Authentication authentication) throws LogicalException {
+        User user = userRepository.findByEmail(authentication.getName());
+
+        if (user.getId() != id &&
+                !authentication.getAuthorities()
+                        .stream().map(GrantedAuthority::getAuthority)
+                        .collect(Collectors.toList()).contains(SecurityConstants.PRIVILEGE_ORDERS_VIEW_ALL))
+            throw new LogicalException("Unauthorized to view this user's orders");
+        return orderRepository.findAllByOrderedBy(customerRepository.getOne(id));
     }
 }

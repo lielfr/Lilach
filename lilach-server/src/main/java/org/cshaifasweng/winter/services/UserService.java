@@ -57,6 +57,7 @@ public class UserService {
         Map<String, Object> requiredFields = new HashMap<>();
 
         try {
+            requiredFields.put("misparZehut", customer.getMisparZehut());
             requiredFields.put("email", customer.getEmail());
             requiredFields.put("password", customer.getPassword());
             requiredFields.put("firstName", customer.getFirstName());
@@ -77,7 +78,7 @@ public class UserService {
             throw new LogicalException("User already exists");
         }
 
-        customerInDB = new Customer(customer.getEmail(), new BCryptPasswordEncoder().encode(customer.getPassword()),
+        customerInDB = new Customer(customer.getMisparZehut(), customer.getEmail(), new BCryptPasswordEncoder().encode(customer.getPassword()),
                 customer.getFirstName(), customer.getLastName(), customer.getPhone(),
                 Arrays.asList(roleRepository.findByName(SecurityConstants.ROLE_CUSTOMER)),
                 customer.getCreditCard(), customer.getExpireDate(), customer.getCvv(), customer.getDateOfBirth());
@@ -120,7 +121,7 @@ public class UserService {
 
         if (dbObject.getId() != id)
             throw new LogicalException("Id does not match");
-
+        // Mispar Zehut should not be changed
         dbObject.setPassword(customer.getPassword());
         dbObject.setFirstName(customer.getFirstName());
         dbObject.setLastName(customer.getLastName());

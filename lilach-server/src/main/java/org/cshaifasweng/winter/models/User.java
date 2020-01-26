@@ -20,6 +20,9 @@ public abstract class User {
     protected Long id;
 
     @Column(nullable = false, unique = true)
+    protected String misparZehut;
+
+    @Column(nullable = false, unique = true)
     protected String email;
 
     protected String password;
@@ -45,7 +48,8 @@ public abstract class User {
     public User() {
     }
 
-    public User(String email, String password, String firstName, String lastName, String phone, Collection<Role> roles) {
+    public User(String misparZehut, String email, String password, String firstName, String lastName, String phone, Collection<Role> roles) {
+        this.misparZehut = misparZehut;
         this.email = email;
         this.password = password;
         this.roles = roles;
@@ -129,5 +133,13 @@ public abstract class User {
 
     public void setDisabled(Boolean disabled) {
         isDisabled = disabled;
+    }
+
+    public String getMisparZehut() {
+        return misparZehut;
+    }
+
+    public void setMisparZehut(String misparZehut) {
+        this.misparZehut = misparZehut;
     }
 }

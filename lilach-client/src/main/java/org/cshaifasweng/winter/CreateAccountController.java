@@ -1,18 +1,10 @@
 package org.cshaifasweng.winter;
-import java.util.Calendar;
-import  java.util.Date;
-
 import javafx.application.Platform;
-import javafx.event.ActionEvent;
-import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.Label;
-import javafx.scene.control.PasswordField;
-import javafx.scene.control.TextField;
-import javafx.fxml.Initializable;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
+import javafx.scene.control.*;
 import org.cshaifasweng.winter.events.DashboardSwitchEvent;
 import org.cshaifasweng.winter.models.Customer;
 import org.cshaifasweng.winter.models.SubscriberType;
@@ -24,12 +16,8 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 import java.time.YearMonth;
-
-import javax.swing.*;
-import java.net.URL;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.ResourceBundle;
 import java.util.regex.Pattern;
 
 
@@ -263,7 +251,7 @@ public class CreateAccountController implements Refreshable{
             calendarB.set(Integer.parseInt(Tbirthd.getText()), Integer.parseInt(Tbirthm.getText()),Integer.parseInt(Tbirthy.getText()));
             Date datebirth = calendarB.getTime();
             /* *************************************************************************************************************************************************/
-            Customer newCustomer = new Customer(Temail.getText(),Tpassword.getText(),TFname.getText(),TLname.getText(),
+            Customer newCustomer = new Customer(Tid.getText(), Temail.getText(),Tpassword.getText(),TFname.getText(),TLname.getText(),
                     Tphone.getText(),Long.valueOf(Tcredit.getText()),date,Integer.parseInt(Tcvv.getText()),datebirth);
             /* *************************************************************************************************************************************************/
             newCustomer.setAddress(addressField.getText());

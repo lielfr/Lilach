@@ -40,4 +40,19 @@ public interface LilachService {
     @POST("/catalog")
     Call<CatalogItem> newCatalogItem(@Body CatalogItem item);
 
+    @PUT("/customer/{id}")
+    Call<Customer> updateCustomer(@Path("id") long id, @Body Customer customer);
+
+    @POST("/order")
+    Call<Order> newOrder(@Body Order order);
+
+    @DELETE("/order/{id}")
+    Call<Void> cancelOrder(@Path("id") long id);
+
+    @GET("/customer/{id}/orders")
+    Call<List<Order>> getOrdersByCustomer(@Path("id") long id);
+
+    @GET("/customer/{id}/complaints")
+    Call<List<Complaint>> getComplaintsByCustomer(@Path("id") long id);
+
 }

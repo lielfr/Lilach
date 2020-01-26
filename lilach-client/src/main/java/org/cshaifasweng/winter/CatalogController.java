@@ -23,10 +23,7 @@ import retrofit2.Response;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.ResourceBundle;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class CatalogController implements Refreshable, Initializable {
@@ -37,7 +34,7 @@ public class CatalogController implements Refreshable, Initializable {
 
     private List<CatalogItem> items;
 
-    private List<Item> cart;
+    private Set<Item> cart;
 
     private static final int NUM_COLS = 3;
     private static final int NUM_ROWS = 3;
@@ -235,7 +232,13 @@ public class CatalogController implements Refreshable, Initializable {
 
     @Subscribe
     public void handleItemBuy(CatalogItemBuyEvent event) throws IOException {
-        cart.add(event.getItem());
+        if (!cart.add(event.getItem())) {
+            int previousQuantity = cart.stream()
+                    .filter((element) -> element.equals(event.getItem()))
+                    .collect(Collectors.toList()).get(0).getQuantity();
+            cart.remove(event.getItem());
+            cart.add(event.getItem());
+        }
         updateCartButton();
 
         Parent dialog = LayoutManager.getInstance().getFXML("popup_add_item");
@@ -248,6 +251,6 @@ public class CatalogController implements Refreshable, Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        cart = new ArrayList<>();
+        cart = new HashSet<>();
     }
 }

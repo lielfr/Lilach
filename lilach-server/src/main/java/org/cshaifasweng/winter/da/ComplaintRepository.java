@@ -1,6 +1,7 @@
 package org.cshaifasweng.winter.da;
 
 import org.cshaifasweng.winter.models.Complaint;
+import org.cshaifasweng.winter.models.Customer;
 import org.cshaifasweng.winter.models.Store;
 import org.springframework.data.jpa.repository.JpaRepository;
 
@@ -11,4 +12,6 @@ public interface ComplaintRepository extends JpaRepository<Complaint, Long> {
     public List<Complaint> findComplaintsByIsOpenTrueAndComplaintOpenAfter(Date date);
 
     public List<Complaint> findComplaintsByStore(Store store);
+
+    public List<Complaint> findComplaintsByOpenedBy(Customer openedBy);
 }

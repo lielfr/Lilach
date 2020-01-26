@@ -12,16 +12,17 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
 import java.net.URL;
-import java.util.List;
 import java.util.ResourceBundle;
+import java.util.Set;
 
 public class PopupAddItemController implements Initializable {
 
-    private List<Item> cart;
+    private Set<Item> cart;
     private Stage stage;
 
     @FXML
     void continueShopping(ActionEvent event) {
+        stage.hide();
         stage.close();
     }
 
@@ -29,6 +30,7 @@ public class PopupAddItemController implements Initializable {
     void goToCart(ActionEvent event) {
         EventBus.getDefault().post(new DashboardSwitchEvent("order"));
         EventBus.getDefault().post(new OrderCreateEvent(cart));
+        stage.hide();
         stage.close();
     }
 

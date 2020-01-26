@@ -5,21 +5,25 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 import org.cshaifasweng.winter.events.DashboardSwitchEvent;
 import org.cshaifasweng.winter.events.OrderCreateEvent;
 import org.cshaifasweng.winter.models.Customer;
+import org.cshaifasweng.winter.models.Item;
 import org.cshaifasweng.winter.models.Order;
 import org.cshaifasweng.winter.models.User;
 import org.cshaifasweng.winter.web.APIAccess;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
-import java.time.*;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 public class OrderController implements Refreshable{
 
@@ -39,7 +43,7 @@ public class OrderController implements Refreshable{
     private Tab tab1;
 
     @FXML
-    private TableView<?> itemTable;
+    private TableView<Item> itemTable;
 
     @FXML
     private Tab tab2;
@@ -189,7 +193,8 @@ public class OrderController implements Refreshable{
 
     @Subscribe
     public void handleOrderCreateEvent(OrderCreateEvent event) {
-        // TODO: Use the event
+        currentOrder.setItems(event.getCart().stream().collect(Collectors.toList()));
+        populateTable();
     }
 
     private void resetVisibleTab2()
@@ -320,7 +325,7 @@ public class OrderController implements Refreshable{
         temp = (Customer)currentUser.copy();
         temp.setFirstName(firstNameVerField.getText());
         temp.setLastName(lastNameVerField.getText());
-        temp.setId(Long.valueOf(idNumVerField.getText()));
+        temp.setMisparZehut(idNumVerField.getText());
         temp.setEmail(emailVerField.getText());
         temp.setPhone(phoneNumVerField.getText());
         temp.setAddress(addressVerField.getText());
@@ -531,7 +536,7 @@ public class OrderController implements Refreshable{
     private void updateShownFieldsTab2(){
         firstNameVerField.setText(currentOrder.getOrderedBy().getFirstName());
         lastNameVerField.setText(currentOrder.getOrderedBy().getLastName());
-        idNumVerField.setText(currentOrder.getOrderedBy().getId().toString());
+        idNumVerField.setText(currentOrder.getOrderedBy().getMisparZehut());
         emailVerField.setText(currentOrder.getOrderedBy().getEmail());
         phoneNumVerField.setText(currentOrder.getOrderedBy().getPhone());
         addressVerField.setText(currentOrder.getOrderedBy().getAddress());
@@ -544,7 +549,7 @@ public class OrderController implements Refreshable{
             lastNameField.setText(currentOrder.getOrderedBy().getLastName());
         }
         if(idNumField != null) {
-            idNumField.setText(currentOrder.getOrderedBy().getId().toString());
+            idNumField.setText(currentOrder.getOrderedBy().getMisparZehut());
         }
         if(emailField != null) {
             emailField.setText(currentOrder.getOrderedBy().getEmail());
@@ -592,9 +597,20 @@ public class OrderController implements Refreshable{
 //        }
     }
 
+    private void populateTable() {
+        itemTable.getColumns().clear();
+        TableColumn<Item, Double> priceColumn = new TableColumn<>("Price");
+        priceColumn.setCellValueFactory(new PropertyValueFactory<>("price"));
+        TableColumn<Item, Double> quantityColumn = new TableColumn<>("Quantity");
+        quantityColumn.setCellValueFactory(new PropertyValueFactory<>("quantity"));
+
+        itemTable.getColumns().addAll(priceColumn, quantityColumn);
+        itemTable.setItems(FXCollections.observableList(currentOrder.getItems()));
+    }
+
     @Override
     public void refresh() {
-
+        EventBus.getDefault().register(this);
         currentOrder.setOrderedBy((Customer)currentUser);
         LocalTime currentTime = LocalTime.now();
         //SingleSelectionModel<Tab> selectionModel = tabPane.getSelectionModel();
@@ -622,8 +638,6 @@ public class OrderController implements Refreshable{
         }
 
         datePicker.setValue(LocalDate.now());
-
-
 
 
         //System.out.println(selectionModel.getSelectedIndex());
