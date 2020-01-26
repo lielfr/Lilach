@@ -360,11 +360,11 @@
                                     <Label text="Phone" GridPane.rowIndex="4" />
                                     <Label text="ID:" GridPane.rowIndex="2" />
                                     <Label text="Last name:" GridPane.rowIndex="1" />
-                                    <TextField fx:id="firstNameField" GridPane.columnIndex="1" />
-                                    <TextField fx:id="lastNameField" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                                    <TextField fx:id="idNumField" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-                                    <TextField fx:id="emailField" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-                                    <TextField fx:id="phoneNumberField" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                                    <TextField fx:id="firstNameField" editable="false" GridPane.columnIndex="1" />
+                                    <TextField fx:id="lastNameField" editable="false" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                                    <TextField fx:id="idNumField" editable="false" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                                    <TextField fx:id="emailField" editable="false" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                                    <TextField fx:id="phoneNumberField" editable="false" GridPane.columnIndex="1" GridPane.rowIndex="4" />
                                     <Label text="Address:" GridPane.rowIndex="5" />
                                     <TextField fx:id="addressField" GridPane.columnIndex="1" GridPane.rowIndex="5" />
                                  </children>
@@ -374,7 +374,7 @@
                                     <Label text="Greeting:" />
                                     <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0">
                                        <children>
-                                          <TextArea fx:id="greetingTextArea" prefHeight="100.0" prefWidth="373.0" />
+                                          <TextArea fx:id="greetingTextArea" editable="false" prefHeight="100.0" prefWidth="373.0" />
                                        </children>
                                        <padding>
                                           <Insets left="80.0" right="10.0" top="10.0" />
@@ -394,8 +394,8 @@
                                  <children>
                                     <Label text="Delivery address:" />
                                     <Label text="Recipient mail:" GridPane.rowIndex="1" />
-                                    <TextField fx:id="deliveryAddressField1" GridPane.columnIndex="1" />
-                                    <TextField fx:id="recipientMailField1" prefWidth="119.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                                    <TextField fx:id="deliveryAddressField1" editable="false" GridPane.columnIndex="1" />
+                                    <TextField fx:id="recipientMailField1" editable="false" prefWidth="119.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                                  </children>
                                  <padding>
                                     <Insets top="20.0" />

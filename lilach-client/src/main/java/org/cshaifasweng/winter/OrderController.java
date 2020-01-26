@@ -16,6 +16,7 @@ import org.greenrobot.eventbus.Subscribe;
 
 import java.time.Instant;
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.time.ZoneId;
 import java.util.Calendar;
 import java.util.Date;
@@ -179,6 +180,12 @@ public class OrderController implements Refreshable{
     @FXML
     private TextArea greetingTextArea;
 
+    @FXML
+    private TextField deliveryAddressField1;
+
+    @FXML
+    private TextField recipientMailField1;
+
     private boolean radioStatus = false;
     Order currentOrder = new Order();
     User currentUser = APIAccess.getCurrentUser();
@@ -207,6 +214,7 @@ public class OrderController implements Refreshable{
         invalidAddressVerLabel.setVisible(false);
     }
 
+
     private boolean checkFields(Map<TextField, Label> fields) {
         boolean found = false;
         for (Map.Entry<TextField, Label> entry : fields.entrySet()) {
@@ -229,6 +237,14 @@ public class OrderController implements Refreshable{
         fieldsMap.put(emailVerField, emailVerEmptyLabel);
         fieldsMap.put(phoneNumVerField, phoneVerEmptyLabel);
         fieldsMap.put(addressVerField, addressVerEmptyLabel);
+
+        return checkFields(fieldsMap);
+    }
+
+    private boolean isInputEmptyTab4(){
+        Map<TextField, Label> fieldsMap = new HashMap<>();
+        fieldsMap.put(setDeliveryAddressField, deliveryAddressEmpty);
+        fieldsMap.put(setRecipientMailField, recipientMailEmpty);
 
         return checkFields(fieldsMap);
     }
@@ -272,6 +288,25 @@ public class OrderController implements Refreshable{
         return val;
     }
 
+    private boolean inputCheckTab4() {
+        boolean val = true;
+        String check;
+
+        check = setRecipientMailField.getText();
+        if (check.matches("(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|\"(?:[\\x01-" +
+                "\\x08\\x0b\\x0c\\x0e-\\x1f\\x21\\x23-\\x5b\\x5d-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])*\")@(?:" +
+                "(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\\[(?:(?:25[0-5]|2[0-4][0-9]|" +
+                "[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\\x01-\\x08\\x0b\\" +
+                "x0c\\x0e-\\x1f\\x21-\\x5a\\x53-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])+)\\])") == false &&
+                (check.isEmpty() == false)) {
+            invalidEmailAddressLabel.setVisible(true);
+            val = false;
+        }
+
+        return val;
+    }
+
+
     private void updateFieldsTab2(){
         Customer temp;
         temp = (Customer)currentUser.copy();
@@ -285,6 +320,14 @@ public class OrderController implements Refreshable{
         currentOrder.setOrderedBy(temp);
     }
 
+    private void updateFieldsTab4(){
+        Customer temp;
+        temp = (Customer)currentUser.copy();
+        temp.setEmail(setRecipientMailField.getText());
+        temp.setAddress(setDeliveryAddressField.getText());
+
+        currentOrder.setOrderedBy(temp);
+    }
     private void resetVisibleTab4(){
         deliveryAddressEmpty.setVisible(false);
         recipientMailEmpty.setVisible(false);
@@ -301,6 +344,7 @@ public class OrderController implements Refreshable{
         if (setRecipientMailField != null)
             setRecipientMailField.setDisable(!status);
     }
+
 
     private void setSelected(boolean status){
         if (sendToAnotherAddRadio != null){
@@ -395,6 +439,26 @@ public class OrderController implements Refreshable{
 //                fillOrder();
             }
         }
+        if(tab3.isSelected()){
+            currentOrder.setGreeting(greetingEntryTextArea.getText());
+            System.out.println(currentOrder.getGreeting());
+        }
+        if (tab4.isSelected()) {
+            if (!(setDeliveryAddressField.isDisabled())) {
+                resetVisibleTab4();
+                boolean firstCheck = isInputEmptyTab4();
+                boolean secondCheck = inputCheckTab4();
+                if (firstCheck || !secondCheck) {
+                    return;
+                }
+                updateFieldsTab4();
+//                fillOrder();
+            }
+        }
+
+            updateShownFieldsTab5();
+
+
 
         // If the current tub is the final tub. send the order and go back to the main screen.
         if (finalTab()) {
@@ -442,6 +506,36 @@ public class OrderController implements Refreshable{
         phoneNumVerField.setText(currentOrder.getOrderedBy().getPhone());
         addressVerField.setText(currentOrder.getOrderedBy().getAddress());
     }
+    private void updateShownFieldsTab5(){
+        if(firstNameField != null) {
+            firstNameField.setText(currentOrder.getOrderedBy().getFirstName());
+        }
+        if(lastNameField != null){
+            lastNameField.setText(currentOrder.getOrderedBy().getLastName());
+        }
+        if(idNumField != null) {
+            idNumField.setText(currentOrder.getOrderedBy().getId().toString());
+        }
+        if(emailField != null) {
+            emailField.setText(currentOrder.getOrderedBy().getEmail());
+        }
+        if(phoneNumberField != null) {
+            phoneNumberField.setText(currentOrder.getOrderedBy().getPhone());
+        }
+        if(addressField != null) {
+            addressField.setText(currentOrder.getOrderedBy().getAddress());
+        }
+        if(greetingTextArea != null) {
+            greetingTextArea.setText(currentOrder.getGreeting());
+        }
+        if(deliveryAddressField1 != null) {
+            deliveryAddressField1.setText(currentOrder.getOrderedBy().getAddress());
+        }
+        if(recipientMailField1 != null) {
+            recipientMailField1.setText(currentOrder.getOrderedBy().getEmail());
+        }
+
+    }
 
     private void updateButtons() {
         SingleSelectionModel<Tab> selectionModel = tabPane.getSelectionModel();
@@ -463,24 +557,41 @@ public class OrderController implements Refreshable{
         if (tab2 != null && tab2.isSelected()){
             updateShownFieldsTab2();
         }
+//        if (tab5 != null && tab5.isSelected()){
+//            updateShownFieldsTab5();
+//        }
     }
 
     @Override
     public void refresh() {
 
         currentOrder.setOrderedBy((Customer)currentUser);
+        LocalTime currentTime = LocalTime.now();
         //SingleSelectionModel<Tab> selectionModel = tabPane.getSelectionModel();
         //setting the default to 'send to my address'.
         selectMyAddRadio();
         if (hourChooseBox != null) {
             hourChooseBox.setItems(hourList);
-            hourChooseBox.setValue("00");
+//            int time  = currentTime.getHour();
+            String hour = Integer.toString(currentTime.getHour());
+            if(hour.length() ==1){
+                hour = "0" + hour;
+            }
+            hourChooseBox.setValue(hour);
+
+
         }
 
         if (minuteChooseBox != null) {
             minuteChooseBox.setItems(minuteList);
-            minuteChooseBox.setValue("00");
+            String minute = Integer.toString(currentTime.getMinute());
+            if(minute.length() ==1){
+                minute = "0" + minute;
+            }
+            minuteChooseBox.setValue(minute);
         }
+
+        datePicker.setValue(LocalDate.now());
 
 
 
