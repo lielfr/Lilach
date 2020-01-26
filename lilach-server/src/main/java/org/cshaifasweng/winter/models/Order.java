@@ -35,7 +35,7 @@ public class Order {
     @ManyToOne(fetch = FetchType.EAGER)
     private Store store;
 
-    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.EAGER)
     private List<Item> items;
 
     private double price;
