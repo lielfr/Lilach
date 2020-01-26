@@ -49,4 +49,7 @@ public interface LilachService {
     @DELETE("/order/{id}")
     Call<Void> cancelOrder(@Path("id") long id);
 
+    @GET("/user/{id}/orders")
+    Call<List<Order>> getOrdersByUser(@Path("id") long id);
+
 }
