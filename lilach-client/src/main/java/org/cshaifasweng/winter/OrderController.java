@@ -497,7 +497,6 @@ public class OrderController implements Refreshable{
         }
         if(tab3.isSelected()){
             currentOrder.setGreeting(greetingEntryTextArea.getText());
-            System.out.println(currentOrder.getGreeting());
         }
         if (tab4.isSelected()) {
             resetVisibleTab4();
