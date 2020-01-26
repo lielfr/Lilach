@@ -121,6 +121,10 @@ public class SecurityDataLoader implements ApplicationListener<ContextRefreshedE
                 Collections.singletonList(customerRole), "Lilach", "Customer", "0509999999",
                 11, customerCreditCardExpire.getTime(), 222, customerBirth.getTime(), Arrays.asList(haifaUniBranch));
 
+        Customer customerBob = createOrReturnCustomer("000000001", "a@a.a", "a",
+                Collections.singletonList(customerRole), "Bob", "Marley", "0509999999",
+                11, customerCreditCardExpire.getTime(), 123, customerBirth.getTime(), Arrays.asList(haifaUniBranch));
+
         Employee admin = createOrReturnEmployee("000000998", "lielft@gmail.com", "AdminBaby!",
                 "Liel", "Fridman", "0509999999",
                 Collections.singletonList(adminRole));
