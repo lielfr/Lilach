@@ -16,10 +16,14 @@ import org.cshaifasweng.winter.web.APIAccess;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
+import java.text.Format;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.ZoneId;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Pattern;
@@ -187,7 +191,16 @@ public class OrderController implements Refreshable{
     @FXML
     private TextField recipientMailField1;
 
+    @FXML
+    private TextField dateAndTimeShowField;
+
+    @FXML
+    private TextField totalPriceShowField;
+
+
     private boolean radioStatus = false;
+    private String output;
+
     Order currentOrder = new Order();
     User currentUser = APIAccess.getCurrentUser();
 
@@ -309,9 +322,9 @@ public class OrderController implements Refreshable{
         return val;
     }
 
-    private boolean dateCheckTab4(){
+    private boolean dateCheckTab4(LocalDateTime localDateTime){
         resetVisibleTab4();
-        boolean isPast1 = isPast();
+        boolean isPast1 = isPast(localDateTime);
         if (isPast1){
             invalidDate.setVisible(true);
             System.out.println("current date is newer than the entered date");
@@ -471,8 +484,27 @@ public class OrderController implements Refreshable{
                 updateFieldsTab4();
 //                fillOrder();
             }
-            if(dateCheckTab4()){
+            else {
+                currentOrder.setDeliveryAddress(currentOrder.getOrderedBy().getAddress());
+                currentOrder.setRecipientMail(currentOrder.getOrderedBy().getEmail());
+                updateFieldsTab4();
+            }
+            LocalDate localDate = datePicker.getValue();
+//            boolean a = localDate.isBefore(LocalDate.now());
+            LocalTime localTime = LocalTime.of(Integer.parseInt(hourChooseBox.getValue()), Integer.parseInt(minuteChooseBox.getValue()), 0);
+            LocalDateTime localDateTime = LocalDateTime.of(localDate, localTime);
+
+            if(dateCheckTab4(localDateTime)){
                 return;
+            }
+            else {
+                ZoneId zoneId = ZoneId.of("Asia/Jerusalem");
+
+                Date date = Date.from( localDateTime.atZone( zoneId).toInstant());
+                Format formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                String s = formatter.format(date);
+                currentOrder.setSupplyDate(date);
+                output= formatter.format(currentOrder.getSupplyDate());
             }
 
         }
@@ -507,14 +539,14 @@ public class OrderController implements Refreshable{
                     "40","41","42","43","44","45","46","47","48","49",
                     "50","51","52","53","54","55","56","57","58","59");
 
-    private boolean isPast(){
+    private boolean isPast(LocalDateTime localDateTime){
         boolean flag = true;
-        Calendar now = Calendar.getInstance();
-        LocalDate localDate = datePicker.getValue();
-        boolean a = localDate.isBefore(LocalDate.now());
-        LocalTime localTime = LocalTime.of(Integer.parseInt(hourChooseBox.getValue()), Integer.parseInt(minuteChooseBox.getValue()), 0);
-
-        LocalDateTime localDateTime = LocalDateTime.of(localDate, localTime);
+//        Calendar now = Calendar.getInstance();
+//        LocalDate localDate = datePicker.getValue();
+//        boolean a = localDate.isBefore(LocalDate.now());
+//        LocalTime localTime = LocalTime.of(Integer.parseInt(hourChooseBox.getValue()), Integer.parseInt(minuteChooseBox.getValue()), 0);
+//
+//        LocalDateTime localDateTime = LocalDateTime.of(localDate, localTime);
         return localDateTime.isBefore(LocalDateTime.now());
 
       /*  Instant instant = Instant.from(localDate.atStartOfDay(ZoneId.systemDefault()));
@@ -561,9 +593,14 @@ public class OrderController implements Refreshable{
         if(recipientMailField1 != null) {
             recipientMailField1.setText(currentOrder.getRecipientMail());
         }
-
+        if(dateAndTimeShowField != null){
+            dateAndTimeShowField.setText(output);
+        }
+//        if(totalPriceShowField != null){
+//            totalPriceShowField.setText(Double.toString(currentOrder.getPrice()));
+//        }
     }
-
+    @FXML
     private void updateButtons() {
         SingleSelectionModel<Tab> selectionModel = tabPane.getSelectionModel();
         if(firstTab()){
@@ -584,9 +621,9 @@ public class OrderController implements Refreshable{
         if (tab2 != null && tab2.isSelected()){
             updateShownFieldsTab2();
         }
-//        if (tab5 != null && tab5.isSelected()){
-//            updateShownFieldsTab5();
-//        }
+        if (tab5 != null && tab5.isSelected()){
+            updateShownFieldsTab5();
+        }
     }
 
     private void populateTable() {
