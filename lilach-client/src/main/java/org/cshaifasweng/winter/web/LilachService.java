@@ -1,5 +1,6 @@
 package org.cshaifasweng.winter.web;
 
+import okhttp3.MultipartBody;
 import org.cshaifasweng.winter.models.*;
 import retrofit2.Call;
 import retrofit2.http.*;
@@ -37,8 +38,8 @@ public interface LilachService {
     @GET("/store/{id}/catalog")
     Call<List<CatalogItem>> getCatalogByStore(@Path("id") long id);
 
-    @POST("/catalog")
-    Call<CatalogItem> newCatalogItem(@Body CatalogItem item);
+    @POST("/store/{id}/catalog")
+    Call<CatalogItem> newCatalogItem(@Path("id") long id, @Body CatalogItem item);
 
     @PUT("/customer/{id}")
     Call<Customer> updateCustomer(@Path("id") long id, @Body Customer customer);
@@ -54,5 +55,9 @@ public interface LilachService {
 
     @GET("/customer/{id}/complaints")
     Call<List<Complaint>> getComplaintsByCustomer(@Path("id") long id);
+
+    @Multipart
+    @POST("/image")
+    Call<String> uploadImage(@Part MultipartBody.Part image);
 
 }

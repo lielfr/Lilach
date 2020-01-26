@@ -20,9 +20,7 @@ public class CatalogItem extends Item {
 
     private String description;
 
-    @Lob
-    @Column(columnDefinition = "BLOB")
-    private byte[] picture;
+    private String picture;
 
     private long availableCount = 0;
 
@@ -45,11 +43,11 @@ public class CatalogItem extends Item {
     private CatalogItemType itemType;
 
     public CatalogItem(double price, String description,
-                       byte[] picture, long availableCount, Store store, boolean canBeAssembled,
+                       String picture, long availableCount, Store store, boolean canBeAssembled,
                        CatalogItemType itemType) {
         this.price = price;
         this.description = description;
-        this.picture = picture.clone();
+        this.picture = picture;
         this.availableCount = availableCount;
         this.store = store;
         this.customItems = new ArrayList<>();
@@ -67,11 +65,11 @@ public class CatalogItem extends Item {
         this.description = description;
     }
 
-    public byte[] getPicture() {
+    public String getPicture() {
         return picture;
     }
 
-    public void setPicture(byte[] picture) {
+    public void setPicture(String picture) {
         this.picture = picture;
     }
 

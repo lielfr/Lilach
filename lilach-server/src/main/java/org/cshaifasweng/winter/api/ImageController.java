@@ -23,17 +23,16 @@ public class ImageController {
         MimetypesFileTypeMap fileTypeMap = new MimetypesFileTypeMap();
         String mimeType = fileTypeMap.getContentType(file);
         byte[] fileAsBytes = new FileInputStream(file).readAllBytes();
-        ResponseEntity<byte[]> responseEntity = ResponseEntity.ok()
+        return ResponseEntity.ok()
                 .header("Content-Type", mimeType)
                 .body(fileAsBytes);
-        return responseEntity;
     }
 
     @PostMapping("/image")
-    public String uploadImage(@RequestBody MultipartFile file) throws IOException, LogicalException {
+    public String uploadImage(@RequestParam("file") MultipartFile file) throws IOException, LogicalException {
         String uuid = UUID.randomUUID().toString();
         File newFile = new File(
-                SpringServer.class.getResource("uploads") + "/" + uuid);
+                SpringServer.class.getResource("uploads").getFile() + "/" + uuid);
         if (!newFile.createNewFile())
             throw new LogicalException("File exists");
         FileOutputStream outputStream =

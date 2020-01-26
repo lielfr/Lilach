@@ -6,7 +6,10 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
@@ -20,7 +23,6 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.net.URL;
 import java.util.*;
@@ -158,7 +160,7 @@ public class CatalogController implements Refreshable, Initializable {
                 CatalogItem item = items.get(index);
                 controller.setItem(item);
                 controller.setItemLabel(item.getDescription());
-                controller.setItemImage(new Image(new ByteArrayInputStream(item.getPicture())));
+                controller.setItemImage(new Image(APIAccess.getImageUrl(item.getPicture())));
                 controller.setItemPriceLabel(item.getPrice() + " NIS");
                 double discountedPrice = item.getPrice();
                 discountedPrice *= (100 - item.getDiscountPercent()) / 100;
