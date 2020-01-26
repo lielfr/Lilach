@@ -221,7 +221,7 @@
                                     <Separator prefWidth="200.0" />
                                     <VBox prefHeight="323.0" prefWidth="866.0">
                                        <children>
-                                          <HBox prefHeight="81.0" prefWidth="866.0" spacing="10.0">
+                                          <HBox prefHeight="105.0" prefWidth="866.0" spacing="10.0">
                                              <children>
                                                 <GridPane prefHeight="61.0" prefWidth="389.0">
                                                   <columnConstraints>
@@ -229,12 +229,14 @@
                                                     <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                                                   </columnConstraints>
                                                   <rowConstraints>
+                                                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                                     <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                                     <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                                   </rowConstraints>
                                                    <children>
-                                                      <RadioButton fx:id="sendToMyAddRadio" mnemonicParsing="false" onMouseClicked="#selectMyAddRadio" text="Send to my address" />
-                                                      <RadioButton fx:id="sendToAnotherAddRadio" mnemonicParsing="false" onMouseClicked="#selectOtherAddRadio" text="Send to another address" GridPane.rowIndex="1" />
+                                                      <RadioButton fx:id="sendToMyAddRadio" mnemonicParsing="false" onMouseClicked="#selectMyAddRadio" text="Send to my address" GridPane.rowIndex="1" />
+                                                      <RadioButton fx:id="sendToAnotherAddRadio" mnemonicParsing="false" onMouseClicked="#selectOtherAddRadio" text="Send to another address" GridPane.rowIndex="2" />
+                                                      <RadioButton fx:id="sendToStoreAddRadio" mnemonicParsing="false" onMouseClicked="#selectStoreRadioButton" text="Send to store" />
                                                    </children>
                                                 </GridPane>
                                              </children>
@@ -242,7 +244,7 @@
                                                 <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                                              </padding>
                                           </HBox>
-                                          <HBox prefHeight="81.0" prefWidth="866.0" spacing="20.0">
+                                          <HBox prefHeight="91.0" prefWidth="866.0" spacing="20.0">
                                              <children>
                                                 <GridPane prefHeight="61.0" prefWidth="459.0">
                                                   <columnConstraints>
@@ -288,7 +290,7 @@
                                                 <Insets bottom="10.0" left="50.0" right="20.0" top="10.0" />
                                              </padding>
                                           </HBox>
-                                          <HBox prefHeight="101.0" prefWidth="866.0" spacing="10.0">
+                                          <HBox prefHeight="111.0" prefWidth="866.0" spacing="10.0">
                                              <padding>
                                                 <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                                              </padding>
