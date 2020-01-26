@@ -148,7 +148,7 @@ public class OrderService {
 
     @Transactional
     public List<Order> findByCustomer(long id, Authentication authentication) throws LogicalException {
-        User user = userRepository.getOne(id);
+        User user = userRepository.findByEmail(authentication.getName());
 
         if (user.getId() != id &&
                 !authentication.getAuthorities()

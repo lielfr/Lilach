@@ -58,6 +58,7 @@ public class SecurityDataLoader implements ApplicationListener<ContextRefreshedE
         Privilege reportsViewPrivilege = createOrReturnPrivilege(SecurityConstants.PRIVILEGE_REPORTS_VIEW);
         Privilege reportsViewAllPrivilege = createOrReturnPrivilege(SecurityConstants.PRIVILEGE_REPORTS_VIEW_ALL);
         Privilege ordersViewAllPrivilege = createOrReturnPrivilege(SecurityConstants.PRIVILEGE_ORDERS_VIEW_ALL);
+        Privilege complaintsViewAllPrivilege = createOrReturnPrivilege(SecurityConstants.PRIVILEGE_COMPLAINTS_VIEW_ALL);
 
         Role adminRole = createOrReturnRole(SecurityConstants.ROLE_ADMIN, Arrays.asList(
                 catalogEditPrivilege,
@@ -69,7 +70,8 @@ public class SecurityDataLoader implements ApplicationListener<ContextRefreshedE
                 ordersCancelPrivilege,
                 reportsViewAllPrivilege,
                 reportsViewPrivilege,
-                ordersViewAllPrivilege
+                ordersViewAllPrivilege,
+                complaintsViewAllPrivilege
         ));
 
         Role customerRole = createOrReturnRole(SecurityConstants.ROLE_CUSTOMER, Arrays.asList(
@@ -83,13 +85,15 @@ public class SecurityDataLoader implements ApplicationListener<ContextRefreshedE
                 complaintFilePrivilege,
                 ordersCancelPrivilege,
                 ordersCreatePrivilege,
-                ordersViewAllPrivilege
+                ordersViewAllPrivilege,
+                complaintsViewAllPrivilege
         ));
 
         Role storeManagerEmployeeRole = createOrReturnRole(SecurityConstants.ROLE_STORE_MANAGER, Arrays.asList(
                 complaintHandlePrivilege,
                 reportsViewPrivilege,
-                ordersViewAllPrivilege
+                ordersViewAllPrivilege,
+                complaintsViewAllPrivilege
         ));
 
         Role storeChainManagerEmployeeRole = createOrReturnRole(SecurityConstants.ROLE_STORE_CHAIN_MANAGER, Arrays.asList(
@@ -97,7 +101,8 @@ public class SecurityDataLoader implements ApplicationListener<ContextRefreshedE
                 usersEditPrivilege,
                 reportsViewAllPrivilege,
                 reportsViewPrivilege,
-                ordersViewAllPrivilege
+                ordersViewAllPrivilege,
+                complaintFilePrivilege
         ));
 
         Store haifaUniBranch = createOrReturnStore("Haifa University Branch", "Abba Houshy Av. 199, Haifa",

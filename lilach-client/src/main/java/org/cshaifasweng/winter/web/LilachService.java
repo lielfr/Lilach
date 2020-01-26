@@ -52,4 +52,7 @@ public interface LilachService {
     @GET("/customer/{id}/orders")
     Call<List<Order>> getOrdersByCustomer(@Path("id") long id);
 
+    @GET("/customer/{id}/complaints")
+    Call<List<Complaint>> getComplaintsByCustomer(@Path("id") long id);
+
 }
