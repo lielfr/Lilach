@@ -31,7 +31,7 @@ public class Customer extends User {
 
     private Collection<Complaint> complaints;
 
-    private Collection<Store> stores;
+    private List<Store> stores;
 
 
     public Customer(String misparZehut, String email, String password, String firstName, String lastName, String phone, long creditCard, Date expireDate, int cvv, Date dateOfBirth) {
@@ -50,6 +50,7 @@ public class Customer extends User {
     public User copy() {
         Customer copy = new Customer(misparZehut, email, password, firstName, lastName, phone,
                 creditCard, expireDate, cvv, (Date)dateOfBirth.clone());
+        copy.setStores(stores);
         return copy;
     }
 
@@ -129,11 +130,11 @@ public class Customer extends User {
         this.transactions = transactions;
     }
 
-    public Collection<Store> getStores() {
+    public List<Store> getStores() {
         return stores;
     }
 
-    public void setStores(Collection<Store> stores) {
+    public void setStores(List<Store> stores) {
         this.stores = stores;
     }
 }

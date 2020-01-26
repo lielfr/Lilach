@@ -24,10 +24,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.ZoneId;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 import java.util.regex.Pattern;
 
 public class OrderController implements Refreshable {
@@ -667,6 +664,12 @@ public class OrderController implements Refreshable {
 
     private void sendOrder() {
         LilachService service = APIAccess.getService();
+
+        List<Store> stores = currentOrder.getOrderedBy().getStores();
+        currentOrder.setStore(stores.get(0));
+
+        // TODO: Add delivery method and replace the line below
+        currentOrder.setDeliveryMethod(DeliveryMethod.DELIVER_TO_ADDRESS);
 
         service.newOrder(currentOrder).enqueue((new Callback<Order>() {
             @Override

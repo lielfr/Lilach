@@ -76,13 +76,15 @@ public class OrderService {
 
 
         // Discount price for subscribers.
-        switch (customer.getSubscriberType()) {
-            case MONTHLY:
-                price = price * 0.75;
-                break;
-            case YEARLY:
-                price = price * 0.65;
-                break;
+        if (customer.getSubscriberType() != null) {
+            switch (customer.getSubscriberType()) {
+                case MONTHLY:
+                    price = price * 0.75;
+                    break;
+                case YEARLY:
+                    price = price * 0.65;
+                    break;
+            }
         }
 
         newOrder.setPrice(price);
