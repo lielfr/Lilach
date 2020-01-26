@@ -303,7 +303,17 @@ public class OrderController implements Refreshable{
             val = false;
         }
 
+
         return val;
+    }
+
+    private boolean dateCheckTab4(){
+        resetVisibleTab4();
+        if (isPast()){
+            invalidDate.setVisible(true);
+            System.out.println("current date is newer than the entered date");
+        }
+        return !isPast();
     }
 
 
@@ -332,6 +342,7 @@ public class OrderController implements Refreshable{
         deliveryAddressEmpty.setVisible(false);
         recipientMailEmpty.setVisible(false);
         invalidEmailAddressLabel.setVisible(false);
+        invalidDate.setVisible(false);
     }
 
     private void setDisable(boolean status){
@@ -444,6 +455,7 @@ public class OrderController implements Refreshable{
             System.out.println(currentOrder.getGreeting());
         }
         if (tab4.isSelected()) {
+            resetVisibleTab4();
             if (!(setDeliveryAddressField.isDisabled())) {
                 resetVisibleTab4();
                 boolean firstCheck = isInputEmptyTab4();
@@ -454,6 +466,10 @@ public class OrderController implements Refreshable{
                 updateFieldsTab4();
 //                fillOrder();
             }
+            if(!dateCheckTab4()){
+                return;
+            }
+
         }
 
             updateShownFieldsTab5();
