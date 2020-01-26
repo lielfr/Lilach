@@ -43,4 +43,10 @@ public interface LilachService {
     @PUT("/customer/{id}")
     Call<Customer> updateCustomer(@Path("id") long id, @Body Customer customer);
 
+    @POST("/order")
+    Call<Order> newOrder(@Body Order order);
+
+    @DELETE("/order/{id}")
+    Call<Void> cancelOrder(@Path("id") long id);
+
 }
