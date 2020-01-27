@@ -123,6 +123,9 @@ public class OrderController implements Refreshable {
     private RadioButton sendToAnotherAddRadio;
 
     @FXML
+    private RadioButton sendToStoreAddRadio;
+
+    @FXML
     private Label deliveryAddressLabel;
 
     @FXML
@@ -404,17 +407,32 @@ public class OrderController implements Refreshable {
     }
 
 
-    private void setSelected(boolean status) {
+    private void setSelected(int status) {
         if (sendToAnotherAddRadio != null) {
-            sendToAnotherAddRadio.setSelected(status);
-            sendToMyAddRadio.setSelected(!status);
+            switch (status) {
+                case 0:
+                    sendToMyAddRadio.setSelected(true);
+                    sendToAnotherAddRadio.setSelected(false);
+                    sendToStoreAddRadio.setSelected(false);
+                    break;
+                case 1:
+                    sendToMyAddRadio.setSelected(false);
+                    sendToAnotherAddRadio.setSelected(true);
+                    sendToStoreAddRadio.setSelected(false);
+                    break;
+                case 2:
+                    sendToMyAddRadio.setSelected(false);
+                    sendToAnotherAddRadio.setSelected(false);
+                    sendToStoreAddRadio.setSelected(true);
+                    break;
+            }
         }
     }
 
     @FXML
     private void selectMyAddRadio() {
         radioStatus = false;
-        setSelected(false);
+        setSelected(0);
         setDisable(radioStatus);
 
     }
@@ -422,8 +440,17 @@ public class OrderController implements Refreshable {
     @FXML
     private void selectOtherAddRadio() {
         radioStatus = true;
-        setSelected(true);
+        setSelected(1);
         setDisable(radioStatus);
+    }
+
+    @FXML
+    void selectStoreRadioButton() {
+        radioStatus = true;
+        setSelected(2);
+        setDisable(!radioStatus);
+
+
     }
 
     @FXML
@@ -503,18 +530,31 @@ public class OrderController implements Refreshable {
         }
         if (tab4.isSelected()) {
             resetVisibleTab4();
-            if (!(setDeliveryAddressField.isDisabled())) {
+            if (sendToAnotherAddRadio.isSelected()) {
                 resetVisibleTab4();
                 boolean firstCheck = isInputEmptyTab4();
                 boolean secondCheck = inputCheckTab4();
                 if (firstCheck || !secondCheck) {
                     return;
                 }
+                currentOrder.setDeliveryMethod(DeliveryMethod.DELIVER_TO_ADDRESS);
                 updateFieldsTab4();
 //                fillOrder();
             } else {
-                currentOrder.setDeliveryAddress(currentOrder.getOrderedBy().getAddress());
-                currentOrder.setRecipientMail(currentOrder.getOrderedBy().getEmail());
+                if (sendToMyAddRadio.isSelected()) {
+                    currentOrder.setDeliveryAddress(currentOrder.getOrderedBy().getAddress());
+                    currentOrder.setRecipientMail(currentOrder.getOrderedBy().getEmail());
+                    currentOrder.setDeliveryMethod(DeliveryMethod.SELF_COLLECTION);
+                }
+                else{
+                    if(sendToStoreAddRadio.isSelected()){
+                        String storeName = currentOrder.getStore().getName();
+                        System.out.println(storeName);
+                        currentOrder.setDeliveryAddress(storeName);
+                        currentOrder.setRecipientMail(currentOrder.getOrderedBy().getEmail());
+                        currentOrder.setDeliveryMethod(DeliveryMethod.DELIVER_TO_ADDRESS);
+                    }
+                }
 
             }
             LocalDate localDate = datePicker.getValue();
@@ -541,7 +581,7 @@ public class OrderController implements Refreshable {
 
         // If the current tub is the final tub. send the order and go back to the main screen.
         if (finalTab()) {
-          sendOrder();
+            sendOrder();
         } else {
             // move to the next tab and enable it.
             selectionModel.selectNext();
@@ -666,9 +706,6 @@ public class OrderController implements Refreshable {
     private void sendOrder() {
         LilachService service = APIAccess.getService();
 
-        List<Store> stores = currentOrder.getOrderedBy().getStores();
-        currentOrder.setStore(stores.get(0));
-
         // TODO: Add delivery method and replace the line below
         currentOrder.setDeliveryMethod(DeliveryMethod.DELIVER_TO_ADDRESS);
 
@@ -726,14 +763,15 @@ public class OrderController implements Refreshable {
         //if(selectionModel.getSelectedIndex() == 0){
 
         updateButtons();
+
+        List<Store> stores = currentOrder.getOrderedBy().getStores();
+        currentOrder.setStore(stores.get(0));
     }
 
     @Override
     public void onSwitch() {
         EventBus.getDefault().unregister(this);
     }
-
-
 }
 
 
