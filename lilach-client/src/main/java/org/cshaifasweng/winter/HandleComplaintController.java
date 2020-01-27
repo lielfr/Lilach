@@ -9,6 +9,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import org.cshaifasweng.winter.events.ComplaintHandleEvent;
 import org.cshaifasweng.winter.events.DashboardSwitchEvent;
+import org.cshaifasweng.winter.models.Complaint;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
@@ -58,7 +59,7 @@ public class HandleComplaintController implements Refreshable {
 
 
     private boolean status = true;
-
+    private Complaint openedComplaint;
     @FXML
     void cancel(ActionEvent event) {
         EventBus.getDefault().post(new DashboardSwitchEvent("primary"));
@@ -71,6 +72,7 @@ public class HandleComplaintController implements Refreshable {
 
     @Subscribe
     public void handleEvent(ComplaintHandleEvent event) {
+        openedComplaint = event.getComplaint();
         complaintNum.setText(Long.toString(event.getComplaint().getId()));
         String fullName;
         String firstName;
@@ -87,6 +89,13 @@ public class HandleComplaintController implements Refreshable {
         }
         complaintOpTiLabel.setText(event.getComplaint().getComplaintOpen().toString());
         complaintBox.setText(event.getComplaint().getDescription());
+    }
+
+    private void fillComplaint(){
+        openedComplaint.setAnswer(answerBox.getText());
+        if(finComp.isSelected()){
+            openedComplaint.setCompensation(Double.valueOf(compAmountField.getText()));
+        }
     }
 
     private boolean isValid (TextField fieldA){
@@ -142,6 +151,8 @@ public class HandleComplaintController implements Refreshable {
         compensationEmpty.setVisible(false);
         invalidInput.setVisible(false);
     }
+
+
 
     @FXML
     void toggleCompensation(MouseEvent event) {
