@@ -2,12 +2,15 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.ColorPicker?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
-
 
 <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="750.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.cshaifasweng.winter.NewCustomItemController">
    <children>
@@ -15,13 +18,63 @@
       <ListView fx:id="itemsListView" maxHeight="1.7976931348623157E308" prefHeight="468.0" prefWidth="900.0" VBox.vgrow="ALWAYS" />
       <HBox>
          <children>
+            <Label maxHeight="1.7976931348623157E308" text="Price range: ">
+               <HBox.margin>
+                  <Insets right="10.0" />
+               </HBox.margin>
+            </Label>
+            <TextField fx:id="lowerPriceBound" onAction="#priceRangeSet" prefWidth="50.0" />
+            <Label maxHeight="1.7976931348623157E308" text="-" />
+            <TextField fx:id="upperPriceBound" layoutX="78.0" layoutY="10.0" onAction="#priceRangeSet" prefWidth="50.0" />
+            <Separator orientation="VERTICAL">
+               <HBox.margin>
+                  <Insets left="10.0" right="10.0" />
+               </HBox.margin>
+            </Separator>
+            <Label maxHeight="1.7976931348623157E308" text="Dominant color: " />
+            <ColorPicker fx:id="dominantColor">
+               <HBox.margin>
+                  <Insets left="5.0" />
+               </HBox.margin>
+            </ColorPicker>
+            <Separator layoutX="204.0" layoutY="10.0" orientation="VERTICAL">
+               <HBox.margin>
+                  <Insets left="10.0" right="10.0" />
+               </HBox.margin>
+            </Separator>
+            <Pane prefWidth="200.0" HBox.hgrow="ALWAYS" />
+            <Separator layoutX="454.0" layoutY="10.0" orientation="VERTICAL" />
+            <Label maxHeight="1.7976931348623157E308" text="Type:">
+               <padding>
+                  <Insets right="5.0" />
+               </padding>
+            </Label>
+            <ChoiceBox fx:id="typeChoiceBox" maxHeight="1.7976931348623157E308" prefWidth="150.0" HBox.hgrow="ALWAYS" />
+         </children>
+         <padding>
+            <Insets bottom="10.0" />
+         </padding>
+      </HBox>
+      <HBox>
+         <children>
+            <Label maxHeight="1.7976931348623157E308" text="Estimated cost: " HBox.hgrow="ALWAYS" />
+            <Label fx:id="estimatedCost" maxHeight="1.7976931348623157E308" text="0.00">
+               <HBox.margin>
+                  <Insets left="5.0" />
+               </HBox.margin>
+            </Label>
+            <Label maxHeight="1.7976931348623157E308" text="NIS">
+               <HBox.margin>
+                  <Insets left="3.0" />
+               </HBox.margin>
+            </Label>
             <Pane layoutX="159.0" layoutY="10.0" maxWidth="1.7976931348623157E308" HBox.hgrow="ALWAYS" />
             <Button mnemonicParsing="false" onAction="#cancel" text="Cancel">
                <HBox.margin>
                   <Insets right="25.0" />
                </HBox.margin>
             </Button>
-            <Button mnemonicParsing="false" onAction="#addItem" text="Add Item" />
+            <Button mnemonicParsing="false" onAction="#addItem" text="I'm done" />
             <Pane maxWidth="1.7976931348623157E308" HBox.hgrow="ALWAYS" />
          </children>
       </HBox>

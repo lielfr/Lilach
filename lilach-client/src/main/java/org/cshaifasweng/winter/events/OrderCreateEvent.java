@@ -2,20 +2,18 @@ package org.cshaifasweng.winter.events;
 
 import org.cshaifasweng.winter.models.Item;
 
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 public class OrderCreateEvent {
-    private Set<Item> cart;
+    private List<Item> cart;
     private Map<Long, Long> quantities;
 
-    public OrderCreateEvent(Set<Item> cart, Map<Long, Long> quantities) {
-        this.cart = new HashSet<>(cart);
+    public OrderCreateEvent(List<Item> cart, Map<Long, Long> quantities) {
+        this.cart = new ArrayList<>(cart);
         this.quantities = quantities;
     }
 
-    public Set<Item> getCart() {
+    public List<Item> getCart() {
         return cart;
     }
 
