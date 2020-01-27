@@ -74,11 +74,12 @@ public class ShowOrderController implements Refreshable {
     void cancelOrder(ActionEvent event) {
         LilachService service = APIAccess.getService();
         service.cancelOrder(currentOrder.getId());
+
     }
 
     @FXML
     void exitScreen(ActionEvent event) {
-        exitButton.setOnAction(actionEvent -> Platform.exit());
+
     }
 
     @Override
