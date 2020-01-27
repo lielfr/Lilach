@@ -123,6 +123,17 @@ public class DashboardController implements Initializable {
 
     }
 
+
+    @FXML
+    void myOrders(ActionEvent event) {
+        setPage("order_list_view");
+    }
+
+    @FXML
+    void openComplaints(ActionEvent event) {
+
+    }
+
     @FXML
      void cartButton(ActionEvent event) {
         setPage("order");
