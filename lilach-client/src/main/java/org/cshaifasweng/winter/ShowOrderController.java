@@ -26,7 +26,7 @@ public class ShowOrderController implements Refreshable {
     private Label phoneLabel;
 
     @FXML
-    private Label addressLable;
+    private Label addressLabel;
 
     @FXML
     private Label greetingLabel;
