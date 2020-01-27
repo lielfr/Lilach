@@ -11,12 +11,17 @@ import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import org.cshaifasweng.winter.events.DashboardSwitchEvent;
 import org.cshaifasweng.winter.models.Complaint;
+import org.cshaifasweng.winter.models.Customer;
+import org.cshaifasweng.winter.models.Store;
+import org.cshaifasweng.winter.models.User;
 import org.cshaifasweng.winter.web.APIAccess;
 import org.cshaifasweng.winter.web.LilachService;
 import org.greenrobot.eventbus.EventBus;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+
+import java.util.List;
 
 public class ComplaintController implements Refreshable {
 
@@ -58,6 +63,10 @@ public class ComplaintController implements Refreshable {
 
 
     private boolean status = true;
+    Complaint complaint = new Complaint();
+    User currentUser = APIAccess.getCurrentUser();
+
+
 
     @FXML
     void cancelComplaint(MouseEvent event) {
@@ -67,7 +76,6 @@ public class ComplaintController implements Refreshable {
     @FXML
     void clearText(ActionEvent event) {
         complaintBox.setText("");
-
     }
 
     @FXML
@@ -124,8 +132,7 @@ public class ComplaintController implements Refreshable {
         return retVal;
     }
 
-    private void restVisible()
-    {
+    private void restVisible() {
         orderNumEmpty.setVisible(false);
         compEmpty.setVisible(false);
         invalidInputOrNum.setVisible(false);
@@ -139,8 +146,9 @@ public class ComplaintController implements Refreshable {
             complaint.setOrderNum(orderNumberFild.getText());
         }
         complaint.setOpen(true);
-
-
+        complaint.setOpenedBy((Customer)currentUser);
+        Customer customer = (Customer) currentUser;
+        complaint.setStore( customer.getStores().get(0));
     }
 
     @FXML

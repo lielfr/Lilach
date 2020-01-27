@@ -766,8 +766,6 @@ public class OrderController implements Refreshable {
         List<Store> stores = currentOrder.getOrderedBy().getStores();
         currentOrder.setStore(stores.get(0));
     }
-
-
 }
 
 
