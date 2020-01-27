@@ -1,6 +1,7 @@
 package org.cshaifasweng.winter.models;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 
 import java.util.ArrayList;
@@ -29,6 +30,7 @@ public class Customer extends User {
 
     private List<Transaction> transactions;
 
+    @JsonIgnore
     private Collection<Complaint> complaints;
 
     private List<Store> stores;

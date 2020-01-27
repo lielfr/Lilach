@@ -3,9 +3,12 @@ package org.cshaifasweng.winter.models;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonTypeName;
+import org.hibernate.annotations.Type;
 
-import javax.persistence.*;
-
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,6 +37,7 @@ public class CatalogItem extends Item {
     @JsonIgnore
     private List<CustomItem> customItems;
 
+    @Type(type = "org.hibernate.type.NumericBooleanType")
     private boolean canBeAssembled;
 
     private double discountAmount;

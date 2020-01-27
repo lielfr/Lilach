@@ -284,7 +284,7 @@ public class CatalogController implements Refreshable, Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        refresh();
+
     }
 
 

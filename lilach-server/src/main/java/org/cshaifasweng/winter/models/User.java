@@ -3,6 +3,7 @@ package org.cshaifasweng.winter.models;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
 import java.util.Collection;
@@ -33,8 +34,10 @@ public abstract class User {
 
     protected String phone;
 
+    @Type(type = "org.hibernate.type.NumericBooleanType")
     protected Boolean isLoggedIn;
 
+    @Type(type = "org.hibernate.type.NumericBooleanType")
     private Boolean isDisabled = false;
 
     @ManyToMany(fetch = FetchType.EAGER)

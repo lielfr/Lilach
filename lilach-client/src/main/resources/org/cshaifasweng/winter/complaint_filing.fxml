@@ -12,7 +12,7 @@
    <children>
       <Label layoutX="98.0" layoutY="122.0" text="choose store" />
       <Label fx:id="complaintLable" layoutX="100.0" layoutY="260.0" text="Please list your complaint here:" />
-      <ComboBox layoutX="189.0" layoutY="117.0" prefWidth="150.0" promptText="choose store" />
+      <ComboBox fx:id="storeComboBox" layoutX="189.0" layoutY="117.0" prefWidth="150.0" promptText="choose store" />
       <TextArea fx:id="complaintBox" layoutX="237.0" layoutY="293.0" prefHeight="289.0" prefWidth="528.0" promptText="enter your complaint here" />
       <CheckBox fx:id="emailCheckBox" layoutX="99.0" layoutY="632.0" mnemonicParsing="false" text="I want to get an answer by email" />
       <Button fx:id="sendBox" layoutX="527.0" layoutY="698.0" mnemonicParsing="false" onAction="#sendComplaint" text="send" />
