@@ -1,5 +1,6 @@
 package org.cshaifasweng.winter;
 
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.CheckBox;
@@ -10,8 +11,13 @@ import javafx.scene.input.MouseEvent;
 import org.cshaifasweng.winter.events.ComplaintHandleEvent;
 import org.cshaifasweng.winter.events.DashboardSwitchEvent;
 import org.cshaifasweng.winter.models.Complaint;
+import org.cshaifasweng.winter.web.APIAccess;
+import org.cshaifasweng.winter.web.LilachService;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 import javax.swing.*;
 
@@ -141,8 +147,28 @@ public class HandleComplaintController implements Refreshable {
     @FXML
     void sendFrom(ActionEvent event) {
        restVisible();
-       inputCheck();
+       if(!(inputCheck())){
+           return;
+       }
+       fillComplaint();
 
+        LilachService service = APIAccess.getService();
+        service.handleComplaint(openedComplaint.getId(),openedComplaint).enqueue(new Callback<Complaint>() {
+            @Override
+            public void onResponse(Call<Complaint> call, Response<Complaint> response) {
+                if (response.code() == 200) {
+                    System.out.println("adding the handling success");
+                    Platform.runLater(() -> {
+                        EventBus.getDefault().post(new DashboardSwitchEvent("catalog"));
+                    });
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Complaint> call, Throwable throwable) {
+
+            }
+        });
     }
 
     private void restVisible()
