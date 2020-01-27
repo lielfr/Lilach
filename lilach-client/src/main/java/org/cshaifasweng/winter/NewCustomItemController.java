@@ -8,6 +8,8 @@ import javafx.scene.control.ListView;
 import javafx.util.Pair;
 import org.cshaifasweng.winter.events.CustomItemAddButtonEvent;
 import org.cshaifasweng.winter.events.CustomItemBeginEvent;
+import org.cshaifasweng.winter.events.CustomItemFinishEvent;
+import org.cshaifasweng.winter.events.DashboardSwitchEvent;
 import org.cshaifasweng.winter.models.CatalogItem;
 import org.cshaifasweng.winter.models.CustomItem;
 import org.cshaifasweng.winter.models.Store;
@@ -39,12 +41,13 @@ public class NewCustomItemController implements Refreshable {
 
     @FXML
     void addItem(ActionEvent event) {
-
+        EventBus.getDefault().post(new DashboardSwitchEvent("catalog"));
+        EventBus.getDefault().post(new CustomItemFinishEvent(createdItem));
     }
 
     @FXML
     void cancel(ActionEvent event) {
-
+        EventBus.getDefault().post(new DashboardSwitchEvent("catalog"));
     }
 
     @Subscribe

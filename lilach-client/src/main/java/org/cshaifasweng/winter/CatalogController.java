@@ -287,5 +287,11 @@ public class CatalogController implements Refreshable, Initializable {
 
     }
 
+    @Subscribe
+    public void onCustomItemFinish(CustomItemFinishEvent event) {
+        cart.add(event.getItem());
+        updateCartButton();
+    }
+
 
 }
