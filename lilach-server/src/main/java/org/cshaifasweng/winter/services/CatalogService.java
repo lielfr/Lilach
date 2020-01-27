@@ -3,6 +3,7 @@ package org.cshaifasweng.winter.services;
 import org.cshaifasweng.winter.da.CatalogItemsRepository;
 import org.cshaifasweng.winter.da.StoreRepository;
 import org.cshaifasweng.winter.models.CatalogItem;
+import org.cshaifasweng.winter.models.CatalogItemType;
 import org.cshaifasweng.winter.models.Store;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -54,4 +55,8 @@ public class CatalogService {
         return item;
     }
 
+    public List<CatalogItem> findByStoreAndType(long storeId, CatalogItemType type) {
+        return repository.findByStoreAndItemType(storeRepository.getOne(storeId),
+                type);
+    }
 }
