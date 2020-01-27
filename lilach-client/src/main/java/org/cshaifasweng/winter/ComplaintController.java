@@ -203,6 +203,7 @@ public class ComplaintController implements Refreshable {
                 complaint.setStore(customer.getStores().get(storeComboBox.getSelectionModel().getSelectedIndex()));
             }
         });
+        storeComboBox.getSelectionModel().select(0);
     }
 
     @Override
