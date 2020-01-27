@@ -66,6 +66,9 @@ public class CatalogController implements Refreshable, Initializable {
     private Button cartButton;
 
     @FXML
+    private Button customItemButton;
+
+    @FXML
     public void goToCart() {
         EventBus.getDefault().post(new DashboardSwitchEvent("order"));
         EventBus.getDefault().post(new OrderCreateEvent(cart));
@@ -254,5 +257,13 @@ public class CatalogController implements Refreshable, Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         cart = new HashSet<>();
+    }
+
+    @FXML
+    void newCustomItem() {
+
+        EventBus.getDefault().post(new DashboardSwitchEvent("new_custom_item"));
+        EventBus.getDefault().post(new CustomItemBeginEvent(
+                stores.get(storeChoiceBox.getSelectionModel().getSelectedIndex())));
     }
 }
