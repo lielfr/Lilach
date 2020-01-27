@@ -8,10 +8,11 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.mail.javamail.MimeMessagePreparator;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
-import javax.mail.internet.MimeMessage;
 import java.io.File;
+import java.util.concurrent.CompletableFuture;
 
 @Service
 public class MailService {
@@ -29,7 +30,8 @@ public class MailService {
         this.contentBuilder = contentBuilder;
     }
 
-    public void sendMail(String recipient, String subject, String message) {
+    @Async
+    public CompletableFuture<Void> sendMail(String recipient, String subject, String message) {
         if (recipient.endsWith("@lilach.com")) {
             log.warn("Tried to send email to address in the lilach.com domain, which is prohibited. Will self-send instead.");
             recipient = mailFrom;
@@ -45,5 +47,7 @@ public class MailService {
                     new File(SpringServer.class.getResource("lilach-logo.png").getFile()));
         };
         mailSender.send(preparator);
+
+        return new CompletableFuture<>();
     }
 }

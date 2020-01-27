@@ -603,4 +603,9 @@ public class CreateAccountController implements Refreshable{
     public void refresh() {
         Cmembership.setItems(dbTypeList);
     }
+
+    @Override
+    public void onSwitch() {
+
+    }
 }

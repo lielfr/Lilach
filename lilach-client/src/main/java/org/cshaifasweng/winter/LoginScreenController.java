@@ -88,6 +88,11 @@ public class LoginScreenController implements Refreshable, Initializable {
     }
 
     @Override
+    public void onSwitch() {
+
+    }
+
+    @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         LoggerUtils.setupLogger(log);
     }

@@ -6,6 +6,8 @@ import retrofit2.Retrofit;
 import retrofit2.converter.jackson.JacksonConverterFactory;
 import retrofit2.converter.scalars.ScalarsConverterFactory;
 
+import java.time.Duration;
+
 public class APIAccess {
     private static LilachService service = null;
     private static String BASE_URL = "http://localhost:8080/";
@@ -18,6 +20,7 @@ public class APIAccess {
 
             OkHttpClient client = new OkHttpClient().newBuilder()
                     .addInterceptor(tokenInterceptor)
+                    .callTimeout(Duration.ofSeconds(10))
                     .build();
 
             Retrofit retrofit = new Retrofit.Builder()

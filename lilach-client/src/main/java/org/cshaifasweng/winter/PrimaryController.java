@@ -123,4 +123,9 @@ public class PrimaryController implements Refreshable {
             }
         });
     }
+
+    @Override
+    public void onSwitch() {
+
+    }
 }

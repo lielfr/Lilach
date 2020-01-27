@@ -208,6 +208,7 @@ public class OrderController implements Refreshable {
     @Subscribe
     public void handleOrderCreateEvent(OrderCreateEvent event) {
         currentOrder.setItems(new ArrayList<>(event.getCart()));
+        currentOrder.setQuantities(event.getQuantities());
         populateTable();
 
         double price = 0.0;
@@ -219,7 +220,7 @@ public class OrderController implements Refreshable {
                 itemPrice -= catalogItem.getDiscountAmount();
                 itemPrice *= (100 - catalogItem.getDiscountPercent()) / 100;
             }
-            price += itemPrice;
+            price += itemPrice * currentOrder.getQuantities().get(item.getId());
         }
 
 
@@ -454,7 +455,7 @@ public class OrderController implements Refreshable {
 
     @FXML
     void cancel(ActionEvent event) {
-        EventBus.getDefault().post(new DashboardSwitchEvent("primary"));
+        EventBus.getDefault().post(new DashboardSwitchEvent("catalog"));
     }
 
 
@@ -491,7 +492,7 @@ public class OrderController implements Refreshable {
     void goBack(ActionEvent event) {
         SingleSelectionModel<Tab> selectionModel = tabPane.getSelectionModel();
         if (selectionModel.getSelectedIndex() == 0) {
-            EventBus.getDefault().post(new DashboardSwitchEvent("primary"));
+            EventBus.getDefault().post(new DashboardSwitchEvent("catalog"));
         } else {
             selectionModel.selectPrevious();
         }
@@ -705,13 +706,13 @@ public class OrderController implements Refreshable {
     private void sendOrder() {
         LilachService service = APIAccess.getService();
 
-
         // TODO: Add delivery method and replace the line below
         currentOrder.setDeliveryMethod(DeliveryMethod.DELIVER_TO_ADDRESS);
 
         service.newOrder(currentOrder).enqueue((new Callback<Order>() {
             @Override
             public void onResponse(Call<Order> call, Response<Order> response) {
+                System.out.println("CODE: " + response.code());
                 if (response.code() == 200) {
                     Platform.runLater(() -> {
                         EventBus.getDefault().post(new DashboardSwitchEvent("catalog"));
@@ -721,7 +722,7 @@ public class OrderController implements Refreshable {
 
             @Override
             public void onFailure(Call<Order> call, Throwable throwable) {
-
+                throwable.printStackTrace();
             }
         }));
     }
@@ -765,6 +766,11 @@ public class OrderController implements Refreshable {
 
         List<Store> stores = currentOrder.getOrderedBy().getStores();
         currentOrder.setStore(stores.get(0));
+    }
+
+    @Override
+    public void onSwitch() {
+        EventBus.getDefault().unregister(this);
     }
 }
 

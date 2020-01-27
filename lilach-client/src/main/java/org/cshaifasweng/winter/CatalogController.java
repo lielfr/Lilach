@@ -13,6 +13,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
+import javafx.util.Pair;
 import org.cshaifasweng.winter.events.*;
 import org.cshaifasweng.winter.models.*;
 import org.cshaifasweng.winter.web.APIAccess;
@@ -36,7 +37,10 @@ public class CatalogController implements Refreshable, Initializable {
 
     private List<CatalogItem> items;
 
+
+
     private Set<Item> cart;
+    private Map<Long, Long> quantities;
 
     private static final int NUM_COLS = 3;
     private static final int NUM_ROWS = 3;
@@ -71,8 +75,7 @@ public class CatalogController implements Refreshable, Initializable {
     @FXML
     public void goToCart() {
         EventBus.getDefault().post(new DashboardSwitchEvent("order"));
-        EventBus.getDefault().post(new OrderCreateEvent(cart));
-        cart.clear();
+        EventBus.getDefault().post(new OrderCreateEvent(cart, quantities));
     }
 
     @FXML
@@ -151,29 +154,40 @@ public class CatalogController implements Refreshable, Initializable {
     }
 
     private void populateGrid() throws IOException {
-        catalogGrid.getChildren().clear();
-        for (int i = 0; i < NUM_ROWS; i++) {
-            for (int j = 0; j < NUM_COLS; j++) {
-                Node itemCell = LayoutManager.getInstance().getFXML("catalog_item");
-                CatalogItemViewController controller =
-                        (CatalogItemViewController) LayoutManager.getInstance().getController("catalog_item");
-                int index = (page - 1) + i * NUM_COLS + j;
-                if (index >= items.size())
-                    break;
-                CatalogItem item = items.get(index);
-                controller.setItem(item);
-                controller.setItemLabel(item.getDescription());
-                controller.setItemImage(new Image(APIAccess.getImageUrl(item.getPicture())));
-                controller.setItemPriceLabel(item.getPrice() + " NIS");
-                double discountedPrice = item.getPrice();
-                discountedPrice *= (100 - item.getDiscountPercent()) / 100;
-                discountedPrice -= item.getDiscountAmount();
-                if (discountedPrice < item.getPrice())
-                    controller.setDiscount(discountedPrice);
-                catalogGrid.add(itemCell, j, i);
+        Platform.runLater(() -> {
+            catalogGrid.getChildren().clear();
+            for (int i = 0; i < NUM_ROWS; i++) {
+                for (int j = 0; j < NUM_COLS; j++) {
+                    Pair<Parent, Object> viewData = null;
+                    try {
+                        viewData = LayoutManager.getInstance().getFXML("catalog_item");
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    Node itemCell = viewData.getKey();
+                    CatalogItemViewController controller =
+                            (CatalogItemViewController) viewData.getValue();
+                    int index = (page - 1) + i * NUM_COLS + j;
+                    if (index >= items.size())
+                        break;
+                    CatalogItem item = items.get(index);
+                    controller.setItem(item);
+                    controller.setItemLabel(item.getDescription());
+                    controller.setItemImage(new Image(APIAccess.getImageUrl(item.getPicture())));
+                    controller.setItemPriceLabel(item.getPrice() + " NIS");
+                    double discountedPrice = item.getPrice();
+                    discountedPrice *= (100 - item.getDiscountPercent()) / 100;
+                    discountedPrice -= item.getDiscountAmount();
+                    if (discountedPrice < item.getPrice())
+                        controller.setDiscount(discountedPrice);
+                    System.out.println("ADDED AT (" + j + ", " + i + ")");
+                    catalogGrid.add(itemCell, j, i);
+                }
             }
-        }
-        updatePages();
+            System.out.println("GRID POPULATED");
+            updatePages();
+        });
+
     }
 
     private void updatePages() {
@@ -204,13 +218,15 @@ public class CatalogController implements Refreshable, Initializable {
 
             @Override
             public void onFailure(Call<List<CatalogItem>> call, Throwable throwable) {
-
+                throwable.printStackTrace();
             }
         });
     }
 
     @Override
     public void refresh() {
+        cart = new HashSet<>();
+        quantities = new HashMap<>();
         EventBus.getDefault().register(this);
         service = APIAccess.getService();
         updateStoresList();
@@ -226,6 +242,11 @@ public class CatalogController implements Refreshable, Initializable {
                 });
     }
 
+    @Override
+    public void onSwitch() {
+        EventBus.getDefault().unregister(this);
+    }
+
     private void updateCartButton() {
         String builder = "Go to cart (" +
                 cart.size() +
@@ -237,19 +258,16 @@ public class CatalogController implements Refreshable, Initializable {
 
     @Subscribe
     public void handleItemBuy(CatalogItemBuyEvent event) throws IOException {
+        quantities.put(event.getItem().getId(), 1L);
         if (!cart.add(event.getItem())) {
-            int previousQuantity = cart.stream()
-                    .filter((element) -> element.equals(event.getItem()))
-                    .collect(Collectors.toList()).get(0).getQuantity();
-            cart.remove(event.getItem());
-            cart.add(event.getItem());
+            quantities.replace(event.getItem().getId(), quantities.get(event.getItem().getId()) + 1);
         }
         updateCartButton();
 
-        Parent dialog = LayoutManager.getInstance().getFXML("popup_add_item");
+        Parent dialog = LayoutManager.getInstance().getFXML("popup_add_item").getKey();
         Stage popupStage = new Stage();
         Scene popupScene = new Scene(dialog);
-        EventBus.getDefault().post(new PopupAddItemEvent(cart, popupStage));
+        EventBus.getDefault().post(new PopupAddItemEvent(cart, quantities, popupStage));
         popupStage.setScene(popupScene);
         popupStage.show();
     }
@@ -257,6 +275,7 @@ public class CatalogController implements Refreshable, Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         cart = new HashSet<>();
+        quantities = new HashMap<>();
     }
 
     @FXML
@@ -266,4 +285,6 @@ public class CatalogController implements Refreshable, Initializable {
         EventBus.getDefault().post(new CustomItemBeginEvent(
                 stores.get(storeChoiceBox.getSelectionModel().getSelectedIndex())));
     }
+
+
 }

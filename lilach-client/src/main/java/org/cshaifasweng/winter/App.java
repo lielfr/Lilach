@@ -20,7 +20,7 @@ public class App extends Application {
 
     @Override
     public void start(Stage stage) throws IOException {
-        scene = new Scene(LayoutManager.getInstance().getFXML("connection"));
+        scene = new Scene(LayoutManager.getInstance().getFXML("connection").getKey());
         scene.getStylesheets().add(String.valueOf(App.class.getResource("strikethrough.css")));
         scene.getStylesheets().add(String.valueOf(App.class.getResource("lilach.css")));
         stage.setScene(scene);
@@ -43,7 +43,7 @@ public class App extends Application {
     }
 
     static void setRoot(String fxml) throws IOException {
-        scene.setRoot(LayoutManager.getInstance().getFXML(fxml));
+        scene.setRoot(LayoutManager.getInstance().getFXML(fxml).getKey());
         scene.getWindow().sizeToScene();
     }
 
