@@ -12,7 +12,6 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
 
@@ -70,7 +69,7 @@ public class ComplaintNotifier {
 
             toNotify.forEach((employee -> {
                 mailService.sendMail(employee.getEmail(), "URGENT: Unhandled complaint!",
-                                "<p>Please handle complaint no. " + complaint.getId() + "urgently.</p>");
+                                "<p>Please handle complaint no. " + complaint.getId() + " urgently.</p>");
             }));
         }
     }

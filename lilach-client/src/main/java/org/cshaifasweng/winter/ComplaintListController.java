@@ -24,7 +24,6 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -54,19 +53,8 @@ public class ComplaintListController implements Refreshable {
         idColumn.setCellValueFactory(new PropertyValueFactory<>("Id"));
         TableColumn<Complaint, Date> complaintOpenColumn = new TableColumn<>("Opened in");
         complaintOpenColumn.setCellValueFactory(new PropertyValueFactory<>("complaintOpen"));
-        javafx.util.Callback<TableColumn<Complaint, Date>, TableCell<Complaint, Date>> dateFactory = tableColumn -> {
-            TableCell<Complaint, Date> cell = new TableCell<>() {
-                private SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss zzzz");
-                @Override
-                protected void updateItem(Date date, boolean b) {
-                    if (date != null) {
-                        setText(dateFormat.format(date));
-                    }
-                }
-            };
-            return cell;
-        };
-        complaintOpenColumn.setCellFactory(dateFactory);
+
+        complaintOpenColumn.setCellFactory(new Utils<Complaint>().dateFactory);
         TableColumn<Complaint, Customer> complaintOpenedByColumn = new TableColumn<>("Opened by");
         complaintOpenedByColumn.setCellValueFactory(new PropertyValueFactory<>("openedBy"));
         complaintOpenColumn.setCellValueFactory(features ->
@@ -100,7 +88,7 @@ public class ComplaintListController implements Refreshable {
         TableColumn<Complaint, Date> complaintCloseColumn = new TableColumn<>("Closed in");
         complaintCloseColumn.setCellValueFactory(features ->
                 new SimpleObjectProperty<>(features.getValue().getComplaintClose()));
-        complaintCloseColumn.setCellFactory(dateFactory);
+        complaintCloseColumn.setCellFactory(new Utils<Complaint>().dateFactory);
 
         TableColumn<Complaint, Employee> complaintHandledByColumn = new TableColumn<>("Handled by");
         complaintHandledByColumn.setCellValueFactory(new PropertyValueFactory<>("handledBy"));
