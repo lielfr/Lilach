@@ -36,7 +36,10 @@ public class CatalogController implements Refreshable, Initializable {
 
     private List<CatalogItem> items;
 
+
+
     private Set<Item> cart;
+    private Map<Long, Long> quantities;
 
     private static final int NUM_COLS = 3;
     private static final int NUM_ROWS = 3;
@@ -71,8 +74,7 @@ public class CatalogController implements Refreshable, Initializable {
     @FXML
     public void goToCart() {
         EventBus.getDefault().post(new DashboardSwitchEvent("order"));
-        EventBus.getDefault().post(new OrderCreateEvent(cart));
-        cart.clear();
+        EventBus.getDefault().post(new OrderCreateEvent(cart, quantities));
     }
 
     @FXML
@@ -237,19 +239,16 @@ public class CatalogController implements Refreshable, Initializable {
 
     @Subscribe
     public void handleItemBuy(CatalogItemBuyEvent event) throws IOException {
+        quantities.put(event.getItem().getId(), 1L);
         if (!cart.add(event.getItem())) {
-            int previousQuantity = cart.stream()
-                    .filter((element) -> element.equals(event.getItem()))
-                    .collect(Collectors.toList()).get(0).getQuantity();
-            cart.remove(event.getItem());
-            cart.add(event.getItem());
+            quantities.replace(event.getItem().getId(), quantities.get(event.getItem().getId()) + 1);
         }
         updateCartButton();
 
         Parent dialog = LayoutManager.getInstance().getFXML("popup_add_item");
         Stage popupStage = new Stage();
         Scene popupScene = new Scene(dialog);
-        EventBus.getDefault().post(new PopupAddItemEvent(cart, popupStage));
+        EventBus.getDefault().post(new PopupAddItemEvent(cart, quantities, popupStage));
         popupStage.setScene(popupScene);
         popupStage.show();
     }
@@ -257,6 +256,7 @@ public class CatalogController implements Refreshable, Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         cart = new HashSet<>();
+        quantities = new HashMap<>();
     }
 
     @FXML

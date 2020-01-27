@@ -205,6 +205,7 @@ public class OrderController implements Refreshable {
     @Subscribe
     public void handleOrderCreateEvent(OrderCreateEvent event) {
         currentOrder.setItems(new ArrayList<>(event.getCart()));
+        currentOrder.setQuantities(event.getQuantities());
         populateTable();
 
         double price = 0.0;
@@ -216,7 +217,7 @@ public class OrderController implements Refreshable {
                 itemPrice -= catalogItem.getDiscountAmount();
                 itemPrice *= (100 - catalogItem.getDiscountPercent()) / 100;
             }
-            price += itemPrice;
+            price += itemPrice * currentOrder.getQuantities().get(item.getId());
         }
 
 
@@ -674,6 +675,7 @@ public class OrderController implements Refreshable {
         service.newOrder(currentOrder).enqueue((new Callback<Order>() {
             @Override
             public void onResponse(Call<Order> call, Response<Order> response) {
+                System.out.println("CODE: " + response.code());
                 if (response.code() == 200) {
                     Platform.runLater(() -> {
                         EventBus.getDefault().post(new DashboardSwitchEvent("catalog"));
@@ -683,7 +685,7 @@ public class OrderController implements Refreshable {
 
             @Override
             public void onFailure(Call<Order> call, Throwable throwable) {
-
+                throwable.printStackTrace();
             }
         }));
     }

@@ -32,7 +32,6 @@ public class CatalogItemViewController implements Initializable {
 
     @FXML
     void buyItem() {
-        item.setQuantity(item.getQuantity() + 1);
         EventBus.getDefault().post(new CatalogItemBuyEvent(item));
     }
 
