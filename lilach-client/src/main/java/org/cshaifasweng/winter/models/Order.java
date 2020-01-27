@@ -1,8 +1,6 @@
 package org.cshaifasweng.winter.models;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 public class Order {
     private Long id;
@@ -29,6 +27,8 @@ public class Order {
 
     private List<Item> items;
 
+    private Map<Long, Long> quantities;
+
     private double price;
 
     public Order() {
@@ -42,6 +42,7 @@ public class Order {
         this.orderedBy = orderedBy;
         this.items = new ArrayList<>();
         this.status = OrderStatus.PENDING;
+        this.quantities = new HashMap<>();
     }
 
     public Long getId() {
@@ -146,6 +147,14 @@ public class Order {
 
     public void setStatus(OrderStatus status) {
         this.status = status;
+    }
+
+    public Map<Long, Long> getQuantities() {
+        return quantities;
+    }
+
+    public void setQuantities(Map<Long, Long> quantities) {
+        this.quantities = quantities;
     }
 }
 

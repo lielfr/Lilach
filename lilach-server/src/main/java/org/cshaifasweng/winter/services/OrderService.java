@@ -36,6 +36,7 @@ public class OrderService {
         requiredFields.put("supplyDate", newOrder.getSupplyDate());
         requiredFields.put("store", newOrder.getStore());
         requiredFields.put("deliveryMethod", newOrder.getDeliveryMethod());
+        requiredFields.put("quantities", newOrder.getQuantities());
 
         if (
                 newOrder.getDeliveryMethod() != null
@@ -64,7 +65,7 @@ public class OrderService {
                 itemPrice -= catalogItem.getDiscountAmount();
                 itemPrice *= (100 - catalogItem.getDiscountPercent()) / 100;
             }
-            price += itemPrice;
+            price += itemPrice * newOrder.getQuantities().get(item.getId());
             if (item instanceof CustomItem) {
                 CustomItem customItem = (CustomItem) item;
                 for (CatalogItem customItemChild : customItem.getItems()) {

@@ -4,7 +4,9 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 import javax.persistence.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Entity
 @JsonTypeName("custom_item")
@@ -16,6 +18,9 @@ public class CustomItem extends Item {
     inverseJoinColumns = @JoinColumn(name = "item_id", referencedColumnName = "id"))
     private List<CatalogItem> items;
 
+    @ElementCollection
+    private Map<Long, Long> quantities;
+
     private double lowerPriceBound;
     private double upperPriceBound;
 
@@ -26,6 +31,7 @@ public class CustomItem extends Item {
     public CustomItem() {
         super();
         items = new ArrayList<>();
+        quantities = new HashMap<>();
     }
 
     public CustomItem(double lowerPriceBound, double upperPriceBound, CustomItemType type) {
@@ -34,6 +40,7 @@ public class CustomItem extends Item {
         this.lowerPriceBound = lowerPriceBound;
         this.upperPriceBound = upperPriceBound;
         this.type = type;
+        quantities = new HashMap<>();
     }
 
     public List<CatalogItem> getItems() {
@@ -74,5 +81,13 @@ public class CustomItem extends Item {
 
     public void setType(CustomItemType type) {
         this.type = type;
+    }
+
+    public Map<Long, Long> getQuantities() {
+        return quantities;
+    }
+
+    public void setQuantities(Map<Long, Long> quantities) {
+        this.quantities = quantities;
     }
 }

@@ -1,9 +1,7 @@
 package org.cshaifasweng.winter.models;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @Entity
 @Table(name = "orders_table")
@@ -38,10 +36,15 @@ public class Order {
     @ManyToMany(fetch = FetchType.EAGER)
     private List<Item> items;
 
+    @ElementCollection
+    private Map<Long, Long> quantities;
+
     private double price;
 
     public Order() {
         this.items = new ArrayList<>();
+        this.status = OrderStatus.PENDING;
+        this.quantities = new HashMap<>();
     }
 
     public Order(Date supplyDate, Store store, Customer orderedBy, DeliveryMethod deliveryMethod) {
@@ -51,6 +54,7 @@ public class Order {
         this.orderedBy = orderedBy;
         this.items = new ArrayList<>();
         this.status = OrderStatus.PENDING;
+        this.quantities = new HashMap<>();
     }
 
     public Long getId() {
@@ -155,6 +159,14 @@ public class Order {
 
     public void setStatus(OrderStatus status) {
         this.status = status;
+    }
+
+    public Map<Long, Long> getQuantities() {
+        return quantities;
+    }
+
+    public void setQuantities(Map<Long, Long> quantities) {
+        this.quantities = quantities;
     }
 }
 

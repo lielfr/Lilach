@@ -8,6 +8,7 @@ public class CustomItemAddButtonEvent {
 
     public CustomItemAddButtonEvent(CatalogItem item, boolean isAdd) {
         this.item = item;
+        this.isAdd = isAdd;
     }
 
     public CatalogItem getItem() {
