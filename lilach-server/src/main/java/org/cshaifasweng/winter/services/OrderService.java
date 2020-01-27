@@ -90,6 +90,8 @@ public class OrderService {
 
         newOrder.setPrice(price);
 
+        newOrder.setStatus(OrderStatus.PENDING);
+
         orderRepository.save(newOrder);
 
         Employee manager = newOrder.getStore().getManager();
@@ -158,7 +160,6 @@ public class OrderService {
                         .stream().map(GrantedAuthority::getAuthority)
                         .collect(Collectors.toList()).contains(SecurityConstants.PRIVILEGE_ORDERS_VIEW_ALL))
             throw new LogicalException("Unauthorized to view this user's orders");
-        return orderRepository.findAllByOrderedBy(customerRepository.getOne(id))
-                .stream().filter((order) -> order.getStatus() == OrderStatus.PENDING).collect(Collectors.toList());
+        return orderRepository.findAllByOrderedByAndStatus(customerRepository.getOne(id), OrderStatus.PENDING);
     }
 }

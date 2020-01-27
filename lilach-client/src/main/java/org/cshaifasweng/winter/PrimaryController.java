@@ -9,8 +9,6 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.MouseButton;
-import javafx.scene.input.MouseEvent;
 import org.cshaifasweng.winter.events.DashboardSwitchEvent;
 import org.cshaifasweng.winter.events.SendEvent;
 import org.cshaifasweng.winter.models.CatalogItem;
@@ -94,16 +92,7 @@ public class PrimaryController implements Refreshable {
                         }
                     });
 
-                    dataTable.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
-                        @Override
-                        public void handle(MouseEvent mouseEvent) {
-                            if (mouseEvent.getButton() == MouseButton.SECONDARY) {
-                                menu.show(dataTable, mouseEvent.getScreenX(), mouseEvent.getScreenY());
-                            } else if (mouseEvent.getButton() == MouseButton.PRIMARY) {
-                                menu.hide();
-                            }
-                        }
-                    });
+                    Utils.addContextMenu(dataTable, menu);
                 });
 
 
