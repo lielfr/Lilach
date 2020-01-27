@@ -8,6 +8,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.DragEvent;
 import javafx.scene.input.MouseEvent;
 import org.cshaifasweng.winter.events.DashboardSwitchEvent;
+import org.cshaifasweng.winter.events.OrderShowEvent;
 import org.cshaifasweng.winter.models.Customer;
 import org.cshaifasweng.winter.models.Order;
 import org.cshaifasweng.winter.web.APIAccess;
@@ -60,7 +61,7 @@ public class OrderListViewController implements Refreshable {
         ContextMenu menu = new ContextMenu();
         MenuItem detailsMenuItem = new MenuItem("Show order");
         detailsMenuItem.setOnAction((event) -> {
-
+            EventBus.getDefault().post(new OrderShowEvent(tableView1.getSelectionModel().getSelectedItem()));
         });
         menu.getItems().add(detailsMenuItem);
 
