@@ -167,7 +167,7 @@ public class ComplaintController implements Refreshable {
 //                Complaint received = response.body();
                 if (response.code() == 200) {
                     Platform.runLater(() -> {
-                        EventBus.getDefault().post(new DashboardSwitchEvent("catalog"));
+                        EventBus.getDefault().post(new DashboardSwitchEvent("complaint_list"));
                     });
                 }
 
