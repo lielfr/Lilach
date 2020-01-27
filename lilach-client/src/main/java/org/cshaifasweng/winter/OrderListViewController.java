@@ -6,7 +6,7 @@ import javafx.scene.control.TableView;
 import javafx.scene.input.DragEvent;
 import javafx.scene.input.MouseEvent;
 
-public class OrderListViewController {
+public class OrderListViewController implements Refreshable {
 
     @FXML
     private Button backToCatalogButton;
@@ -29,4 +29,13 @@ public class OrderListViewController {
 
     }
 
+    @Override
+    public void refresh() {
+
+    }
+
+    @Override
+    public void onSwitch() {
+
+    }
 }
