@@ -30,9 +30,11 @@ public class ComplaintService {
     }
 
     @Transactional
-    public Complaint newComplaint(String description, boolean email, Customer openedBy) {
+    public Complaint newComplaint(String description, boolean email, Customer openedBy, Store store) {
         Complaint complaint = new Complaint(description, email, openedBy);
         complaint.setComplaintOpen(new Date());
+        complaint.setOpen(true);
+        complaint.setStore(store);
         complaintRepository.save(complaint);
 
         return complaint;

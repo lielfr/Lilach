@@ -244,6 +244,7 @@ public class CatalogController implements Refreshable, Initializable {
 
     @Override
     public void onSwitch() {
+        catalogGrid.getChildren().clear();
         EventBus.getDefault().unregister(this);
     }
 
@@ -272,18 +273,18 @@ public class CatalogController implements Refreshable, Initializable {
         popupStage.show();
     }
 
-    @Override
-    public void initialize(URL url, ResourceBundle resourceBundle) {
-        cart = new HashSet<>();
-        quantities = new HashMap<>();
-    }
-
     @FXML
     void newCustomItem() {
 
         EventBus.getDefault().post(new DashboardSwitchEvent("new_custom_item"));
         EventBus.getDefault().post(new CustomItemBeginEvent(
                 stores.get(storeChoiceBox.getSelectionModel().getSelectedIndex())));
+    }
+
+
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+
     }
 
 

@@ -31,6 +31,7 @@ public class Store {
     private List<Customer> customers;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "store")
+    @JsonIgnore
     private List<Complaint> complaints;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "store")

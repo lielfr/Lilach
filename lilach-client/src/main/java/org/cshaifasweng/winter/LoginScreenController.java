@@ -84,12 +84,10 @@ public class LoginScreenController implements Refreshable, Initializable {
 
     @Override
     public void refresh() {
-
     }
 
     @Override
     public void onSwitch() {
-
     }
 
     @Override
