@@ -4,14 +4,16 @@ import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.ListView;
+import javafx.scene.control.*;
 import javafx.util.Pair;
+import javafx.util.StringConverter;
 import org.cshaifasweng.winter.events.CustomItemAddButtonEvent;
 import org.cshaifasweng.winter.events.CustomItemBeginEvent;
 import org.cshaifasweng.winter.events.CustomItemFinishEvent;
 import org.cshaifasweng.winter.events.DashboardSwitchEvent;
 import org.cshaifasweng.winter.models.CatalogItem;
 import org.cshaifasweng.winter.models.CustomItem;
+import org.cshaifasweng.winter.models.CustomItemType;
 import org.cshaifasweng.winter.models.Store;
 import org.cshaifasweng.winter.ui.CustomItemCell;
 import org.cshaifasweng.winter.web.APIAccess;
@@ -22,6 +24,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -31,6 +34,21 @@ public class NewCustomItemController implements Refreshable {
     @FXML
     private ListView<Pair<CatalogItem, Long>> itemsListView;
 
+    @FXML
+    private Label estimatedCost;
+
+    @FXML
+    private TextField lowerPriceBound;
+
+    @FXML
+    private TextField upperPriceBound;
+
+    @FXML
+    private ColorPicker dominantColor;
+
+    @FXML
+    private ChoiceBox<CustomItemType> typeChoiceBox;
+
     private CustomItem createdItem = new CustomItem();
 
     private LilachService service = APIAccess.getService();
@@ -39,8 +57,23 @@ public class NewCustomItemController implements Refreshable {
 
     Store store;
 
+    private void updateCost() {
+        double totalCost = createdItem.getItems().stream()
+                .map(item -> item.getPrice() * createdItem.getQuantities().get(item.getId()))
+                .reduce(Double::sum)
+                .orElse(0.0);
+        createdItem.setPrice(totalCost);
+        estimatedCost.setText(String.valueOf((totalCost)));
+    }
+
     @FXML
     void addItem(ActionEvent event) {
+        createdItem.setItems(createdItem.getItems()
+                .stream()
+                .filter(item -> createdItem.getQuantities().get(item.getId()) > 0)
+                .collect(Collectors.toList()));
+        updateCost();
+
         EventBus.getDefault().post(new DashboardSwitchEvent("catalog"));
         EventBus.getDefault().post(new CustomItemFinishEvent(createdItem));
     }
@@ -48,6 +81,17 @@ public class NewCustomItemController implements Refreshable {
     @FXML
     void cancel(ActionEvent event) {
         EventBus.getDefault().post(new DashboardSwitchEvent("catalog"));
+    }
+
+    @FXML
+    void priceRangeSet() {
+        String onlyNumbers = "^[0-9]+$";
+        if (!lowerPriceBound.getText().matches(onlyNumbers))
+            lowerPriceBound.setText("10");
+        if (!upperPriceBound.getText().matches(onlyNumbers))
+            upperPriceBound.setText("1000");
+        createdItem.setLowerPriceBound(Double.parseDouble(lowerPriceBound.getText()));
+        createdItem.setUpperPriceBound(Double.parseDouble(upperPriceBound.getText()));
     }
 
     @Subscribe
@@ -62,6 +106,8 @@ public class NewCustomItemController implements Refreshable {
         Map<Long, Long> quantities = createdItem.getQuantities();
         if (event.isAdd()) {
             quantities.put(item.getId(), quantities.get(item.getId()) + 1);
+            if (!createdItem.getItems().contains(item))
+                createdItem.getItems().add(item);
         } else {
             if (!quantities.containsKey(item.getId())) return;
             long currentQuantity = quantities.get(item.getId());
@@ -69,6 +115,7 @@ public class NewCustomItemController implements Refreshable {
                 quantities.put(item.getId(), currentQuantity - 1);
         }
         updateTable();
+        updateCost();
     }
 
     private void updateTable() {
@@ -110,6 +157,21 @@ public class NewCustomItemController implements Refreshable {
         EventBus.getDefault().register(this);
         itemsListView.setCellFactory(param -> new CustomItemCell());
         getAvailableItems();
+        typeChoiceBox.setConverter(new StringConverter<CustomItemType>() {
+            @Override
+            public String toString(CustomItemType customItemType) {
+                return customItemType.name();
+            }
+
+            @Override
+            public CustomItemType fromString(String s) {
+                return null;
+            }
+        });
+        typeChoiceBox.setItems(FXCollections.observableList(Arrays.asList(CustomItemType.values())));
+        typeChoiceBox.getSelectionModel().selectedItemProperty().addListener(
+                (observableValue, customItemType, t1) -> createdItem.setType(typeChoiceBox.getValue()));
+        dominantColor.setOnAction(actionEvent -> createdItem.setDominantColor(dominantColor.getValue().toString()));
     }
 
     @Override

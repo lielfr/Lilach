@@ -39,7 +39,7 @@ public class CatalogController implements Refreshable, Initializable {
 
 
 
-    private Set<Item> cart;
+    private List<Item> cart;
     private Map<Long, Long> quantities;
 
     private static final int NUM_COLS = 3;
@@ -225,7 +225,7 @@ public class CatalogController implements Refreshable, Initializable {
 
     @Override
     public void refresh() {
-        cart = new HashSet<>();
+        cart = new ArrayList<>();
         quantities = new HashMap<>();
         EventBus.getDefault().register(this);
         service = APIAccess.getService();
@@ -237,7 +237,6 @@ public class CatalogController implements Refreshable, Initializable {
                         return;
                     getCatalog(stores.get
                             (selectedIndex).getId());
-                    cart.clear();
                     updateCartButton();
                 });
     }

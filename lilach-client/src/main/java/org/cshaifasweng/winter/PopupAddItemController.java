@@ -12,13 +12,13 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
 import java.net.URL;
+import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
-import java.util.Set;
 
 public class PopupAddItemController implements Initializable {
 
-    private Set<Item> cart;
+    private List<Item> cart;
     private Stage stage;
     private Map<Long, Long> quantities;
 
