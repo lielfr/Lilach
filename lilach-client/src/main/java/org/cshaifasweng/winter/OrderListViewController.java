@@ -68,7 +68,8 @@ public class OrderListViewController implements Refreshable {
             try {
                 Scene scene = new Scene(LayoutManager.getInstance().getFXML("show_order").getKey());
                 stage.show();
-                EventBus.getDefault().post(new OrderShowEvent(tableView1.getSelectionModel().getSelectedItem()));
+                EventBus.getDefault().post(
+                        new OrderShowEvent(tableView1.getSelectionModel().getSelectedItem(), stage));
             } catch (IOException e) {
                 e.printStackTrace();
             }
