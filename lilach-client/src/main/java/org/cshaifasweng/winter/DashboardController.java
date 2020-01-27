@@ -5,8 +5,8 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Label;
-import javafx.scene.control.ScrollPane;
 import javafx.util.Pair;
 import org.cshaifasweng.winter.events.DashboardSwitchEvent;
 import org.cshaifasweng.winter.events.LoginChangeEvent;
@@ -30,24 +30,30 @@ public class DashboardController implements Initializable {
     protected static final Logger log = Logger.getLogger(DashboardController.class.getName());
 
     @FXML
-    private ScrollPane containerPane;
+    private DashboardPane containerPane;
 
     @FXML
     private Label welcomeLabel;
 
     private Pair<Parent, Object> currentWindow;
 
+    private Scene scene;
+
     private void setPage(String page) {
         try {
             if (currentWindow != null) {
+                scene = currentWindow.getKey().getScene();
                 Refreshable currentController = (Refreshable) currentWindow.getValue();
                 currentController.onSwitch();
             }
+            containerPane.setContent(null);
+            currentWindow = null;
+            containerPane.refreshPane();
             Pair<Parent,Object> dataPair = LayoutManager.getInstance().getFXML(page);
             containerPane.setContent(dataPair.getKey());
+            containerPane.refreshPane();
             Refreshable controller = (Refreshable) dataPair.getValue();
             controller.refresh();
-            containerPane.autosize();
             currentWindow = dataPair;
         } catch (IOException e) {
             e.printStackTrace();
@@ -61,9 +67,7 @@ public class DashboardController implements Initializable {
 
     @Subscribe
     public void handleUserLogin(LoginChangeEvent event) {
-
         User user = APIAccess.getCurrentUser();
-        log.finest("Dashboard: got LoginEvent, user = " + user);
         if (user == null)
             welcomeLabel.setText("Welcome, Guest");
         else
