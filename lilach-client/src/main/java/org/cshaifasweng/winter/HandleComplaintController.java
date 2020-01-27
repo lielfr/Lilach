@@ -19,8 +19,6 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-import javax.swing.*;
-
 public class HandleComplaintController implements Refreshable {
 
 
@@ -189,6 +187,11 @@ public class HandleComplaintController implements Refreshable {
 
     @Override
     public void refresh() {
+
+    }
+
+    @Override
+    public void onSwitch() {
 
     }
 }

@@ -215,4 +215,9 @@ public class AddItemController implements Refreshable {
         typeChoiceBox.getSelectionModel().selectedIndexProperty()
                 .addListener((observableValue, number, t1) -> createdItem.setItemType(typeChoiceBox.getValue()));
     }
+
+    @Override
+    public void onSwitch() {
+
+    }
 }

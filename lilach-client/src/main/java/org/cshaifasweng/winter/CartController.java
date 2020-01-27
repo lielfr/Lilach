@@ -15,6 +15,11 @@ public class CartController implements Refreshable {
     public void refresh() {
     }
 
+    @Override
+    public void onSwitch() {
+
+    }
+
     @FXML
     private void backToCatalog() throws IOException {
         EventBus.getDefault().post(new DashboardSwitchEvent("primary"));

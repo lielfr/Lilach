@@ -4,32 +4,27 @@ package org.cshaifasweng.winter;
 import org.cshaifasweng.winter.da.CatalogItemsRepository;
 import org.cshaifasweng.winter.da.CustomerRepository;
 import org.cshaifasweng.winter.da.UserRepository;
-import org.cshaifasweng.winter.models.CatalogItem;
 import org.cshaifasweng.winter.services.MailService;
-import org.cshaifasweng.winter.models.Customer;
-import org.cshaifasweng.winter.models.User;
-import org.cshaifasweng.winter.security.SecurityConstants;
-import org.cshaifasweng.winter.security.WebSecurityConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.Bean;
+import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.annotation.EnableScheduling;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Properties;
+import java.util.concurrent.Executor;
 
 @SpringBootApplication
 @EnableScheduling
+@EnableAsync
 public class SpringServer {
 
     private static ConfigurableApplicationContext context = null;
@@ -76,13 +71,18 @@ public class SpringServer {
     @Bean
     CommandLineRunner runner() {
         return args -> {
-            // TODO: Initialize the data here (or maybe somewhere else?)
-
-
-
             log.info("Server is up and running!");
-
         };
 
+    }
+
+    @Bean
+    public Executor taskExecutor() {
+        ThreadPoolTaskExecutor taskExecutor = new ThreadPoolTaskExecutor();
+        taskExecutor.setCorePoolSize(10);
+        taskExecutor.setMaxPoolSize(20);
+        taskExecutor.setQueueCapacity(100);
+        taskExecutor.initialize();
+        return taskExecutor;
     }
 }
