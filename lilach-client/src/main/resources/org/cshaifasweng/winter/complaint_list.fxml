@@ -6,6 +6,7 @@
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
@@ -28,7 +29,12 @@
          <bottom>
             <VBox alignment="CENTER" prefHeight="54.0" prefWidth="904.0" BorderPane.alignment="CENTER">
                <children>
-                  <Button fx:id="backButton" mnemonicParsing="false" onMouseClicked="#back" text="Back" />
+                  <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="20.0">
+                     <children>
+                        <Button fx:id="backButton" mnemonicParsing="false" onMouseClicked="#back" text="Back to main page" />
+                        <Button fx:id="updateButton" mnemonicParsing="false" onMouseClicked="#updateTable" text="Update table" />
+                     </children>
+                  </HBox>
                </children>
             </VBox>
          </bottom>
