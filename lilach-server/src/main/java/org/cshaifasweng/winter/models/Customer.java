@@ -1,6 +1,7 @@
 package org.cshaifasweng.winter.models;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 
 import javax.persistence.*;
@@ -33,6 +34,7 @@ public class Customer extends User {
     private List<Transaction> transactions;
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "openedBy")
+    @JsonIgnore
     private Collection<Complaint> complaints;
 
     @ManyToMany(fetch = FetchType.LAZY)

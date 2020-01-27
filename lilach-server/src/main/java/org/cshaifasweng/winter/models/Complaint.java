@@ -1,11 +1,11 @@
 package org.cshaifasweng.winter.models;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.Collection;
 import java.util.Date;
 
 @Entity
@@ -16,23 +16,26 @@ public class Complaint {
 
 //    private boolean purchased;
     private String description;
+    @Type(type = "org.hibernate.type.NumericBooleanType")
     private boolean ordered;
 
     // TODO: Change this once we have an order entity in place.
     private String orderNum;
 
+    @Type(type = "org.hibernate.type.NumericBooleanType")
     private boolean email;
 
     private String answer;
 
     private Double compensation = 0.0;
 
-    private  boolean isOpen;
+    @Type(type = "org.hibernate.type.NumericBooleanType")
+    private boolean isOpen;
 
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Customer openedBy;
 
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.EAGER)
     private Store store;
 
     public boolean isOrdered() {

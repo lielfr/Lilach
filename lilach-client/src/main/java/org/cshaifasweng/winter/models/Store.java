@@ -22,6 +22,7 @@ public class Store {
 
     private List<Customer> customers;
 
+    @JsonIgnore
     private List<Complaint> complaints;
 
     private List<CatalogItem> catalogItems;

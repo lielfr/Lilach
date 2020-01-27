@@ -1,14 +1,14 @@
 package org.cshaifasweng.winter;
 
 import javafx.application.Platform;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
+import javafx.util.StringConverter;
 import org.cshaifasweng.winter.events.DashboardSwitchEvent;
 import org.cshaifasweng.winter.models.Complaint;
 import org.cshaifasweng.winter.models.Customer;
@@ -21,7 +21,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-import java.util.List;
+import java.io.IOException;
 
 public class ComplaintController implements Refreshable {
 
@@ -61,9 +61,12 @@ public class ComplaintController implements Refreshable {
     @FXML
     private Label invalidInputOrNum;
 
+    @FXML
+    private ComboBox<Store> storeComboBox;
+
 
     private boolean status = true;
-//    Complaint complaint = new Complaint();
+    Complaint complaint = new Complaint();
     User currentUser = APIAccess.getCurrentUser();
 
 
@@ -147,20 +150,15 @@ public class ComplaintController implements Refreshable {
         }
         complaint.setOpen(true);
         complaint.setOpenedBy((Customer)currentUser);
-        Customer customer = (Customer) currentUser;
-        complaint.setStore(customer.getStores().get(0));
     }
-/*kjsdlfkjsdafkljflkdsflkasdf*/
     @FXML
-    void sendComplaint(ActionEvent event) {
+    void sendComplaint(ActionEvent event) throws IOException {
         restVisible();
 
         //TODO: Add a popup here.
         if (!inputCheck()) return;
 
         // TODO: Actually instantiate the complaint (using new and all the fields).
-        Complaint complaint;
-        complaint = new Complaint();
         fillComplaint(complaint);
         LilachService service = APIAccess.getService();
         service.newComplaint(complaint).enqueue(new Callback<Complaint>() {
@@ -186,7 +184,25 @@ public class ComplaintController implements Refreshable {
 
     @Override
     public void refresh() {
+        storeComboBox.setConverter(new StringConverter<Store>() {
+            @Override
+            public String toString(Store store) {
+                return store.getName();
+            }
 
+            @Override
+            public Store fromString(String s) {
+                return null;
+            }
+        });
+        Customer customer = (Customer) currentUser;
+        storeComboBox.setItems(FXCollections.observableList(customer.getStores()));
+        storeComboBox.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Store>() {
+            @Override
+            public void changed(ObservableValue<? extends Store> observableValue, Store store, Store t1) {
+                complaint.setStore(customer.getStores().get(storeComboBox.getSelectionModel().getSelectedIndex()));
+            }
+        });
     }
 
     @Override

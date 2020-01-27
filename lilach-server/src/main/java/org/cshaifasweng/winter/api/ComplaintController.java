@@ -31,7 +31,8 @@ public class ComplaintController {
         if (authentication == null) throw new LogicalException("Authentication cannot be null");
         User user = userService.getUser(authentication.getName());
         if (!(user instanceof Customer)) throw new LogicalException("User should be a customer");
-        return complaintService.newComplaint(complaint.getDescription(), complaint.isEmail(), (Customer) user);
+        System.out.println("MOO: " + complaint.getStore() + ", " + complaint.isEmail());
+        return complaintService.newComplaint(complaint.getDescription(), complaint.isEmail(), (Customer) user, complaint.getStore());
     }
 
     @GetMapping("/complaint/{id}")

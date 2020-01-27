@@ -1,5 +1,7 @@
 package org.cshaifasweng.winter.models;
 
+import org.hibernate.annotations.Type;
+
 import javax.persistence.*;
 import java.util.*;
 
@@ -19,6 +21,7 @@ public class Order {
 
     private String greeting;
 
+    @Type(type = "org.hibernate.type.NumericBooleanType")
     private boolean deliverToAnother;
 
     private String deliveryAddress;
