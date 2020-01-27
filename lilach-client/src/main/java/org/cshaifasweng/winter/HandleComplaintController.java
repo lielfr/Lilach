@@ -7,8 +7,10 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
+import org.cshaifasweng.winter.events.ComplaintHandleEvent;
 import org.cshaifasweng.winter.events.DashboardSwitchEvent;
 import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 
 import javax.swing.*;
 
@@ -66,6 +68,27 @@ public class HandleComplaintController implements Refreshable {
     void clearText(ActionEvent event) {
         answerBox.setText("");
     }
+
+    @Subscribe
+    public void handleEvent(ComplaintHandleEvent event) {
+        complaintNum.setText(Long.toString(event.getComplaint().getId()));
+        String fullName;
+        String firstName;
+        firstName = event.getComplaint().getOpenedBy().getFirstName();
+        String lastName;
+        lastName = event.getComplaint().getOpenedBy().getLastName();
+        fullName = firstName + lastName;
+        customerName.setText(fullName);
+        purchaseMadeCheckBox.setSelected(event.getComplaint().isOrdered());
+        if(purchaseMadeCheckBox.isSelected()){
+            complaintOpDaLabel.setText(event.getComplaint().getOrderNum());
+        }else{
+            complaintOpDaLabel.setText("");
+        }
+        complaintOpTiLabel.setText(event.getComplaint().getComplaintOpen().toString());
+        complaintBox.setText(event.getComplaint().getDescription());
+    }
+
     private boolean isValid (TextField fieldA){
         int countDot = 0;
         for (int i = 0; i<fieldA.getText().length() ; i++){
