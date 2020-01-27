@@ -1,7 +1,5 @@
 package org.cshaifasweng.winter;
 
-import java.io.IOException;
-
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
 import org.cshaifasweng.winter.events.DashboardSwitchEvent;
@@ -10,6 +8,8 @@ import org.cshaifasweng.winter.models.CatalogItem;
 import org.cshaifasweng.winter.web.APIAccess;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
+
+import java.io.IOException;
 
 public class SecondaryController implements Refreshable {
 
@@ -50,5 +50,10 @@ public class SecondaryController implements Refreshable {
         EventBus.getDefault().register(this);
         currentPrice = PrimaryController.selectedItem.getPrice();
         priceField.setText(Double.toString(currentPrice));
+    }
+
+    @Override
+    public void onSwitch() {
+
     }
 }

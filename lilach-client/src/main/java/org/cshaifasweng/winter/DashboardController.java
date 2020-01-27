@@ -4,8 +4,10 @@ import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
+import javafx.util.Pair;
 import org.cshaifasweng.winter.events.DashboardSwitchEvent;
 import org.cshaifasweng.winter.events.LoginChangeEvent;
 import org.cshaifasweng.winter.events.TokenSetEvent;
@@ -33,12 +35,20 @@ public class DashboardController implements Initializable {
     @FXML
     private Label welcomeLabel;
 
+    private Pair<Parent, Object> currentWindow;
+
     private void setPage(String page) {
         try {
-            containerPane.setContent(LayoutManager.getInstance().getFXML(page));
-            Refreshable controller = (Refreshable) LayoutManager.getInstance().getController(page);
+            if (currentWindow != null) {
+                Refreshable currentController = (Refreshable) currentWindow.getValue();
+                currentController.onSwitch();
+            }
+            Pair<Parent,Object> dataPair = LayoutManager.getInstance().getFXML(page);
+            containerPane.setContent(dataPair.getKey());
+            Refreshable controller = (Refreshable) dataPair.getValue();
             controller.refresh();
             containerPane.autosize();
+            currentWindow = dataPair;
         } catch (IOException e) {
             e.printStackTrace();
         }

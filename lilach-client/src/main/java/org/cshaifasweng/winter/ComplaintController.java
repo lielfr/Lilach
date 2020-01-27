@@ -175,4 +175,9 @@ public class ComplaintController implements Refreshable {
     public void refresh() {
 
     }
+
+    @Override
+    public void onSwitch() {
+
+    }
 }

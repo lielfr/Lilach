@@ -10,8 +10,6 @@ import javafx.scene.input.MouseEvent;
 import org.cshaifasweng.winter.events.DashboardSwitchEvent;
 import org.greenrobot.eventbus.EventBus;
 
-import javax.swing.*;
-
 public class HandleComplaintController implements Refreshable {
 
 
@@ -129,6 +127,11 @@ public class HandleComplaintController implements Refreshable {
 
     @Override
     public void refresh() {
+
+    }
+
+    @Override
+    public void onSwitch() {
 
     }
 }

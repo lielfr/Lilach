@@ -108,4 +108,9 @@ public class NewCustomItemController implements Refreshable {
         itemsListView.setCellFactory(param -> new CustomItemCell());
         getAvailableItems();
     }
+
+    @Override
+    public void onSwitch() {
+        EventBus.getDefault().unregister(this);
+    }
 }

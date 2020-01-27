@@ -428,7 +428,7 @@ public class OrderController implements Refreshable {
 
     @FXML
     void cancel(ActionEvent event) {
-        EventBus.getDefault().post(new DashboardSwitchEvent("primary"));
+        EventBus.getDefault().post(new DashboardSwitchEvent("catalog"));
     }
 
 
@@ -465,7 +465,7 @@ public class OrderController implements Refreshable {
     void goBack(ActionEvent event) {
         SingleSelectionModel<Tab> selectionModel = tabPane.getSelectionModel();
         if (selectionModel.getSelectedIndex() == 0) {
-            EventBus.getDefault().post(new DashboardSwitchEvent("primary"));
+            EventBus.getDefault().post(new DashboardSwitchEvent("catalog"));
         } else {
             selectionModel.selectPrevious();
         }
@@ -726,6 +726,11 @@ public class OrderController implements Refreshable {
         //if(selectionModel.getSelectedIndex() == 0){
 
         updateButtons();
+    }
+
+    @Override
+    public void onSwitch() {
+        EventBus.getDefault().unregister(this);
     }
 
 
