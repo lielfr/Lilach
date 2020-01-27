@@ -5,6 +5,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.stage.Stage;
 import org.cshaifasweng.winter.events.OrderShowEvent;
 import org.cshaifasweng.winter.models.Order;
 import org.cshaifasweng.winter.web.APIAccess;
@@ -54,6 +55,7 @@ public class ShowOrderController implements Refreshable {
 
 
     private Order currentOrder;
+    private Stage stage;
 
     @Subscribe
     public void handleEvent(OrderShowEvent event){
@@ -68,18 +70,19 @@ public class ShowOrderController implements Refreshable {
     deliveryAddressLabel.setText(currentOrder.getDeliveryAddress());
     recipientLabel.setText(currentOrder.getRecipientMail());
     priceLabel.setText(Double.toString(currentOrder.getPrice()));
+    stage = event.getPopupStage();
     }
 
     @FXML
     void cancelOrder(ActionEvent event) {
         LilachService service = APIAccess.getService();
         service.cancelOrder(currentOrder.getId());
-
+        stage.close();
     }
 
     @FXML
     void exitScreen(ActionEvent event) {
-
+        stage.close();
     }
 
     @Override
