@@ -21,6 +21,8 @@
             <Button layoutX="10.0" layoutY="114.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#createaccount" text="Create account" />
             <Button layoutX="10.0" layoutY="114.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#cartButton" text="Cart" />
             <Button layoutX="10.0" layoutY="182.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#addItem" text="Add item" />
+            <Button layoutX="10.0" layoutY="208.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#myOrders" text="My orders" />
+            <Button layoutX="10.0" layoutY="234.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#openComplaints" text="Open complaints" />
          </children>
       </VBox>
       <DashboardPane fx:id="containerPane" fitToHeight="true" fitToWidth="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="696.0" prefWidth="904.0" HBox.hgrow="ALWAYS">

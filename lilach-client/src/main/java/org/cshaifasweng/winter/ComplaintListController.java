@@ -31,10 +31,10 @@ public class ComplaintListController {
     }
 
     private void populateTableComplaints(){
-        complaintListTable.getColumns().clear();
-        TableColumn<Complaint, Long> idColumn = new TableColumn<>("Id");
-        idColumn.setCellValueFactory(new PropertyValueFactory<>("Id"));
-//        TableColumn
+//        complaintListTable.getColumns().clear();
+//        TableColumn<Complaint, Long> idColumn = new TableColumn<>("Id");
+//        idColumn.setCellValueFactory(new PropertyValueFactory<>("Id"));
+////        TableColumn
 
 
     }
