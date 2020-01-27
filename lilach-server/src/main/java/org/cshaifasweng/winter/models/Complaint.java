@@ -4,8 +4,6 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 
 @Entity
@@ -57,10 +55,10 @@ public class Complaint {
     @ManyToOne(fetch = FetchType.EAGER)
     private Employee handledBy;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd@HH:mm:ss.SSSZ")
     private Date complaintOpen;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd@HH:mm:ss.SSSZ")
     private Date complaintClose;
 
     public Complaint() {
@@ -110,21 +108,6 @@ public class Complaint {
 
     public void setCompensation(Double compensation) {
         this.compensation = compensation;
-    }
-
-    private void getOpenTime(){
-        complaintOpen = new Date();
-        String StrDateFormat =  "hh:mm:ss a";
-        DateFormat dateFormat = new SimpleDateFormat(StrDateFormat);
-        String formattedDate= dateFormat.format(complaintOpen);
-
-    }
-    private void getCloseTime(){
-        complaintClose = new Date();
-        String StrDateFormat =  "hh:mm:ss a";
-        DateFormat dateFormat = new SimpleDateFormat(StrDateFormat);
-        String formattedDate= dateFormat.format(complaintClose);
-
     }
 
     public boolean isOpen() {

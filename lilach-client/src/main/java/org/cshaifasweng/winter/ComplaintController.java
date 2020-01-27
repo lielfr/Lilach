@@ -167,7 +167,7 @@ public class ComplaintController implements Refreshable {
 //                Complaint received = response.body();
                 if (response.code() == 200) {
                     Platform.runLater(() -> {
-                        EventBus.getDefault().post(new DashboardSwitchEvent("catalog"));
+                        EventBus.getDefault().post(new DashboardSwitchEvent("complaint_list"));
                     });
                 }
 
@@ -203,6 +203,7 @@ public class ComplaintController implements Refreshable {
                 complaint.setStore(customer.getStores().get(storeComboBox.getSelectionModel().getSelectedIndex()));
             }
         });
+        storeComboBox.getSelectionModel().select(0);
     }
 
     @Override
