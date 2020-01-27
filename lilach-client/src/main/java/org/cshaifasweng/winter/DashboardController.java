@@ -131,7 +131,7 @@ public class DashboardController implements Initializable {
 
     @FXML
     void openComplaints(ActionEvent event) {
-
+        setPage("complaint_list");
     }
 
     @FXML
