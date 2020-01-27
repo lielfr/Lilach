@@ -3,10 +3,12 @@ package org.cshaifasweng.winter;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.DragEvent;
 import javafx.scene.input.MouseEvent;
+import javafx.stage.Stage;
 import org.cshaifasweng.winter.events.DashboardSwitchEvent;
 import org.cshaifasweng.winter.events.OrderShowEvent;
 import org.cshaifasweng.winter.models.Customer;
@@ -18,6 +20,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import java.io.IOException;
 import java.util.Date;
 import java.util.List;
 
@@ -61,7 +64,15 @@ public class OrderListViewController implements Refreshable {
         ContextMenu menu = new ContextMenu();
         MenuItem detailsMenuItem = new MenuItem("Show order");
         detailsMenuItem.setOnAction((event) -> {
-            EventBus.getDefault().post(new OrderShowEvent(tableView1.getSelectionModel().getSelectedItem()));
+            Stage stage = new Stage();
+            try {
+                Scene scene = new Scene(LayoutManager.getInstance().getFXML("show_order").getKey());
+                stage.show();
+                EventBus.getDefault().post(new OrderShowEvent(tableView1.getSelectionModel().getSelectedItem()));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
         });
         menu.getItems().add(detailsMenuItem);
 
