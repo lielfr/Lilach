@@ -63,7 +63,7 @@ public class ComplaintController implements Refreshable {
 
 
     private boolean status = true;
-    Complaint complaint = new Complaint();
+//    Complaint complaint = new Complaint();
     User currentUser = APIAccess.getCurrentUser();
 
 
@@ -148,9 +148,9 @@ public class ComplaintController implements Refreshable {
         complaint.setOpen(true);
         complaint.setOpenedBy((Customer)currentUser);
         Customer customer = (Customer) currentUser;
-        complaint.setStore( customer.getStores().get(0));
+        complaint.setStore(customer.getStores().get(0));
     }
-
+/*kjsdlfkjsdafkljflkdsflkasdf*/
     @FXML
     void sendComplaint(ActionEvent event) {
         restVisible();
@@ -161,12 +161,17 @@ public class ComplaintController implements Refreshable {
         // TODO: Actually instantiate the complaint (using new and all the fields).
         Complaint complaint;
         complaint = new Complaint();
-
+        fillComplaint(complaint);
         LilachService service = APIAccess.getService();
         service.newComplaint(complaint).enqueue(new Callback<Complaint>() {
             @Override
             public void onResponse(Call<Complaint> call, Response<Complaint> response) {
-                Complaint received = response.body();
+//                Complaint received = response.body();
+                if (response.code() == 200) {
+                    Platform.runLater(() -> {
+                        EventBus.getDefault().post(new DashboardSwitchEvent("catalog"));
+                    });
+                }
 
                 // TODO: Replace with something meaningful
                 Platform.runLater(() -> complaintBox.setText("DONE"));
