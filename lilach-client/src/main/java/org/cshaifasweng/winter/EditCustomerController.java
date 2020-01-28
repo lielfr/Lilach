@@ -20,6 +20,8 @@ import org.greenrobot.eventbus.Subscribe;
 import java.net.URL;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.util.Date;
 import java.util.Locale;
 import java.util.ResourceBundle;
 import java.util.regex.Pattern;
@@ -342,33 +344,25 @@ public class EditCustomerController implements Initializable {
     }
 
     private void updateFields(Customer customer){
-        firsNameField;
-
-        lastNameField;
-
-        idNumField;
-
-        phoneField;
-
-        emailField;
-
-        passwordField;
-
-        addressField;
-
-        creditcardField;
-
-        cvvField;
-
-        dateOfBirthPicker;
-
-        expirationPicker;
-
-        subscriptionEndPicker;
-
-        subscriptionChoice;
-
-
+        firsNameField.setText(customer.getFirstName());
+        lastNameField.setText(customer.getLastName());
+        idNumField.setText(customer.getMisparZehut());
+        phoneField.setText(customer.getPhone());
+        emailField.setText(customer.getEmail());
+        passwordField.setText(customer.getPassword());
+        addressField.setText(customer.getAddress());
+        creditcardField.setText(Long.toString(customer.getCreditCard()));
+        cvvField.setText(Long.toString(customer.getCvv()));
+        Date inputBDate = customer.getDateOfBirth();
+        LocalDate bDate = LocalDate.ofInstant(inputBDate.toInstant(), ZoneId.systemDefault());
+        dateOfBirthPicker.setValue(bDate);
+        Date inputExpDate = customer.getExpireDate();
+        LocalDate expDate = LocalDate.ofInstant(inputExpDate.toInstant(), ZoneId.systemDefault());
+        expirationPicker.setValue(expDate);
+        Date inputEndDate = customer.getExpireDate();
+        LocalDate endDate = LocalDate.ofInstant(inputExpDate.toInstant(), ZoneId.systemDefault());
+        subscriptionEndPicker.setValue((endDate));
+        subscriptionChoice.setValue(customer.getSubscriberType());
     }
 
 
