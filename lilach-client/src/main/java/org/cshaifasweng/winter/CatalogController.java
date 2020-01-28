@@ -271,10 +271,10 @@ public class CatalogController implements Refreshable, Initializable {
     @Subscribe
     public void handleItemBuy(CatalogItemBuyEvent event) throws IOException {
         if (!cart.contains(event.getItem())) {
-            quantities.put(event.getItem().getId(), 1L);
+            quantities.put(event.getItem().getId(), (long) event.getQuantity());
             cart.add(event.getItem());
         } else {
-            quantities.put(event.getItem().getId(), quantities.get(event.getItem().getId()) + 1);
+            quantities.put(event.getItem().getId(), quantities.get(event.getItem().getId()) + event.getQuantity());
         }
         updateCartButton();
 

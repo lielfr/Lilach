@@ -4,6 +4,7 @@ import javafx.css.PseudoClass;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import org.cshaifasweng.winter.events.CatalogItemBuyEvent;
@@ -26,13 +27,35 @@ public class CatalogItemViewController implements Initializable {
     @FXML
     private Label itemPriceLabelDiscount;
 
+    @FXML
+    private TextField quantityField;
+
+    private int quantity = 1;
+
     private PseudoClass strikethrough;
 
     private CatalogItem item;
 
     @FXML
+    void addAmount() {
+        quantity++;
+        updateQuantity();
+    }
+
+    @FXML
+    void subtractAmount() {
+        if (quantity == 1) return;
+        quantity--;
+        updateQuantity();
+    }
+
+    private void updateQuantity() {
+        quantityField.setText(String.valueOf(quantity));
+    }
+
+    @FXML
     void buyItem() {
-        EventBus.getDefault().post(new CatalogItemBuyEvent(item));
+        EventBus.getDefault().post(new CatalogItemBuyEvent(item, quantity));
     }
 
     @Override
