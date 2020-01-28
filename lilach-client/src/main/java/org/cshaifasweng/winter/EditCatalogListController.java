@@ -2,8 +2,6 @@ package org.cshaifasweng.winter;
 
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.event.EventTarget;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -53,6 +51,8 @@ public class EditCatalogListController implements Refreshable {
                     TableColumn<CatalogItem, String> pictureColumn = new TableColumn<>("Picture");
                     TableColumn<CatalogItem, String> descriptionColumn = new TableColumn<CatalogItem, String>("Description");
                     TableColumn<CatalogItem, Double> priceColumn = new TableColumn<>("Price");
+                    TableColumn<CatalogItem, Double> discountAmountColumn = new TableColumn<>("Discount amount");
+                    TableColumn<CatalogItem, Double> discountPercentColumn = new TableColumn<>("Discount %");
 
 
                     idColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
@@ -76,9 +76,11 @@ public class EditCatalogListController implements Refreshable {
                     pictureColumn.setCellValueFactory(new PropertyValueFactory<>("picture"));
                     descriptionColumn.setCellValueFactory(new PropertyValueFactory<>("description"));
                     priceColumn.setCellValueFactory(new PropertyValueFactory<>("price"));
+                    discountAmountColumn.setCellValueFactory(new PropertyValueFactory<>("discountAmount"));
+                    discountPercentColumn.setCellValueFactory(new PropertyValueFactory<>("discountPercent"));
 
                     dataTable.getColumns().addAll(idColumn, descriptionColumn,
-                            priceColumn, pictureColumn);
+                            priceColumn, discountAmountColumn, discountPercentColumn, pictureColumn);
 
                     dataTable.setItems(FXCollections.observableList(items));
 
@@ -88,33 +90,30 @@ public class EditCatalogListController implements Refreshable {
 
                     menu.getItems().addAll(item, item2);
 
-                    menu.setOnAction(new EventHandler<ActionEvent>() {
-                        @Override
-                        public void handle(ActionEvent actionEvent) {
-                            EventTarget target = actionEvent.getTarget();
-                            int selectedIndex = dataTable.getSelectionModel().getSelectedIndex();
-                            selectedItem = items.get(selectedIndex);
-                            if (item.equals(target)) {
-                                EventBus.getDefault().post(new DashboardSwitchEvent("add_item"));
-                                EventBus.getDefault().post(new CatalogItemEditEvent(selectedItem));
-                            } else if (item2.equals(target)) {
-                                service.deleteItem(selectedItem.getId()).enqueue(new Callback<Void>() {
-                                    @Override
-                                    public void onResponse(Call<Void> call, Response<Void> response) {
-                                        Platform.runLater(() -> {
-                                            populateTable(storeChoiceBox.getValue().getId());
-                                        });
+                    menu.setOnAction(actionEvent -> {
+                        EventTarget target = actionEvent.getTarget();
+                        int selectedIndex = dataTable.getSelectionModel().getSelectedIndex();
+                        selectedItem = items.get(selectedIndex);
+                        if (item.equals(target)) {
+                            EventBus.getDefault().post(new DashboardSwitchEvent("add_item"));
+                            EventBus.getDefault().post(new CatalogItemEditEvent(selectedItem));
+                        } else if (item2.equals(target)) {
+                            service.deleteItem(selectedItem.getId()).enqueue(new Callback<Void>() {
+                                @Override
+                                public void onResponse(Call<Void> call1, Response<Void> response1) {
+                                    Platform.runLater(() -> {
+                                        populateTable(storeChoiceBox.getValue().getId());
+                                    });
 
-                                    }
+                                }
 
-                                    @Override
-                                    public void onFailure(Call<Void> call, Throwable throwable) {
+                                @Override
+                                public void onFailure(Call<Void> call1, Throwable throwable) {
 
-                                    }
-                                });
-                            }
-
+                                }
+                            });
                         }
+
                     });
 
                     Utils.addContextMenu(dataTable, menu);

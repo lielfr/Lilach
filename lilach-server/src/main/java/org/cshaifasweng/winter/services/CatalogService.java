@@ -43,6 +43,10 @@ public class CatalogService {
         dbItem.setItemsSold(item.getItemsSold());
         dbItem.setPicture(item.getPicture());
         dbItem.setPrice(item.getPrice());
+        dbItem.setDiscountPercent(item.getDiscountPercent());
+        dbItem.setDiscountAmount(item.getDiscountAmount());
+        dbItem.setItemType(item.getItemType());
+        dbItem.setStore(item.getStore());
         repository.save(dbItem);
         return dbItem;
     }
