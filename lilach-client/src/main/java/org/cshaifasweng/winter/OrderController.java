@@ -691,7 +691,7 @@ public class OrderController implements Refreshable {
         }
 
         if (selectionModel.getSelectedIndex() == 4) {
-            nextButton.setText("Send order");
+            nextButton.setText("Place order");
         } else {
             nextButton.setText("Next");
         }
