@@ -3,16 +3,25 @@ package org.cshaifasweng.winter;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.stage.Stage;
+import org.cshaifasweng.winter.events.DashboardSwitchEvent;
 import org.cshaifasweng.winter.events.OrderShowEvent;
 import org.cshaifasweng.winter.models.Order;
 import org.cshaifasweng.winter.web.APIAccess;
 import org.cshaifasweng.winter.web.LilachService;
+import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
-public class ShowOrderController implements Refreshable {
+import java.net.URL;
+import java.util.ResourceBundle;
+
+public class ShowOrderController implements Refreshable, Initializable {
 
     @FXML
     private Button exitButton;
@@ -57,6 +66,8 @@ public class ShowOrderController implements Refreshable {
     private Order currentOrder;
     private Stage stage;
 
+    private Stage popupStage;
+
     @Subscribe
     public void handleEvent(OrderShowEvent event){
     currentOrder = event.getOrder();
@@ -70,19 +81,36 @@ public class ShowOrderController implements Refreshable {
     deliveryAddressLabel.setText(currentOrder.getDeliveryAddress());
     recipientLabel.setText(currentOrder.getRecipientMail());
     priceLabel.setText(Double.toString(currentOrder.getPrice()));
-    stage = event.getPopupStage();
+    popupStage = event.getPopupStage();
     }
 
     @FXML
     void cancelOrder(ActionEvent event) {
         LilachService service = APIAccess.getService();
-        service.cancelOrder(currentOrder.getId());
-        stage.close();
+        service.cancelOrder(currentOrder.getId()).enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(Call<Void> call, Response<Void> response) {
+                if (response.code() == 200) {
+                    Platform.runLater(() -> {
+                        popupStage.close();
+                        // Force refresh
+                        EventBus.getDefault().post(new DashboardSwitchEvent("order_list_view"));
+                    });
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Void> call, Throwable throwable) {
+
+            }
+        });
+
     }
 
     @FXML
     void exitScreen(ActionEvent event) {
-        stage.close();
+        popupStage.hide();
+        popupStage.close();
     }
 
     @Override
@@ -93,5 +121,10 @@ public class ShowOrderController implements Refreshable {
     @Override
     public void onSwitch() {
 
+    }
+
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+        EventBus.getDefault().register(this);
     }
 }
