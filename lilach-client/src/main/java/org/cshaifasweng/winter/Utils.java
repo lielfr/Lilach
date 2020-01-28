@@ -1,10 +1,7 @@
 package org.cshaifasweng.winter;
 
 import javafx.event.EventHandler;
-import javafx.scene.control.ContextMenu;
-import javafx.scene.control.TableCell;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 
@@ -41,6 +38,15 @@ public class Utils<T> {
 
     public static LocalDate toLocalDate(Date dateToConvert) {
         return new java.sql.Date(dateToConvert.getTime()).toLocalDate();
+    }
+
+    public static boolean emptyOrNullCheckField(TextField checkedField, Label errorField, String empty) {
+        if (checkedField == null || checkedField.getText() == null || checkedField.getText().isEmpty()) {
+            errorField.setVisible(true);
+            errorField.setText(empty);
+            return false;
+        }
+        return true;
     }
 
 }

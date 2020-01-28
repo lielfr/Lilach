@@ -10,6 +10,7 @@ import javafx.stage.Stage;
 import javafx.util.Pair;
 import javafx.util.StringConverter;
 import org.cshaifasweng.winter.events.CustomerSendEvent;
+import org.cshaifasweng.winter.events.UserEditedEvent;
 import org.cshaifasweng.winter.models.Customer;
 import org.cshaifasweng.winter.models.SubscriberType;
 import org.cshaifasweng.winter.models.User;
@@ -136,7 +137,6 @@ public class EditCustomerController implements Initializable {
         cvvField.setDisable(false);
         dateOfBirthPicker.setDisable(false);
         expirationPicker.setDisable(false);
-        subscriptionEndPicker.setDisable(false);
         subscriptionChoice.setDisable(false);
     }
 
@@ -171,14 +171,6 @@ public class EditCustomerController implements Initializable {
 //        subscriptionEndPicker.setDisable(false);
 //        subscriptionChoice.setDisable(false);
 //    }
-    private boolean emptyOrNullCheckField(TextField checkedField, Label errorField) {
-        if (checkedField == null || checkedField.getText() == null || checkedField.getText().isEmpty()) {
-            errorField.setVisible(true);
-            errorField.setText(empty);
-            return false;
-        }
-        return true;
-    }
 
     private boolean emptyCheck() {
         boolean val = true;
@@ -194,7 +186,11 @@ public class EditCustomerController implements Initializable {
         testPairs.add(new Pair<>(cvvField, cvvLabel));
 
         for (Pair<TextField, Label> pair : testPairs) {
-            val = val & emptyOrNullCheckField(pair.getKey(), pair.getValue());
+            val = val & Utils.emptyOrNullCheckField(pair.getKey(), pair.getValue(), empty);
+        }
+
+        if(!(checkDates())){
+            val = false;
         }
 
         return val;
@@ -394,6 +390,7 @@ public class EditCustomerController implements Initializable {
                         System.out.println("adding the handling success");
                         Platform.runLater(() -> {
                            stage.close();
+                           EventBus.getDefault().post(new UserEditedEvent());
                         });
                     }
                 }
@@ -434,6 +431,7 @@ public class EditCustomerController implements Initializable {
 
     @Subscribe
     public void handleEvent(CustomerSendEvent event) {
+        if (event.getCustomer() == null) return;
         customer = event.getCustomer();
 
         fillFields(customer);

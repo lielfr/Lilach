@@ -12,6 +12,8 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 import javafx.util.StringConverter;
 import org.cshaifasweng.winter.events.CustomerSendEvent;
+import org.cshaifasweng.winter.events.DashboardSwitchEvent;
+import org.cshaifasweng.winter.events.UserEditedEvent;
 import org.cshaifasweng.winter.models.Customer;
 import org.cshaifasweng.winter.models.Store;
 import org.cshaifasweng.winter.models.User;
@@ -19,6 +21,7 @@ import org.cshaifasweng.winter.models.UserType;
 import org.cshaifasweng.winter.web.APIAccess;
 import org.cshaifasweng.winter.web.LilachService;
 import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -56,9 +59,14 @@ public class UserDisplayController implements Refreshable, Initializable {
     private UserType selectedType = UserType.ALL;
     private List<User> usersList;
 
+    @Subscribe
+    public void handleUserEdited(UserEditedEvent event) {
+        refreshPage();
+    }
+
     @FXML
     void backToCatalog(ActionEvent event) {
-
+        EventBus.getDefault().post(new DashboardSwitchEvent("catalog"));
     }
 
     @FXML
@@ -67,13 +75,13 @@ public class UserDisplayController implements Refreshable, Initializable {
     }
 
     @FXML
-    void refreshPage(ActionEvent event) {
-
+    void refreshPage() {
+        populateTable();
     }
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-
+        EventBus.getDefault().register(this);
     }
 
     private void populateTable() {

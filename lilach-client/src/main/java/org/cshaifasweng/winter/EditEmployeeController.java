@@ -1,7 +1,6 @@
 package org.cshaifasweng.winter;
 
 import javafx.application.Platform;
-import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -10,11 +9,10 @@ import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
-import javafx.util.StringConverter;
+import javafx.util.Pair;
 import org.cshaifasweng.winter.events.CustomerSendEvent;
-import org.cshaifasweng.winter.models.Customer;
+import org.cshaifasweng.winter.events.UserEditedEvent;
 import org.cshaifasweng.winter.models.Employee;
-import org.cshaifasweng.winter.models.SubscriberType;
 import org.cshaifasweng.winter.models.User;
 import org.cshaifasweng.winter.web.APIAccess;
 import org.cshaifasweng.winter.web.LilachService;
@@ -26,9 +24,9 @@ import retrofit2.Response;
 
 import java.net.URL;
 import java.time.LocalDate;
-import java.time.ZoneId;
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.ResourceBundle;
 import java.util.regex.Pattern;
 
@@ -135,41 +133,20 @@ public class EditEmployeeController implements Initializable {
     private boolean emptyCheck() {
         boolean val = true;
 
-        if (firsNameField.getText().isEmpty()) {
-            firstNameLabel.setVisible(true);
-            firstNameLabel.setText(empty);
-            val = false;
+        List<Pair<TextField, Label>> testPairs = new ArrayList<>();
+        testPairs.add(new Pair<>(firsNameField, firstNameLabel));
+        testPairs.add(new Pair<>(lastNameField, lastNameLabel));
+        testPairs.add(new Pair<>(idNumField, idNumLabel));
+        testPairs.add(new Pair<>(phoneField, phoneNumLabel));
+        testPairs.add(new Pair<>(emailField, emailLabel));
+
+        for (Pair<TextField, Label> pair : testPairs) {
+            val = val & Utils.emptyOrNullCheckField(pair.getKey(), pair.getValue(), empty);
         }
 
-        if (lastNameField.getText().isEmpty()) {
-            lastNameLabel.setVisible(true);
-            lastNameLabel.setText(empty);
+        if (!checkDates())
             val = false;
-        }
 
-        if (idNumField.getText().isEmpty()) {
-            idNumLabel.setVisible(true);
-            idNumLabel.setText(empty);
-            val = false;
-        }
-
-        if (phoneField.getText().isEmpty()) {
-            phoneNumLabel.setVisible(true);
-            phoneNumLabel.setText(empty);
-            val = false;
-        }
-
-        if (emailField.getText().isEmpty()) {
-            emailLabel.setVisible(true);
-            emailLabel.setText(empty);
-            val = false;
-        }
-
-        if (passwordField.getText().isEmpty()) {
-            passwordLabel.setVisible(true);
-            passwordLabel.setText(empty);
-            val = false;
-        }
         return val;
     }
 
@@ -233,10 +210,9 @@ public class EditEmployeeController implements Initializable {
             val = false;
         }
 
-
-        if(!(checkDates())){
+        System.out.println("Input check!");
+        if (!checkDates())
             val = false;
-        }
 
         return val;
     }
@@ -244,9 +220,11 @@ public class EditEmployeeController implements Initializable {
     private boolean checkDates() {
         boolean val = true;
         LocalDate employedSincePickerDate = employedSincePicker.getValue();
+        System.out.println("Employed since: " + employedSincePickerDate);
+        System.out.println("Is past: " + isPast(employedSincePickerDate));
 
 
-        if (!(isPast(employedSincePickerDate))) {
+        if (!isPast(employedSincePickerDate)) {
             employedLable.setVisible(true);
             employedLable.setText(invalid);
             val = false;
@@ -255,15 +233,14 @@ public class EditEmployeeController implements Initializable {
     }
 
     private void fillFields(Employee employee){
+        customerIdLabel.setText(Long.toString(employee.getId()));
         firsNameField.setText(employee.getFirstName());
         lastNameField.setText(employee.getLastName());
         idNumField.setText(employee.getMisparZehut());
         phoneField.setText(employee.getPhone());
         emailField.setText(employee.getEmail());
-        passwordField.setText(employee.getPassword());
         Date input = employee.getEmployedSince();
-        LocalDate bDate = LocalDate.ofInstant(input.toInstant(), ZoneId.systemDefault());
-        employedSincePicker.setValue(bDate);
+        employedSincePicker.setValue(Utils.toLocalDate(input));
     }
 
     private void updateFields(){
@@ -272,7 +249,8 @@ public class EditEmployeeController implements Initializable {
         employee.setMisparZehut(idNumField.getText());
         employee.setPhone(phoneField.getText());
         employee.setEmail(emailField.getText());
-        employee.setPassword(passwordField.getText());
+        if (passwordField.getText() != null && !passwordField.getText().isEmpty())
+            employee.setPassword(passwordField.getText());
         employee.setEmployedSince(convertToDateViaSqlDate(employedSincePicker.getValue()));
     }
 
@@ -296,10 +274,10 @@ public class EditEmployeeController implements Initializable {
     void saveChanges(ActionEvent event) {
         if(editPressed){
             turnLabelsOff();
-            if(emptyCheck()){
+            if(!emptyCheck()){
                 return;
             }
-            if(inputCheck()){
+            if(!inputCheck()){
                 return;
             }
             updateFields();
@@ -311,6 +289,7 @@ public class EditEmployeeController implements Initializable {
                         System.out.println("adding the handling success");
                         Platform.runLater(() -> {
                             stage.close();
+                            EventBus.getDefault().post(new UserEditedEvent());
                         });
                     }
                 }
@@ -328,11 +307,12 @@ public class EditEmployeeController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         EventBus.getDefault().register(this);
-        customerIdLabel.setText(Long.toString(employee.getId()));
+
     }
 
     @Subscribe
     public void handleEvent(CustomerSendEvent event) {
+        if (event.getEmployee() == null) return;
         employee = event.getEmployee();
         fillFields(employee);
         stage = event.getStage();

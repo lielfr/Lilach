@@ -15,10 +15,12 @@ public class CustomerSendEvent {
     }
 
     public Customer getCustomer() {
+        if (!(user instanceof Customer)) return null;
         return (Customer) user;
     }
 
     public Employee getEmployee() {
+        if (!(user instanceof Employee)) return null;
         return (Employee) user;
     }
 
