@@ -339,7 +339,7 @@ public class EditCustomerController implements Initializable {
         return val;
     }
 
-    private void updateFields(){
+    private void updateFields(Customer customer){
 
     }
 
