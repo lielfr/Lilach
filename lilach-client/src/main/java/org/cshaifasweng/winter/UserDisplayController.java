@@ -11,12 +11,14 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 import javafx.util.StringConverter;
+import org.cshaifasweng.winter.events.CustomerSendEvent;
 import org.cshaifasweng.winter.models.Customer;
 import org.cshaifasweng.winter.models.Store;
 import org.cshaifasweng.winter.models.User;
 import org.cshaifasweng.winter.models.UserType;
 import org.cshaifasweng.winter.web.APIAccess;
 import org.cshaifasweng.winter.web.LilachService;
+import org.greenrobot.eventbus.EventBus;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -100,6 +102,8 @@ public class UserDisplayController implements Refreshable, Initializable {
         MenuItem menuItemEdit = new MenuItem("Edit user");
         MenuItem menuItemUnlock = new MenuItem("Unlock user (if logged in)");
 
+        userContextMenu.getItems().addAll(menuItemEdit, menuItemUnlock);
+
         userContextMenu.setOnAction((actionEvent -> {
             User user = userTable.getSelectionModel().getSelectedItem();
             if (menuItemEdit.equals(actionEvent.getTarget())) {
@@ -112,6 +116,11 @@ public class UserDisplayController implements Refreshable, Initializable {
                     } else {
                         scene = new Scene(LayoutManager.getInstance().getFXML("edit_employee").getKey());
                     }
+
+                    stage.setScene(scene);
+                    stage.show();
+
+                    EventBus.getDefault().post(new CustomerSendEvent(user, stage));
                 } catch (IOException exception) {
                     exception.printStackTrace();
                 }
@@ -137,6 +146,7 @@ public class UserDisplayController implements Refreshable, Initializable {
                             firstNameColumn, lastNameColumn, isLoggedInColumn);
 
                     userTable.setItems(FXCollections.observableArrayList(usersList));
+                    Utils.addContextMenu(userTable, userContextMenu);
                 });
 
 

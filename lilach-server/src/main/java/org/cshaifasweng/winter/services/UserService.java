@@ -128,7 +128,8 @@ public class UserService {
         if (dbObject.getId() != id)
             throw new LogicalException("Id does not match");
         // Mispar Zehut should not be changed
-        dbObject.setPassword(customer.getPassword());
+        if (customer.getPassword() != null)
+            dbObject.setPassword(new BCryptPasswordEncoder().encode(customer.getPassword()));
         dbObject.setFirstName(customer.getFirstName());
         dbObject.setLastName(customer.getLastName());
         dbObject.setSubscriberType(customer.getSubscriberType());
@@ -136,6 +137,9 @@ public class UserService {
         dbObject.setCreditCard(customer.getCreditCard());
         dbObject.setCvv(customer.getCvv());
         dbObject.setPhone(customer.getPhone());
+        dbObject.setDateOfBirth(customer.getDateOfBirth());
+        dbObject.setExpireDate(customer.getExpireDate());
+        dbObject.setMisparZehut(customer.getMisparZehut());
 
         Calendar yearFromNow = Calendar.getInstance();
         yearFromNow.add(Calendar.YEAR, 1);

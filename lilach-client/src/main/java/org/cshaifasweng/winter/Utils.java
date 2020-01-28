@@ -9,6 +9,7 @@ import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.Date;
 
 public class Utils<T> {
@@ -36,6 +37,10 @@ public class Utils<T> {
                 }
             }
         });
+    }
+
+    public static LocalDate toLocalDate(Date dateToConvert) {
+        return new java.sql.Date(dateToConvert.getTime()).toLocalDate();
     }
 
 }

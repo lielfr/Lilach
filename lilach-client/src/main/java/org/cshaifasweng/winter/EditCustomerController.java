@@ -5,17 +5,14 @@ import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Button;
-import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.DatePicker;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.stage.Stage;
+import javafx.util.Pair;
 import javafx.util.StringConverter;
-import org.cshaifasweng.winter.events.ComplaintHandleEvent;
 import org.cshaifasweng.winter.events.CustomerSendEvent;
-import org.cshaifasweng.winter.events.DashboardSwitchEvent;
-import org.cshaifasweng.winter.models.*;
+import org.cshaifasweng.winter.models.Customer;
+import org.cshaifasweng.winter.models.SubscriberType;
+import org.cshaifasweng.winter.models.User;
 import org.cshaifasweng.winter.web.APIAccess;
 import org.cshaifasweng.winter.web.LilachService;
 import org.greenrobot.eventbus.EventBus;
@@ -26,12 +23,7 @@ import retrofit2.Response;
 
 import java.net.URL;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.Locale;
-import java.util.ResourceBundle;
+import java.util.*;
 import java.util.regex.Pattern;
 
 public class EditCustomerController implements Initializable {
@@ -145,6 +137,7 @@ public class EditCustomerController implements Initializable {
         dateOfBirthPicker.setDisable(false);
         expirationPicker.setDisable(false);
         subscriptionEndPicker.setDisable(false);
+        subscriptionChoice.setDisable(false);
     }
 
     private void turnLabelsOff() {
@@ -178,60 +171,32 @@ public class EditCustomerController implements Initializable {
 //        subscriptionEndPicker.setDisable(false);
 //        subscriptionChoice.setDisable(false);
 //    }
+    private boolean emptyOrNullCheckField(TextField checkedField, Label errorField) {
+        if (checkedField == null || checkedField.getText() == null || checkedField.getText().isEmpty()) {
+            errorField.setVisible(true);
+            errorField.setText(empty);
+            return false;
+        }
+        return true;
+    }
 
     private boolean emptyCheck() {
         boolean val = true;
 
-        if (firsNameField.getText().isEmpty()) {
-            firstNameLabel.setVisible(true);
-            firstNameLabel.setText(empty);
-            val = false;
+        List<Pair<TextField, Label>> testPairs = new ArrayList<>();
+        testPairs.add(new Pair<>(firsNameField, firstNameLabel));
+        testPairs.add(new Pair<>(lastNameField, lastNameLabel));
+        testPairs.add(new Pair<>(idNumField, idNumLabel));
+        testPairs.add(new Pair<>(phoneField, phoneNumLabel));
+        testPairs.add(new Pair<>(emailField, emailLabel));
+        testPairs.add(new Pair<>(addressField, addressLabel));
+        testPairs.add(new Pair<>(creditcardField, creditcardLabel));
+        testPairs.add(new Pair<>(cvvField, cvvLabel));
+
+        for (Pair<TextField, Label> pair : testPairs) {
+            val = val & emptyOrNullCheckField(pair.getKey(), pair.getValue());
         }
 
-        if (lastNameField.getText().isEmpty()) {
-            lastNameLabel.setVisible(true);
-            lastNameLabel.setText(empty);
-            val = false;
-        }
-
-        if (idNumField.getText().isEmpty()) {
-            idNumLabel.setVisible(true);
-            idNumLabel.setText(empty);
-            val = false;
-        }
-
-        if (phoneField.getText().isEmpty()) {
-            phoneNumLabel.setVisible(true);
-            phoneNumLabel.setText(empty);
-            val = false;
-        }
-
-        if (emailField.getText().isEmpty()) {
-            emailLabel.setVisible(true);
-            emailLabel.setText(empty);
-            val = false;
-        }
-
-        if (passwordField.getText().isEmpty()) {
-            passwordLabel.setVisible(true);
-            passwordLabel.setText(empty);
-            val = false;
-        }
-        if (addressField.getText().isEmpty()) {
-            addressLabel.setVisible(true);
-            addressLabel.setText(empty);
-            val = false;
-        }
-        if (creditcardField.getText().isEmpty()) {
-            creditcardLabel.setVisible(true);
-            creditcardLabel.setText(empty);
-            val = false;
-        }
-        if (cvvField.getText().isEmpty()) {
-            cvvLabel.setVisible(true);
-            cvvLabel.setText(empty);
-            val = false;
-        }
         return val;
     }
 
@@ -339,7 +304,7 @@ public class EditCustomerController implements Initializable {
         LocalDate dateOfBirth = dateOfBirthPicker.getValue();
         LocalDate expDate = expirationPicker.getValue();
 
-        if (!(isPast(expDate))) {
+        if (!(isPast(dateOfBirth))) {
             dateOfBirthLabel.setVisible(true);
             dateOfBirthLabel.setText(invalid);
             val = false;
@@ -354,25 +319,25 @@ public class EditCustomerController implements Initializable {
     }
 
     private void fillFields(Customer customer){
+        customerIdLabel.setText(Long.toString(customer.getId()));
         firsNameField.setText(customer.getFirstName());
         lastNameField.setText(customer.getLastName());
         idNumField.setText(customer.getMisparZehut());
         phoneField.setText(customer.getPhone());
         emailField.setText(customer.getEmail());
-        passwordField.setText(customer.getPassword());
         addressField.setText(customer.getAddress());
         creditcardField.setText(Long.toString(customer.getCreditCard()));
         cvvField.setText(Long.toString(customer.getCvv()));
         Date inputBDate = customer.getDateOfBirth();
-        LocalDate bDate = LocalDate.ofInstant(inputBDate.toInstant(), ZoneId.systemDefault());
-        dateOfBirthPicker.setValue(bDate);
+        dateOfBirthPicker.setValue(Utils.toLocalDate(inputBDate));
         Date inputExpDate = customer.getExpireDate();
-        LocalDate expDate = LocalDate.ofInstant(inputExpDate.toInstant(), ZoneId.systemDefault());
-        expirationPicker.setValue(expDate);
+        expirationPicker.setValue(Utils.toLocalDate(inputExpDate));
         Date inputEndDate = customer.getExpireDate();
-        LocalDate endDate = LocalDate.ofInstant(inputExpDate.toInstant(), ZoneId.systemDefault());
-        subscriptionEndPicker.setValue((endDate));
-        subscriptionChoice.setValue(customer.getSubscriberType());
+        subscriptionEndPicker.setValue(Utils.toLocalDate(inputEndDate));
+        if (customer.getSubscriberType() == null)
+            subscriptionChoice.getSelectionModel().select(0);
+        else
+            subscriptionChoice.setValue(customer.getSubscriberType());
     }
 
     private void updateFields(){
@@ -381,22 +346,14 @@ public class EditCustomerController implements Initializable {
         customer.setMisparZehut(idNumField.getText());
         customer.setPhone(phoneField.getText());
         customer.setEmail(emailField.getText());
-        customer.setPassword(passwordField.getText());
+        if (passwordField.getText() != null && !passwordField.getText().isEmpty())
+            customer.setPassword(passwordField.getText());
         customer.setAddress(addressField.getText());
         customer.setCreditCard(Long.parseLong(creditcardField.getText()));
-        customer.setCvv(Integer.getInteger(cvvField.getText()));
+        customer.setCvv(Integer.parseInt(cvvField.getText()));
         customer.setDateOfBirth(convertToDateViaSqlDate(dateOfBirthPicker.getValue()));
         customer.setExpireDate(convertToDateViaSqlDate(expirationPicker.getValue()));
-        String choice = subscriptionChoice.getValue().toString();
-        SubscriberType choice1;
-        if(choice.equals("None")){
-            choice1 = null;
-        }
-        if(choice.equals("Month")){
-            choice1= SubscriberType.MONTHLY;
-        }
-        else
-            choice1= SubscriberType.YEARLY;
+        SubscriberType choice1 = subscriptionChoice.getValue();
         customer.setSubscriberType(choice1);
     }
 
@@ -420,10 +377,12 @@ public class EditCustomerController implements Initializable {
     void saveChanges(ActionEvent event) {
         if(editPressed){
             turnLabelsOff();
-            if(emptyCheck()){
+            if(!emptyCheck()){
+                System.out.println("EMPTY CHECK FAILED!");
                 return;
             }
-            if(inputCheck()){
+            if(!inputCheck()){
+                System.out.println("INPUT CHECK FAILED!");
                 return;
             }
             updateFields();
@@ -452,10 +411,11 @@ public class EditCustomerController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         EventBus.getDefault().register(this);
-        customerIdLabel.setText(Long.toString(customer.getId()));
+
         subscriptionChoice.setConverter(new StringConverter<SubscriberType>() {
             @Override
             public String toString(SubscriberType subscriberType) {
+                if (subscriberType == null) return "None";
                 return subscriberType.toString();
             }
 
@@ -464,12 +424,18 @@ public class EditCustomerController implements Initializable {
                 return null;
             }
         });
-        subscriptionChoice.setItems(FXCollections.observableArrayList(Arrays.asList(SubscriberType.values())));
+
+        List<SubscriberType> values = new ArrayList<>();
+        values.add(null);
+        values.addAll(Arrays.asList(SubscriberType.values()));
+
+        subscriptionChoice.setItems(FXCollections.observableArrayList(values));
     }
 
     @Subscribe
     public void handleEvent(CustomerSendEvent event) {
         customer = event.getCustomer();
+
         fillFields(customer);
         stage = event.getStage();
 
