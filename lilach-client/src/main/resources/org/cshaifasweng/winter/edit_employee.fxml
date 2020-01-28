@@ -101,6 +101,7 @@
                         <Label fx:id="passwordLabel" text="Label" textFill="RED" visible="false" GridPane.columnIndex="2" GridPane.rowIndex="5" />
                         <Label text="Employed since" GridPane.rowIndex="6" />
                         <DatePicker fx:id="employedSincePicker" GridPane.columnIndex="1" GridPane.rowIndex="6" />
+                        <Label fx:id="employedLable" text="Label" textFill="RED" visible="false" GridPane.columnIndex="2" GridPane.rowIndex="6" />
                      </children>
                      <VBox.margin>
                         <Insets />
