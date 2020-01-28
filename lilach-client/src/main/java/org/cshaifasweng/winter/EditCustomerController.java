@@ -160,7 +160,7 @@ public class EditCustomerController implements Initializable {
             idNumLabel.setText(empty);
             val = false;
         }
-        phoneField.getText().isEmpty()
+
         if( phoneField.getText().isEmpty()){
             phoneNumLabel.setVisible(true);
             phoneNumLabel.setText(empty);
