@@ -1,5 +1,6 @@
 package org.cshaifasweng.winter;
 
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -9,16 +10,19 @@ import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.stage.Stage;
 import javafx.util.StringConverter;
 import org.cshaifasweng.winter.events.ComplaintHandleEvent;
 import org.cshaifasweng.winter.events.CustomerSendEvent;
-import org.cshaifasweng.winter.models.Customer;
-import org.cshaifasweng.winter.models.Employee;
-import org.cshaifasweng.winter.models.SubscriberType;
-import org.cshaifasweng.winter.models.User;
+import org.cshaifasweng.winter.events.DashboardSwitchEvent;
+import org.cshaifasweng.winter.models.*;
 import org.cshaifasweng.winter.web.APIAccess;
+import org.cshaifasweng.winter.web.LilachService;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 import java.net.URL;
 import java.time.LocalDate;
@@ -124,6 +128,8 @@ public class EditCustomerController implements Initializable {
     boolean editPressed = false;
     private User user;
     private Customer customer;
+    Stage stage;
+
 
 
     private void turnOnFields() {
@@ -407,12 +413,40 @@ public class EditCustomerController implements Initializable {
 
     @FXML
     void exit(ActionEvent event) {
-
+        stage.close();
     }
 
     @FXML
     void saveChanges(ActionEvent event) {
+        if(editPressed){
+            turnLabelsOff();
+            if(emptyCheck()){
+                return;
+            }
+            if(inputCheck()){
+                return;
+            }
+            updateFields();
+            LilachService service = APIAccess.getService();
+            service.updateCustomer(customer.getId(),customer).enqueue(new Callback<Customer>() {
+                @Override
+                public void onResponse(Call<Customer> call, Response<Customer> response) {
+                    if (response.code() == 200) {
+                        System.out.println("adding the handling success");
+                        Platform.runLater(() -> {
+                           stage.close();
+                        });
+                    }
+                }
 
+                @Override
+                public void onFailure(Call<Customer> call, Throwable throwable) {
+
+                }
+            });
+
+        }
+        return;
     }
 
     @Override
@@ -436,5 +470,8 @@ public class EditCustomerController implements Initializable {
     @Subscribe
     public void handleEvent(CustomerSendEvent event) {
         customer = event.getCustomer();
+        fillFields(customer);
+        stage = event.getStage();
+
     }
 }
