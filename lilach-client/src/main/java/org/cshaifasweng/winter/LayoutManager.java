@@ -5,6 +5,7 @@ import javafx.scene.Parent;
 import javafx.util.Pair;
 
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 
 public class LayoutManager {
 
@@ -21,11 +22,29 @@ public class LayoutManager {
     }
 
     public Pair<Parent, Object> getFXML(String name) throws IOException {
-        FXMLLoader loader = new FXMLLoader(LayoutManager.class.getResource(name + ".fxml"));
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(LayoutManager.class.getResource(name + ".fxml"));
+        loader.setControllerFactory(c -> {
+            if (c == CatalogController.class) {
+                return new CatalogController();
+            }
+            Object controller;
+            try {
+                controller = c.getConstructor().newInstance();
+                return controller;
+            } catch (InstantiationException e) {
+                e.printStackTrace();
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            } catch (InvocationTargetException e) {
+                e.printStackTrace();
+            } catch (NoSuchMethodException e) {
+                e.printStackTrace();
+            }
+
+            return null;
+        });
         Parent ret = loader.load();
-//        if (!controllers.containsKey(name))
-//            controllers.put(name, new PriorityQueue<>());
-//        controllers.get(name).add(loader.getController());
         Object controller = loader.getController();
         return new Pair<>(ret, controller);
     }
