@@ -4,6 +4,7 @@ import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
@@ -31,7 +32,7 @@ import java.util.Date;
 import java.util.ResourceBundle;
 import java.util.regex.Pattern;
 
-public class EditEmployeeController {
+public class EditEmployeeController implements Initializable {
 
     @FXML
     private Button exitButton;
