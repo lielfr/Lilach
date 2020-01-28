@@ -63,4 +63,10 @@ public interface LilachService {
     @POST("/image")
     Call<String> uploadImage(@Part MultipartBody.Part image);
 
+    @POST("/custom")
+    Call<CustomItem> newCustomItem(@Body CustomItem item);
+
+    @DELETE("/custom/{id}")
+    Call<Void> deleteCustomItem(@Path("id") long id);
+
 }

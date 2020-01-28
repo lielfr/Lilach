@@ -1,12 +1,17 @@
 package org.cshaifasweng.winter;
 
 import javafx.application.Platform;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.geometry.Insets;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.HBox;
+import javafx.util.Pair;
+import org.cshaifasweng.winter.events.BackToCatalogEvent;
 import org.cshaifasweng.winter.events.DashboardSwitchEvent;
 import org.cshaifasweng.winter.events.OrderCreateEvent;
 import org.cshaifasweng.winter.models.*;
@@ -18,6 +23,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import java.io.IOException;
 import java.text.Format;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -453,9 +459,14 @@ public class OrderController implements Refreshable {
 
     }
 
+    void backToCatalog() {
+        EventBus.getDefault().post(new DashboardSwitchEvent("catalog"));
+        EventBus.getDefault().post(new BackToCatalogEvent(currentOrder.getItems(), currentOrder.getQuantities()));
+    }
+
     @FXML
     void cancel(ActionEvent event) {
-        EventBus.getDefault().post(new DashboardSwitchEvent("catalog"));
+        backToCatalog();
     }
 
 
@@ -492,7 +503,7 @@ public class OrderController implements Refreshable {
     void goBack(ActionEvent event) {
         SingleSelectionModel<Tab> selectionModel = tabPane.getSelectionModel();
         if (selectionModel.getSelectedIndex() == 0) {
-            EventBus.getDefault().post(new DashboardSwitchEvent("catalog"));
+            backToCatalog();
         } else {
             selectionModel.selectPrevious();
         }
@@ -694,12 +705,70 @@ public class OrderController implements Refreshable {
 
     private void populateTable() {
         itemTable.getColumns().clear();
+        TableColumn<Item, String> descriptionColumn = new TableColumn<>("Description");
+        descriptionColumn.setCellValueFactory((cellFeatures) -> {
+            if (cellFeatures.getValue() instanceof CustomItem) {
+                CustomItem customItem = (CustomItem) cellFeatures.getValue();
+                return new SimpleObjectProperty<>("Custom item");
+            }
+            return new SimpleObjectProperty<>(((CatalogItem) cellFeatures.getValue()).getDescription());
+        });
         TableColumn<Item, Double> priceColumn = new TableColumn<>("Price");
         priceColumn.setCellValueFactory(new PropertyValueFactory<>("price"));
-        TableColumn<Item, Double> quantityColumn = new TableColumn<>("Quantity");
-        quantityColumn.setCellValueFactory(new PropertyValueFactory<>("quantity"));
+        TableColumn<Item, Pair<Item, Long>> quantityColumn = new TableColumn<>("Quantity");
+        quantityColumn.setCellValueFactory(cellFeatures ->
+                new SimpleObjectProperty<Pair<Item, Long>>(new Pair<>(
+                        cellFeatures.getValue(),
+                        currentOrder.getQuantities().get(cellFeatures.getValue().getId()))));
+        quantityColumn.setCellFactory((column) -> {
+            HBox hBox = new HBox();
+            Button minusButton = new Button("-");
+            Label quantityLabel = new Label("0");
+            Button plusButton = new Button("+");
+            HBox.setMargin(quantityLabel, new Insets(0, 5, 0, 5));
+            return new TableCell<>() {
+                private void refreshPair(Pair<Item, Long> longLongPair) {
+                    updateItem(new Pair<>(longLongPair.getKey(),
+                            currentOrder.getQuantities().get(longLongPair.getKey().getId())), true);
+                }
 
-        itemTable.getColumns().addAll(priceColumn, quantityColumn);
+                @Override
+                protected void updateItem(Pair<Item, Long> longLongPair, boolean b) {
+                    if (longLongPair != null) {
+                        minusButton.setOnAction(actionEvent -> {
+                            if (longLongPair.getValue() > 1) {
+                                currentOrder.getQuantities().replace(longLongPair.getKey().getId(), longLongPair.getValue() - 1);
+                                refreshPair(longLongPair);
+                            } else {
+                                if (longLongPair.getKey() instanceof CustomItem) {
+                                    LilachService service = APIAccess.getService();
+                                    try {
+                                        service.deleteCustomItem(longLongPair.getKey().getId()).execute();
+                                    } catch (IOException e) {
+                                        e.printStackTrace();
+                                    }
+                                }
+                                currentOrder.getItems().remove(longLongPair.getKey());
+                                currentOrder.getQuantities().remove(longLongPair.getKey().getId());
+                                populateTable();
+                            }
+                        });
+                        plusButton.setOnAction(actionEvent -> {
+                                currentOrder.getQuantities()
+                                        .replace(longLongPair.getKey().getId(), longLongPair.getValue() + 1);
+                                refreshPair(longLongPair);
+                        });
+                        System.out.println("KEY: " + longLongPair.getKey());
+                        quantityLabel.setText(currentOrder.getQuantities().get(longLongPair.getKey().getId()).toString());
+                        hBox.getChildren().clear();
+                        hBox.getChildren().addAll(minusButton, quantityLabel, plusButton);
+                        setGraphic(hBox);
+                    }
+                }
+            };
+        });
+
+        itemTable.getColumns().addAll(descriptionColumn, priceColumn, quantityColumn);
         itemTable.setItems(FXCollections.observableList(currentOrder.getItems()));
     }
 

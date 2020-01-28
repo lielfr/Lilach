@@ -73,6 +73,13 @@ public class CatalogController implements Refreshable, Initializable {
     @FXML
     private Button customItemButton;
 
+    @Subscribe
+    public void handleBackToCatalog(BackToCatalogEvent event) {
+        cart.addAll(event.getCart());
+        quantities.putAll(event.getQuantities());
+        updateCartButton();
+    }
+
     @FXML
     public void goToCart() {
         EventBus.getDefault().post(new DashboardSwitchEvent("order"));
@@ -230,7 +237,7 @@ public class CatalogController implements Refreshable, Initializable {
     @Override
     public void refresh() {
         cart = new ArrayList<>();
-        quantities = new HashMap<>();
+
         EventBus.getDefault().register(this);
         service = APIAccess.getService();
 
@@ -264,9 +271,7 @@ public class CatalogController implements Refreshable, Initializable {
     @Subscribe
     public void handleItemBuy(CatalogItemBuyEvent event) throws IOException {
         quantities.put(event.getItem().getId(), 1L);
-        if (!cart.add(event.getItem())) {
-            quantities.replace(event.getItem().getId(), quantities.get(event.getItem().getId()) + 1);
-        }
+        cart.add(event.getItem());
         updateCartButton();
 
         Parent dialog = LayoutManager.getInstance().getFXML("popup_add_item").getKey();
@@ -282,18 +287,22 @@ public class CatalogController implements Refreshable, Initializable {
 
         EventBus.getDefault().post(new DashboardSwitchEvent("new_custom_item"));
         EventBus.getDefault().post(new CustomItemBeginEvent(
-                stores.get(storeChoiceBox.getSelectionModel().getSelectedIndex())));
+                stores.get(storeChoiceBox.getSelectionModel().getSelectedIndex()), cart, quantities));
     }
 
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-
+        quantities = new HashMap<>();
     }
 
     @Subscribe
     public void onCustomItemFinish(CustomItemFinishEvent event) {
+        // We need to save those since we
+        cart.addAll(event.getCurrentCart());
+        quantities.putAll(event.getQuantities());
         cart.add(event.getItem());
+        quantities.put(event.getItem().getId(), 1L);
         updateCartButton();
     }
 

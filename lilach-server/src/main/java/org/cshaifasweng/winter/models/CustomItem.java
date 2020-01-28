@@ -12,7 +12,7 @@ import java.util.Map;
 @JsonTypeName("custom_item")
 public class CustomItem extends Item {
 
-    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "custom_items_items",
     joinColumns = @JoinColumn(name = "custom_item_id", referencedColumnName = "id"),
     inverseJoinColumns = @JoinColumn(name = "item_id", referencedColumnName = "id"))
