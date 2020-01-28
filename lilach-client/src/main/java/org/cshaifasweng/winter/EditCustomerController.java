@@ -13,6 +13,7 @@ import org.cshaifasweng.winter.models.Customer;
 import org.cshaifasweng.winter.models.Employee;
 import org.cshaifasweng.winter.models.User;
 import org.cshaifasweng.winter.web.APIAccess;
+import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
 import java.net.URL;
@@ -362,11 +363,14 @@ public class EditCustomerController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        EventBus.getDefault().register(this);
+
 
     }
 
     @Subscribe
     public void handleEvent(CustomerSendEvent event) {
         customer = event.getCustomer;
+        customerIdLabel.setText(Long.toString(customer.getId()));
     }
 }
