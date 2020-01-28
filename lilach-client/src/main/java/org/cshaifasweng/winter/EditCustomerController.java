@@ -244,19 +244,19 @@ public class EditCustomerController implements Initializable {
         check = firsNameField.getText();
         if ((Pattern.matches("[a-zA-Z]+", check) == false) && (check.isEmpty() == false)) {
             firstNameLabel.setVisible(true);
-            firstNameLabel.setText(empty);
+            firstNameLabel.setText(invalid);
             val = false;
         }
         check = lastNameField.getText();
         if ((Pattern.matches("[a-zA-Z]+", check) == false) && (check.isEmpty() == false)) {
             lastNameLabel.setVisible(true);
-            lastNameLabel.setText(empty);
+            lastNameLabel.setText(invalid);
             val = false;
         }
         check = idNumField.getText();
         if ((check.length() != 9) && (check.isEmpty() == false)) {
             idNumLabel.setVisible(true);
-            idNumLabel.setText(empty);
+            idNumLabel.setText(invalid);
             val = false;
 
         }
@@ -268,28 +268,28 @@ public class EditCustomerController implements Initializable {
                 "x0c\\x0e-\\x1f\\x21-\\x5a\\x53-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])+)\\])") == false &&
                 (check.isEmpty() == false)) {
             emailLabel.setVisible(true);
-            emailLabel.setText(empty);
+            emailLabel.setText(invalid);
             val = false;
         }
         check = phoneField.getText();
         if ((Pattern.matches("^((\\+|00)?972\\-?|0)(([23489]|[57]\\d)\\-?\\d{7})$", check) == false) &&
                 (check.isEmpty() == false)) {
             phoneNumLabel.setVisible(true);
-            phoneNumLabel.setText(empty);
+            phoneNumLabel.setText(invalid);
             val = false;
         }
 
         check = creditcardField.getText();
         if ((check.length() != 16) && (check.isEmpty() == false)) {
             creditcardLabel.setVisible(true);
-            creditcardLabel.setText(empty);
+            creditcardLabel.setText(invalid);
             val = false;
         } else {
             if (check.length() == 16) {
                 for (int i = 0; i < check.length(); i++) {
                     if ((check.charAt(i) < '0') || (check.charAt(i) > '9')) {
                         creditcardLabel.setVisible(true);
-                        creditcardLabel.setText(empty);
+                        creditcardLabel.setText(invalid);
                         val = false;
                     }
                 }
@@ -302,18 +302,18 @@ public class EditCustomerController implements Initializable {
 
         check = cvvField.getText();
         if ((check.length() != 3) && (check.isEmpty() == false)) {
-            LECvv.setText("Cvv is incorrect");
-            countMistake++;
+            cvvLabel.setVisible(true);
+            cvvLabel.setText(invalid);
+            val = false;
         } else if (check.length() == 3) {
             for (int i = 0; i < check.length(); i++) {
                 if ((check.charAt(i) < '0') || (check.charAt(i) > '9')) {
-                    LECvv.setText("Cvv is incorrect");
-                    countMistake++;
+                    cvvLabel.setVisible(true);
+                    cvvLabel.setText(invalid);
+                    val = false;
                 }
-
             }
-        }//finish check Tcvv
-        return countMistake;
+        }//finish check cvv
 
         return val;
     }
