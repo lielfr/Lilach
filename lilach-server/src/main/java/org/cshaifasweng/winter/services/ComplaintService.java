@@ -21,12 +21,14 @@ public class ComplaintService {
     private final ComplaintRepository complaintRepository;
     private final CustomerRepository customerRepository;
     private final UserRepository userRepository;
+    private final MailService mailService;
 
     @Autowired
-    public ComplaintService(ComplaintRepository complaintRepository, CustomerRepository customerRepository, UserRepository userRepository) {
+    public ComplaintService(ComplaintRepository complaintRepository, CustomerRepository customerRepository, UserRepository userRepository, MailService mailService) {
         this.complaintRepository = complaintRepository;
         this.customerRepository = customerRepository;
         this.userRepository = userRepository;
+        this.mailService = mailService;
     }
 
     @Transactional
@@ -62,6 +64,13 @@ public class ComplaintService {
             ));
 
             customerRepository.save(customer);
+        }
+
+        if (complaint.isEmail()) {
+            mailService.sendMail(complaint.getOpenedBy().getEmail(), "We got you!",
+                    "Dear customer,<br>We care a lot about our customers.<b>You contacted us about the following topic:<br>" +
+                            complaint.getDescription() + "<br>Our answer:" + complaint.getAnswer() + "<br>" +
+                            "Compensation: " + complaint.getCompensation() + ".<br>Sincerely,<br>The Lilach team.");
         }
 
         complaint.setComplaintClose(new Date());
