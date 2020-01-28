@@ -303,7 +303,7 @@ public class EditEmployeeController {
             }
             updateFields();
             LilachService service = APIAccess.getService();
-            service.updateCustomer(employee.getId(),employee).enqueue(new Callback<Customer>() {
+            service.updateEmployee(employee.getId(),employee).enqueue(new Callback<Customer>() {
                 @Override
                 public void onResponse(Call<Customer> call, Response<Customer> response) {
                     if (response.code() == 200) {
