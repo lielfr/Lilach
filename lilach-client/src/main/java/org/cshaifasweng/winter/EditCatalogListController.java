@@ -19,11 +19,10 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.util.List;
 
-public class PrimaryController implements Refreshable {
+public class EditCatalogListController implements Refreshable {
 
     @FXML
     private TableView<CatalogItem> dataTable;
@@ -45,7 +44,7 @@ public class PrimaryController implements Refreshable {
                 // All the UI updating should be done in the UI thread. Here we enforce that.
                 Platform.runLater(() -> {
                     TableColumn<CatalogItem, Long> idColumn = new TableColumn<>("Catalog Number");
-                    TableColumn pictureColumn = new TableColumn("Picture");
+                    TableColumn<CatalogItem, String> pictureColumn = new TableColumn("Picture");
                     TableColumn<CatalogItem, String> descriptionColumn = new TableColumn<CatalogItem, String>("Description");
                     TableColumn<CatalogItem, Double> priceColumn = new TableColumn<>("Price");
 
@@ -57,18 +56,18 @@ public class PrimaryController implements Refreshable {
                         imageView.setFitHeight(50);
                         imageView.setFitWidth(50);
 
-                        TableCell<CatalogItem, byte[]> tableCell = new TableCell<>() {
+                        TableCell<CatalogItem, String> tableCell = new TableCell<>() {
                             @Override
-                            protected void updateItem(byte[] image, boolean b) {
+                            protected void updateItem(String image, boolean b) {
                                 if (image != null) {
-                                    imageView.setImage(new Image(new ByteArrayInputStream(image)));
+                                    imageView.setImage(new Image(APIAccess.getImageUrl(image)));
                                 }
                             }
                         };
                         tableCell.setGraphic(imageView);
                         return tableCell;
                     });
-                    pictureColumn.setCellValueFactory(new PropertyValueFactory<CatalogItem, byte[]>("picture"));
+                    pictureColumn.setCellValueFactory(new PropertyValueFactory<CatalogItem, String>("picture"));
                     descriptionColumn.setCellValueFactory(new PropertyValueFactory<CatalogItem, String>("description"));
                     priceColumn.setCellValueFactory(new PropertyValueFactory<CatalogItem, Double>("price"));
 

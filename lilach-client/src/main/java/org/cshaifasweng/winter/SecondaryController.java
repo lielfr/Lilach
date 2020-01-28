@@ -48,7 +48,7 @@ public class SecondaryController implements Refreshable {
     @Override
     public void refresh() {
         EventBus.getDefault().register(this);
-        currentPrice = PrimaryController.selectedItem.getPrice();
+        currentPrice = EditCatalogListController.selectedItem.getPrice();
         priceField.setText(Double.toString(currentPrice));
     }
 
