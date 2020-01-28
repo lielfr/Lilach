@@ -683,7 +683,7 @@ public class OrderController implements Refreshable {
     private void updateButtons() {
         SingleSelectionModel<Tab> selectionModel = tabPane.getSelectionModel();
         if (firstTab()) {
-            backButton.setText("Exit");
+            backButton.setText("Continue shopping");
             cancelButton.setVisible(false);
         } else {
             backButton.setText("Back");
@@ -691,7 +691,7 @@ public class OrderController implements Refreshable {
         }
 
         if (selectionModel.getSelectedIndex() == 4) {
-            nextButton.setText("Place order");
+            nextButton.setText("Checkout");
         } else {
             nextButton.setText("Next");
         }
