@@ -129,6 +129,23 @@ public class EditCustomerController implements Initializable {
         expirationPicker.setDisable(false);
         subscriptionEndPicker.setDisable(false);
     }
+
+    private void turnLabelsOff() {
+        firstNameLabel.setVisible(false);
+        lastNameLabel.setVisible(false);
+        idNumLabel.setVisible(false);
+        phoneNumLabel.setVisible(false);
+        emailLabel.setVisible(false);
+        dateOfBirthLabel.setVisible(false);
+        passwordLabel.setVisible(false);
+        addressLabel.setVisible(false);
+        creditcardLabel.setVisible(false);
+        cvvLabel.setVisible(false);
+        expirationLabel.setVisible(false);
+        subscriptionEndLabel.setVisible(false);
+        customerIdLabel.setVisible(false);
+    }
+
 //    private void turnOnFieldsManger(){
 //        firsNameField.setDisable(false);
 //        lastNameField.setDisable(false);
