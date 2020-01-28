@@ -9,6 +9,7 @@ import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import org.cshaifasweng.winter.events.ComplaintHandleEvent;
+import org.cshaifasweng.winter.events.CustomerSendEvent;
 import org.cshaifasweng.winter.models.Customer;
 import org.cshaifasweng.winter.models.Employee;
 import org.cshaifasweng.winter.models.User;
@@ -370,7 +371,7 @@ public class EditCustomerController implements Initializable {
 
     @Subscribe
     public void handleEvent(CustomerSendEvent event) {
-        customer = event.getCustomer;
+        customer = event.getCustomer();
         customerIdLabel.setText(Long.toString(customer.getId()));
     }
 }
