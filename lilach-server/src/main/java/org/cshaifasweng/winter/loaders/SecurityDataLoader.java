@@ -165,6 +165,10 @@ public class SecurityDataLoader implements ApplicationListener<ContextRefreshedE
         qiryatYamManager.setManagedStore(qiryatYamBranch);
         qiryatYamManager.setAssignedStore(qiryatYamBranch);
 
+        Employee networkManager = createOrReturnEmployee("111110996", "boss@lilach.com", "boss",
+                "rock", "theSmok", "0509123456",
+                Collections.singletonList(storeChainManagerEmployeeRole));
+
         employeeRepository.save(haifaUniManager);
         employeeRepository.save(qiryatYamManager);
         storeRepository.save(haifaUniBranch);
