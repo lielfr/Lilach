@@ -347,7 +347,7 @@ public class EditCustomerController implements Initializable {
         return val;
     }
 
-    private void updateFields(Customer customer){
+    private void fillFields(Customer customer){
         firsNameField.setText(customer.getFirstName());
         lastNameField.setText(customer.getLastName());
         idNumField.setText(customer.getMisparZehut());
@@ -367,6 +367,35 @@ public class EditCustomerController implements Initializable {
         LocalDate endDate = LocalDate.ofInstant(inputExpDate.toInstant(), ZoneId.systemDefault());
         subscriptionEndPicker.setValue((endDate));
         subscriptionChoice.setValue(customer.getSubscriberType());
+    }
+
+    private void updateFields(){
+        customer.setFirstName(firsNameField.getText());
+        customer.setLastName((lastNameField.getText()));
+        customer.setMisparZehut(idNumField.getText());
+        customer.setPhone(phoneField.getText());
+        customer.setEmail(emailField.getText());
+        customer.setPassword(passwordField.getText());
+        customer.setAddress(addressField.getText());
+        customer.setCreditCard(Long.parseLong(creditcardField.getText()));
+        customer.setCvv(Integer.getInteger(cvvField.getText()));
+        customer.setDateOfBirth(convertToDateViaSqlDate(dateOfBirthPicker.getValue()));
+        customer.setExpireDate(convertToDateViaSqlDate(expirationPicker.getValue()));
+        String choice = subscriptionChoice.getValue().toString();
+        SubscriberType choice1;
+        if(choice.equals("None")){
+            choice1 = null;
+        }
+        if(choice.equals("Month")){
+            choice1= SubscriberType.MONTHLY;
+        }
+        else
+            choice1= SubscriberType.YEARLY;
+        customer.setSubscriberType(choice1);
+    }
+
+    private Date convertToDateViaSqlDate(LocalDate dateToConvert) {
+        return java.sql.Date.valueOf(dateToConvert);
     }
 
 
