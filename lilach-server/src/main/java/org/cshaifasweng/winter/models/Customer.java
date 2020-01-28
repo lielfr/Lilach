@@ -42,7 +42,8 @@ public class Customer extends User {
             joinColumns = @JoinColumn(name = "customer_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "store_id", referencedColumnName = "id")
     )
-    private Collection<Store> stores;
+    @JsonIgnore
+    private List<Store> stores;
 
 
     public Customer(String misparZehut, String email, String password, String firstName, String lastName, String phone, Collection<Role> roles, long creditCard, Date expireDate, int cvv, Date dateOfBirth) {
@@ -52,9 +53,11 @@ public class Customer extends User {
         this.expireDate = expireDate;
         this.cvv = cvv;
         this.transactions = new ArrayList<>();
+        this.stores = new ArrayList<>();
     }
 
     public Customer() {
+        stores = new ArrayList<>();
     }
 
     @Override
@@ -140,11 +143,11 @@ public class Customer extends User {
         this.transactions = transactions;
     }
 
-    public Collection<Store> getStores() {
+    public List<Store> getStores() {
         return stores;
     }
 
-    public void setStores(Collection<Store> stores) {
+    public void setStores(List<Store> stores) {
         this.stores = stores;
     }
 }
