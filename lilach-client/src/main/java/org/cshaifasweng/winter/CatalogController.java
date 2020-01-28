@@ -73,6 +73,9 @@ public class CatalogController implements Refreshable, Initializable {
     @FXML
     private Button customItemButton;
 
+    @FXML
+    private TextField searchField;
+
     @Subscribe
     public void handleBackToCatalog(BackToCatalogEvent event) {
         cart.addAll(event.getCart());
@@ -210,6 +213,30 @@ public class CatalogController implements Refreshable, Initializable {
         forwardButton.setDisable(page == pages);
     }
 
+    private void searchCatalog(long id, String keywords) {
+        service.searchCatalogByStore(id, keywords).enqueue(new Callback<List<CatalogItem>>() {
+            @Override
+            public void onResponse(Call<List<CatalogItem>> call, Response<List<CatalogItem>> response) {
+                if (response.code() != 200) return;
+
+                items = response.body();
+
+                Platform.runLater(() -> {
+                    try {
+                        populateGrid();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                });
+            }
+
+            @Override
+            public void onFailure(Call<List<CatalogItem>> call, Throwable throwable) {
+
+            }
+        });
+    }
+
     private void getCatalog(long id) {
         service.getCatalogByStore(id).enqueue(new Callback<>() {
             @Override
@@ -251,6 +278,15 @@ public class CatalogController implements Refreshable, Initializable {
                     updateCartButton();
                 });
         updateStoresList();
+
+        searchField.textProperty().addListener((observableValue, s, t1) -> {
+            long storeId = stores.get(storeChoiceBox.getSelectionModel().getSelectedIndex()).getId();
+            if (searchField.getText().equals(""))
+                getCatalog(storeId);
+            else {
+                searchCatalog(storeId, searchField.getText());
+            }
+        });
     }
 
     @Override

@@ -41,6 +41,9 @@ public interface LilachService {
     @GET("/store/{id}/catalog")
     Call<List<CatalogItem>> getCatalogByStore(@Path("id") long id, @Query("singleItems") boolean singleItems);
 
+    @GET("/store/{id}/catalog")
+    Call<List<CatalogItem>> searchCatalogByStore(@Path("id") long id, @Query("search") String keywords);
+
     @POST("/store/{id}/catalog")
     Call<CatalogItem> newCatalogItem(@Path("id") long id, @Body CatalogItem item);
 
