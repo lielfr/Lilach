@@ -182,11 +182,11 @@
                      <children>
                         <ScrollPane fitToWidth="true" hbarPolicy="NEVER" maxWidth="1.7976931348623157E308" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                            <content>
-                              <VBox prefHeight="372.0" prefWidth="904.0" spacing="10.0">
+                              <VBox prefHeight="372.0" prefWidth="904.0" spacing="4.0">
                                  <children>
                                     <Label text="Adding greeting card:" />
                                     <Separator prefWidth="200.0" />
-                                    <Label text="What would you like to write on a greeting card?" />
+                                    <Label text="Send kind words to your dear one(s):" />
                                     <HBox alignment="CENTER" prefHeight="231.0" prefWidth="866.0" spacing="10.0">
                                        <children>
                                           <TextArea fx:id="greetingEntryTextArea" prefHeight="80.0" prefWidth="464.0" promptText="Enter your text here" wrapText="true" />
@@ -234,9 +234,9 @@
                                                     <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                                   </rowConstraints>
                                                    <children>
-                                                      <RadioButton fx:id="sendToMyAddRadio" mnemonicParsing="false" onMouseClicked="#selectMyAddRadio" text="Send to my address" GridPane.rowIndex="1" />
-                                                      <RadioButton fx:id="sendToAnotherAddRadio" mnemonicParsing="false" onMouseClicked="#selectOtherAddRadio" text="Send to another address" GridPane.rowIndex="2" />
-                                                      <RadioButton fx:id="sendToStoreAddRadio" mnemonicParsing="false" onMouseClicked="#selectStoreRadioButton" text="Send to store" />
+                                                      <RadioButton fx:id="sendToMyAddRadio" mnemonicParsing="false" onMouseClicked="#selectMyAddRadio" text="Deliver to my address" GridPane.rowIndex="1" />
+                                                      <RadioButton fx:id="sendToAnotherAddRadio" mnemonicParsing="false" onMouseClicked="#selectOtherAddRadio" text="Deliver to a different address" GridPane.rowIndex="2" />
+                                                      <RadioButton fx:id="sendToStoreAddRadio" mnemonicParsing="false" onMouseClicked="#selectStoreRadioButton" text="Deliver to store" />
                                                    </children>
                                                 </GridPane>
                                              </children>

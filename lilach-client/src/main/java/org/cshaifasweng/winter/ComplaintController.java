@@ -67,7 +67,7 @@ public class ComplaintController implements Refreshable {
 
     private boolean status = true;
     Complaint complaint = new Complaint();
-    User currentUser = APIAccess.getCurrentUser();
+    User currentUser;
 
 
 
@@ -184,6 +184,7 @@ public class ComplaintController implements Refreshable {
 
     @Override
     public void refresh() {
+        currentUser = APIAccess.getCurrentUser();
         storeComboBox.setConverter(new StringConverter<Store>() {
             @Override
             public String toString(Store store) {
