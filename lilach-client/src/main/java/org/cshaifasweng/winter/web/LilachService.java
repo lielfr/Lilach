@@ -78,4 +78,7 @@ public interface LilachService {
     @PUT("/order/{id}/delivered")
     Call<Void> markOrderAsDelivered(@Path("id") long id);
 
+    @PUT("/employee/{id}")
+    Call<Employee> updateEmployee(@Path("id") long id, @Body Employee employee);
+
 }
