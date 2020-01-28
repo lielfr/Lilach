@@ -142,8 +142,6 @@ public class UserService {
 
         if (customer.getSubscriberType() != null && !customer.getSubscriberType().equals(dbObject.getSubscriberType()))
             dbObject.setExpireDate(yearFromNow.getTime());
-        else
-            dbObject.setExpireDate(customer.getExpireDate());
 
         customerRepository.save(dbObject);
 
