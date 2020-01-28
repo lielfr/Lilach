@@ -11,10 +11,7 @@ import org.cshaifasweng.winter.events.CustomItemAddButtonEvent;
 import org.cshaifasweng.winter.events.CustomItemBeginEvent;
 import org.cshaifasweng.winter.events.CustomItemFinishEvent;
 import org.cshaifasweng.winter.events.DashboardSwitchEvent;
-import org.cshaifasweng.winter.models.CatalogItem;
-import org.cshaifasweng.winter.models.CustomItem;
-import org.cshaifasweng.winter.models.CustomItemType;
-import org.cshaifasweng.winter.models.Store;
+import org.cshaifasweng.winter.models.*;
 import org.cshaifasweng.winter.ui.CustomItemCell;
 import org.cshaifasweng.winter.web.APIAccess;
 import org.cshaifasweng.winter.web.LilachService;
@@ -55,6 +52,10 @@ public class NewCustomItemController implements Refreshable {
 
     private List<CatalogItem> items;
 
+    private List<Item> cart;
+
+    private Map<Long, Long> quantities;
+
     Store store;
 
     private void updateCost() {
@@ -75,7 +76,27 @@ public class NewCustomItemController implements Refreshable {
         updateCost();
 
         EventBus.getDefault().post(new DashboardSwitchEvent("catalog"));
-        EventBus.getDefault().post(new CustomItemFinishEvent(createdItem));
+
+        service.newCustomItem(createdItem).enqueue(new Callback<CustomItem>() {
+            @Override
+            public void onResponse(Call<CustomItem> call, Response<CustomItem> response) {
+                if (response.code() == 200) {
+                    createdItem = response.body();
+                    System.out.println("New custom item, id: " + createdItem.getId());
+                    Platform.runLater(() -> {
+                        EventBus.getDefault().post(new CustomItemFinishEvent(createdItem, cart, quantities));
+                    });
+                }
+                // TODO: Add error message here
+
+            }
+
+            @Override
+            public void onFailure(Call<CustomItem> call, Throwable throwable) {
+                // TODO: Add on failure
+            }
+        });
+
     }
 
     @FXML
@@ -97,6 +118,8 @@ public class NewCustomItemController implements Refreshable {
     @Subscribe
     public void storeSet(CustomItemBeginEvent event) {
         store = event.getStore();
+        cart = event.getCurrentCart();
+        quantities = event.getQuantities();
         getAvailableItems();
     }
 
