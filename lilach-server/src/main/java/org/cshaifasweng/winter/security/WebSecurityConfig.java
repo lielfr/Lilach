@@ -40,6 +40,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final LilachLogoutHandler logoutHandler;
 
+    @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
     public WebSecurityConfig(DataSource dataSource, WebApplicationContext applicationContext, UserRepository userRepository, LilachLogoutHandler logoutHandler) {
         this.dataSource = dataSource;
         this.applicationContext = applicationContext;
@@ -91,6 +92,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .permitAll()
                 .antMatchers(HttpMethod.PUT, "/order/**/delivered")
                 .hasAuthority(SecurityConstants.PRIVILEGE_ORDERS_MARK_AS_DELIVERED)
+                .antMatchers(HttpMethod.DELETE, "/catalog/**")
+                .hasAuthority(SecurityConstants.PRIVILEGE_CATALOG_EDIT)
                 .anyRequest().authenticated()
                 .and()
                 .addFilter(new AuthenticationFilter(authenticationManager(), userRepository, userService))

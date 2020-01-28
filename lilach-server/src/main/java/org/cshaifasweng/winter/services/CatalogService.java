@@ -59,4 +59,9 @@ public class CatalogService {
         return repository.findByStoreAndItemType(storeRepository.getOne(storeId),
                 type);
     }
+
+    @Transactional
+    public void deleteItem(long itemId) {
+        repository.deleteById(itemId);
+    }
 }

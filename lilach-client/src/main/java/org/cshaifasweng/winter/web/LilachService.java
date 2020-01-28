@@ -14,6 +14,9 @@ public interface LilachService {
     @PUT("catalog/{id}")
     Call<CatalogItem> updateItem(@Path("id") long id, @Body CatalogItem item);
 
+    @DELETE("catalog/{id}")
+    Call<Void> deleteItem(@Path("id") long id);
+
     @POST("/customer")
     Call<Customer> newCustomer(@Body Customer customer);
 

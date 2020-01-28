@@ -4,6 +4,7 @@ import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.event.EventTarget;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -83,16 +84,36 @@ public class EditCatalogListController implements Refreshable {
 
                     ContextMenu menu = new ContextMenu();
                     MenuItem item = new MenuItem("Edit item");
+                    MenuItem item2 = new MenuItem("Delete item");
 
-                    menu.getItems().add(item);
+                    menu.getItems().addAll(item, item2);
 
                     menu.setOnAction(new EventHandler<ActionEvent>() {
                         @Override
                         public void handle(ActionEvent actionEvent) {
+                            EventTarget target = actionEvent.getTarget();
                             int selectedIndex = dataTable.getSelectionModel().getSelectedIndex();
                             selectedItem = items.get(selectedIndex);
-                            EventBus.getDefault().post(new DashboardSwitchEvent("add_item"));
-                            EventBus.getDefault().post(new CatalogItemEditEvent(selectedItem));
+                            if (item.equals(target)) {
+                                EventBus.getDefault().post(new DashboardSwitchEvent("add_item"));
+                                EventBus.getDefault().post(new CatalogItemEditEvent(selectedItem));
+                            } else if (item2.equals(target)) {
+                                service.deleteItem(selectedItem.getId()).enqueue(new Callback<Void>() {
+                                    @Override
+                                    public void onResponse(Call<Void> call, Response<Void> response) {
+                                        Platform.runLater(() -> {
+                                            populateTable(storeChoiceBox.getValue().getId());
+                                        });
+
+                                    }
+
+                                    @Override
+                                    public void onFailure(Call<Void> call, Throwable throwable) {
+
+                                    }
+                                });
+                            }
+
                         }
                     });
 
