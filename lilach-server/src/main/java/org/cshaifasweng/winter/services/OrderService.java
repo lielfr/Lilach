@@ -69,7 +69,7 @@ public class OrderService {
             if (item instanceof CustomItem) {
                 CustomItem customItem = (CustomItem) item;
                 for (CatalogItem customItemChild : customItem.getItems()) {
-                    if (!customItemChild.isCanBeAssembled())
+                    if (customItemChild.getItemType() != CatalogItemType.ONE_FLOWER)
                         throw new LogicalException("Illegal custom item: contains items that cannot be assembled.");
                 }
             }

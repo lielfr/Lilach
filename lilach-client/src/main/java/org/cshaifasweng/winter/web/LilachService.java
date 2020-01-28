@@ -41,6 +41,9 @@ public interface LilachService {
     @GET("/store/{id}/catalog")
     Call<List<CatalogItem>> getCatalogByStore(@Path("id") long id, @Query("singleItems") boolean singleItems);
 
+    @GET("/store/{id}/catalog")
+    Call<List<CatalogItem>> searchCatalogByStore(@Path("id") long id, @Query("search") String keywords);
+
     @POST("/store/{id}/catalog")
     Call<CatalogItem> newCatalogItem(@Path("id") long id, @Body CatalogItem item);
 
@@ -62,5 +65,11 @@ public interface LilachService {
     @Multipart
     @POST("/image")
     Call<String> uploadImage(@Part MultipartBody.Part image);
+
+    @POST("/custom")
+    Call<CustomItem> newCustomItem(@Body CustomItem item);
+
+    @DELETE("/custom/{id}")
+    Call<Void> deleteCustomItem(@Path("id") long id);
 
 }

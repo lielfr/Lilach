@@ -105,7 +105,7 @@ public class SecurityDataLoader implements ApplicationListener<ContextRefreshedE
                 complaintFilePrivilege
         ));
 
-        Store haifaUniBranch = createOrReturnStore("Haifa University Branch", "Abba Houshy Av. 199, Haifa",
+        Store haifaUniBranch = createOrReturnStore("University of Haifa Branch", "Abba Houshy Av. 199, Haifa",
                 "04-9899999", "Every day between 8AM to 8PM");
 
         Store qiryatYamBranch = createOrReturnStore("Qiryat Yam Branch", "Moshe Sharet 12, Qiryat Yam",
