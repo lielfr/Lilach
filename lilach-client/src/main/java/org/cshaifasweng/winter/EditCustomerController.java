@@ -237,7 +237,9 @@ public class EditCustomerController implements Initializable {
     }
 
     private boolean inputCheck(){
+        boolean val = true;
 
+        return val;
     }
 
     private boolean checkDates(){
