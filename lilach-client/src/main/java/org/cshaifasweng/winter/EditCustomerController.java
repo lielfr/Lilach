@@ -8,10 +8,12 @@ import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import org.cshaifasweng.winter.events.ComplaintHandleEvent;
 import org.cshaifasweng.winter.models.Customer;
 import org.cshaifasweng.winter.models.Employee;
 import org.cshaifasweng.winter.models.User;
 import org.cshaifasweng.winter.web.APIAccess;
+import org.greenrobot.eventbus.Subscribe;
 
 import java.net.URL;
 import java.time.LocalDate;
@@ -112,8 +114,8 @@ public class EditCustomerController implements Initializable {
     String empty = "Can't stay empty";
     String invalid = "Invalid entry";
     boolean editPressed = false;
-    private User user = APIAccess.getCurrentUser();
-    private Customer customer = (Customer) user;
+    private User user;
+    private Customer customer;
 
 
     private void turnOnFields() {
@@ -337,6 +339,10 @@ public class EditCustomerController implements Initializable {
         return val;
     }
 
+    private void updateFields(){
+
+    }
+
 
     @FXML
     void edit(ActionEvent event) {
@@ -357,5 +363,10 @@ public class EditCustomerController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
+    }
+
+    @Subscribe
+    public void handleEvent(CustomerSendEvent event) {
+        customer = event.getCustomer;
     }
 }
