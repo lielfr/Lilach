@@ -18,6 +18,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Locale;
 import java.util.ResourceBundle;
+import java.util.regex.Pattern;
 
 public class EditCustomerController implements Initializable {
 
@@ -112,10 +113,10 @@ public class EditCustomerController implements Initializable {
     String invalid = "Invalid entry";
     boolean editPressed = false;
     private User user = APIAccess.getCurrentUser();
-    private Customer customer = (Customer)user;
+    private Customer customer = (Customer) user;
 
 
-    private void turnOnFields(){
+    private void turnOnFields() {
         firsNameField.setDisable(false);
         lastNameField.setDisable(false);
         idNumField.setDisable(false);
@@ -162,55 +163,55 @@ public class EditCustomerController implements Initializable {
 //        subscriptionChoice.setDisable(false);
 //    }
 
-    private boolean emptyCheck(){
-        boolean val =true;
+    private boolean emptyCheck() {
+        boolean val = true;
 
-        if(firsNameField.getText().isEmpty()){
+        if (firsNameField.getText().isEmpty()) {
             firstNameLabel.setVisible(true);
             firstNameLabel.setText(empty);
             val = false;
         }
 
-        if( lastNameField.getText().isEmpty()){
+        if (lastNameField.getText().isEmpty()) {
             lastNameLabel.setVisible(true);
             lastNameLabel.setText(empty);
             val = false;
         }
 
-        if( idNumField.getText().isEmpty()){
+        if (idNumField.getText().isEmpty()) {
             idNumLabel.setVisible(true);
             idNumLabel.setText(empty);
             val = false;
         }
 
-        if( phoneField.getText().isEmpty()){
+        if (phoneField.getText().isEmpty()) {
             phoneNumLabel.setVisible(true);
             phoneNumLabel.setText(empty);
             val = false;
         }
 
-        if( emailField.getText().isEmpty()){
+        if (emailField.getText().isEmpty()) {
             emailLabel.setVisible(true);
             emailLabel.setText(empty);
             val = false;
         }
 
-        if( passwordField.getText().isEmpty()){
+        if (passwordField.getText().isEmpty()) {
             passwordLabel.setVisible(true);
             passwordLabel.setText(empty);
             val = false;
         }
-        if( addressField.getText().isEmpty()){
+        if (addressField.getText().isEmpty()) {
             addressLabel.setVisible(true);
             addressLabel.setText(empty);
             val = false;
         }
-        if(creditcardField.getText().isEmpty()){
+        if (creditcardField.getText().isEmpty()) {
             creditcardLabel.setVisible(true);
             creditcardLabel.setText(empty);
             val = false;
         }
-        if(cvvField.getText().isEmpty()){
+        if (cvvField.getText().isEmpty()) {
             cvvLabel.setVisible(true);
             cvvLabel.setText(empty);
             val = false;
@@ -236,24 +237,99 @@ public class EditCustomerController implements Initializable {
         return (now.getTime().before(new Date()));*/
     }
 
-    private boolean inputCheck(){
+    private boolean inputCheck() {
         boolean val = true;
+
+        String check;
+        check = firsNameField.getText();
+        if ((Pattern.matches("[a-zA-Z]+", check) == false) && (check.isEmpty() == false)) {
+            firstNameLabel.setVisible(true);
+            firstNameLabel.setText(empty);
+            val = false;
+        }
+        check = lastNameField.getText();
+        if ((Pattern.matches("[a-zA-Z]+", check) == false) && (check.isEmpty() == false)) {
+            lastNameLabel.setVisible(true);
+            lastNameLabel.setText(empty);
+            val = false;
+        }
+        check = idNumField.getText();
+        if ((check.length() != 9) && (check.isEmpty() == false)) {
+            idNumLabel.setVisible(true);
+            idNumLabel.setText(empty);
+            val = false;
+
+        }
+        check = emailField.getText();
+        if (check.matches("(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|\"(?:[\\x01-" +
+                "\\x08\\x0b\\x0c\\x0e-\\x1f\\x21\\x23-\\x5b\\x5d-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])*\")@(?:" +
+                "(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\\[(?:(?:25[0-5]|2[0-4][0-9]|" +
+                "[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\\x01-\\x08\\x0b\\" +
+                "x0c\\x0e-\\x1f\\x21-\\x5a\\x53-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])+)\\])") == false &&
+                (check.isEmpty() == false)) {
+            emailLabel.setVisible(true);
+            emailLabel.setText(empty);
+            val = false;
+        }
+        check = phoneField.getText();
+        if ((Pattern.matches("^((\\+|00)?972\\-?|0)(([23489]|[57]\\d)\\-?\\d{7})$", check) == false) &&
+                (check.isEmpty() == false)) {
+            phoneNumLabel.setVisible(true);
+            phoneNumLabel.setText(empty);
+            val = false;
+        }
+
+        check = creditcardField.getText();
+        if ((check.length() != 16) && (check.isEmpty() == false)) {
+            creditcardLabel.setVisible(true);
+            creditcardLabel.setText(empty);
+            val = false;
+        } else {
+            if (check.length() == 16) {
+                for (int i = 0; i < check.length(); i++) {
+                    if ((check.charAt(i) < '0') || (check.charAt(i) > '9')) {
+                        creditcardLabel.setVisible(true);
+                        creditcardLabel.setText(empty);
+                        val = false;
+                    }
+                }
+            }//finish
+        }
+
+        if(!(checkDates())){
+            val = false;
+        }
+
+        check = cvvField.getText();
+        if ((check.length() != 3) && (check.isEmpty() == false)) {
+            LECvv.setText("Cvv is incorrect");
+            countMistake++;
+        } else if (check.length() == 3) {
+            for (int i = 0; i < check.length(); i++) {
+                if ((check.charAt(i) < '0') || (check.charAt(i) > '9')) {
+                    LECvv.setText("Cvv is incorrect");
+                    countMistake++;
+                }
+
+            }
+        }//finish check Tcvv
+        return countMistake;
 
         return val;
     }
 
-    private boolean checkDates(){
+    private boolean checkDates() {
         boolean val = true;
         LocalDate dateOfBirth = dateOfBirthPicker.getValue();
         LocalDate expDate = expirationPicker.getValue();
 
-        if(!(isPast(expDate))){
+        if (!(isPast(expDate))) {
             dateOfBirthLabel.setVisible(true);
             dateOfBirthLabel.setText(invalid);
             val = false;
         }
 
-        if(isPast(expDate)){
+        if (isPast(expDate)) {
             expirationLabel.setVisible(true);
             expirationLabel.setText(invalid);
             val = false;
