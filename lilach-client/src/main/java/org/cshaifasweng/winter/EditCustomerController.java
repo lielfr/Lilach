@@ -2,13 +2,21 @@ package org.cshaifasweng.winter;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import org.cshaifasweng.winter.models.Customer;
+import org.cshaifasweng.winter.models.Employee;
+import org.cshaifasweng.winter.models.User;
+import org.cshaifasweng.winter.web.APIAccess;
 
-public class EditCustomerController {
+import java.net.URL;
+import java.util.ResourceBundle;
+
+public class EditCustomerController implements Initializable {
 
     @FXML
     private Button exitButton;
@@ -97,8 +105,11 @@ public class EditCustomerController {
     @FXML
     private Label customerIdLabel;
 
-    String canNotBeEmpty = "Can't stay empty";
-    String invalidVal = "Invalid entry";
+    String empty = "Can't stay empty";
+    String invalid = "Invalid entry";
+    private User user = APIAccess.getCurrentUser();
+    private Customer customer = (Customer)user;
+
 
     private void turnOnFieldsCustomer(){
         firsNameField.setDisable(false);
@@ -130,9 +141,68 @@ public class EditCustomerController {
         subscriptionChoice.setDisable(false);
     }
 
+    private boolean emptyCheck(){
+        boolean val =true;
+        if(firsNameField.getText().isEmpty()){
+            firstNameLabel.setVisible(true);
+            firstNameLabel.setText(empty);
+            val = false;
+        }
+
+        if( lastNameField.getText().isEmpty()){
+            lastNameLabel.setVisible(true);
+            lastNameLabel.setText(empty);
+            val = false;
+        }
+
+        if( idNumField.getText().isEmpty()){
+            idNumLabel.setVisible(true);
+            idNumLabel.setText(empty);
+            val = false;
+        }
+        phoneField.getText().isEmpty()
+        if( phoneField.getText().isEmpty()){
+            phoneNumLabel.setVisible(true);
+            phoneNumLabel.setText(empty);
+            val = false;
+        }
+
+        if( emailField.getText().isEmpty()){
+            emailLabel.setVisible(true);
+            emailLabel.setText(empty);
+            val = false;
+        }
+
+        if( passwordField.getText().isEmpty()){
+            passwordLabel.setVisible(true);
+            passwordLabel.setText(empty);
+            val = false;
+        }
+        if( addressField.getText().isEmpty()){
+            addressLabel.setVisible(true);
+            addressLabel.setText(empty);
+            val = false;
+        }
+        if(creditcardField.getText().isEmpty()){
+            creditcardLabel.setVisible(true);
+            creditcardLabel.setText(empty);
+            val = false;
+        }
+        if(cvvField.getText().isEmpty()){
+            cvvLabel.setVisible(true);
+            cvvLabel.setText(empty);
+            val = false;
+        }
+        return val;
+    }
+
+
     @FXML
     void edit(ActionEvent event) {
-//        if()
+        if(user instanceof Employee){
+
+        }
+
         turnOnFieldsManger();
     }
 
@@ -146,4 +216,8 @@ public class EditCustomerController {
 
     }
 
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+
+    }
 }
