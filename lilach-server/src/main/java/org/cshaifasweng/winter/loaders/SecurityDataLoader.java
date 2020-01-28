@@ -59,6 +59,8 @@ public class SecurityDataLoader implements ApplicationListener<ContextRefreshedE
         Privilege reportsViewAllPrivilege = createOrReturnPrivilege(SecurityConstants.PRIVILEGE_REPORTS_VIEW_ALL);
         Privilege ordersViewAllPrivilege = createOrReturnPrivilege(SecurityConstants.PRIVILEGE_ORDERS_VIEW_ALL);
         Privilege complaintsViewAllPrivilege = createOrReturnPrivilege(SecurityConstants.PRIVILEGE_COMPLAINTS_VIEW_ALL);
+        Privilege ordersMarkAsDeliveredPrivilege =
+                createOrReturnPrivilege(SecurityConstants.PRIVILEGE_ORDERS_MARK_AS_DELIVERED);
 
         Role adminRole = createOrReturnRole(SecurityConstants.ROLE_ADMIN, Arrays.asList(
                 catalogEditPrivilege,
@@ -71,7 +73,8 @@ public class SecurityDataLoader implements ApplicationListener<ContextRefreshedE
                 reportsViewAllPrivilege,
                 reportsViewPrivilege,
                 ordersViewAllPrivilege,
-                complaintsViewAllPrivilege
+                complaintsViewAllPrivilege,
+                ordersMarkAsDeliveredPrivilege
         ));
 
         Role customerRole = createOrReturnRole(SecurityConstants.ROLE_CUSTOMER, Arrays.asList(
@@ -86,14 +89,16 @@ public class SecurityDataLoader implements ApplicationListener<ContextRefreshedE
                 ordersCancelPrivilege,
                 ordersCreatePrivilege,
                 ordersViewAllPrivilege,
-                complaintsViewAllPrivilege
+                complaintsViewAllPrivilege,
+                ordersMarkAsDeliveredPrivilege
         ));
 
         Role storeManagerEmployeeRole = createOrReturnRole(SecurityConstants.ROLE_STORE_MANAGER, Arrays.asList(
                 complaintHandlePrivilege,
                 reportsViewPrivilege,
                 ordersViewAllPrivilege,
-                complaintsViewAllPrivilege
+                complaintsViewAllPrivilege,
+                ordersMarkAsDeliveredPrivilege
         ));
 
         Role storeChainManagerEmployeeRole = createOrReturnRole(SecurityConstants.ROLE_STORE_CHAIN_MANAGER, Arrays.asList(
@@ -102,7 +107,8 @@ public class SecurityDataLoader implements ApplicationListener<ContextRefreshedE
                 reportsViewAllPrivilege,
                 reportsViewPrivilege,
                 ordersViewAllPrivilege,
-                complaintFilePrivilege
+                complaintFilePrivilege,
+                ordersMarkAsDeliveredPrivilege
         ));
 
         Store haifaUniBranch = createOrReturnStore("University of Haifa Branch", "Abba Houshy Av. 199, Haifa",

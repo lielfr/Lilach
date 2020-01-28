@@ -83,6 +83,12 @@ public class UserService {
                 Arrays.asList(roleRepository.findByName(SecurityConstants.ROLE_CUSTOMER)),
                 customer.getCreditCard(), customer.getExpireDate(), customer.getCvv(), customer.getDateOfBirth());
 
+        Calendar yearFromNow = Calendar.getInstance();
+        yearFromNow.add(Calendar.YEAR, 1);
+
+        if (customer.getSubscriberType() != null)
+            customer.setExpireDate(yearFromNow.getTime());
+
         customerRepository.save(customerInDB);
 
         // Copy it so we don't accidentally set the password to null
@@ -130,7 +136,12 @@ public class UserService {
         dbObject.setCreditCard(customer.getCreditCard());
         dbObject.setCvv(customer.getCvv());
         dbObject.setPhone(customer.getPhone());
-        dbObject.setExpireDate(customer.getExpireDate());
+
+        Calendar yearFromNow = Calendar.getInstance();
+        yearFromNow.add(Calendar.YEAR, 1);
+
+        if (customer.getSubscriberType() != null && !customer.getSubscriberType().equals(dbObject.getSubscriberType()))
+            dbObject.setExpireDate(yearFromNow.getTime());
 
         customerRepository.save(dbObject);
 
