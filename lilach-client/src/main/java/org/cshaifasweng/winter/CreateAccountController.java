@@ -191,12 +191,12 @@ public class CreateAccountController implements Refreshable{
             Tmessage.setVisible(true);
         }
         else if(MissField()==0 && MistakeField()==0){
-            String choice = Cmembership.getValue().toString();
+            int choice = Cmembership.getSelectionModel().getSelectedIndex();
             SubscriberType choice1;
-            if(choice.equals("None")){
+            if(choice == 0){
                 choice1 = null;
             }
-            if(choice.equals("Month")){
+            if(choice == 1){
                 choice1= SubscriberType.MONTHLY;
             }
             else
@@ -582,12 +582,12 @@ public class CreateAccountController implements Refreshable{
             }
             check = Tcvv.getText();
             if ((check.length() != 3) && (check.isEmpty() == false)) {
-                LECvv.setText("Cvv is incorrect");
+                LECvv.setText("CVV is incorrect");
                 countMistake++;
             } else if (check.length() == 3) {
                 for (int i = 0; i < check.length(); i++) {
                     if ((check.charAt(i) < '0') || (check.charAt(i) > '9')) {
-                        LECvv.setText("Cvv is incorrect");
+                        LECvv.setText("CVV is incorrect");
                         countMistake++;
                     }
 
@@ -597,7 +597,12 @@ public class CreateAccountController implements Refreshable{
 
         }
 
-    private ObservableList<String> dbTypeList = FXCollections.observableArrayList("None","Month","Year");
+    private ObservableList<String> dbTypeList =
+            FXCollections.observableArrayList(
+                    "None",
+                    "Monthly (20 NIS per month, 25% discount on each order)",
+                    "Yearly (200 NIS per year, 35% discount on each order)"
+            );
 
     @Override
     public void refresh() {

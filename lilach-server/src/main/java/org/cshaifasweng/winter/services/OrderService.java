@@ -162,4 +162,24 @@ public class OrderService {
             throw new LogicalException("Unauthorized to view this user's orders");
         return orderRepository.findAllByOrderedByAndStatus(customerRepository.getOne(id), OrderStatus.PENDING);
     }
+
+    @Transactional
+    public Order markAsDelivered(long id) {
+        Order order = orderRepository.getOne(id);
+        order.setStatus(OrderStatus.DELIVERED);
+
+        if (order.isDeliverToAnother()) {
+            String message = "An order for you has arrived.<br>";
+            if (order.getGreeting() != null && !order.getGreeting().isEmpty())
+                message += "The sender would also like you to read this:<br>" + order.getGreeting() + "<br>";
+            message += "Greetings,<br>The Lilach team.";
+            mailService.sendMail(order.getRecipientMail(), "Order arrived", message);
+        } else {
+            mailService.sendMail(order.getOrderedBy().getEmail(), "Order arrived",
+                    "Your order #" + order.getId() + "has arrived.<br>Greetings,<br>The Lilach team.");
+        }
+
+        return order;
+
+    }
 }

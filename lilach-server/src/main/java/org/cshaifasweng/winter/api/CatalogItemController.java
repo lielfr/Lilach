@@ -54,4 +54,9 @@ public class CatalogItemController {
     public CatalogItem newItem(@PathVariable("id") long id, @RequestBody CatalogItem item) {
         return catalogService.addItem(id, item);
     }
+
+    @DeleteMapping("/catalog/{id}")
+    public void deleteItem(@PathVariable("id") long id) {
+        catalogService.deleteItem(id);
+    }
 }
