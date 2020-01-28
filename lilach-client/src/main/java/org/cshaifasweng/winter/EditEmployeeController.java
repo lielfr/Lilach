@@ -304,9 +304,9 @@ public class EditEmployeeController implements Initializable {
             }
             updateFields();
             LilachService service = APIAccess.getService();
-            service.updateEmployee(employee.getId(),employee).enqueue(new Callback<Customer>() {
+            service.updateEmployee(employee.getId(),employee).enqueue(new Callback<Employee>() {
                 @Override
-                public void onResponse(Call<Customer> call, Response<Customer> response) {
+                public void onResponse(Call<Employee> call, Response<Employee> response) {
                     if (response.code() == 200) {
                         System.out.println("adding the handling success");
                         Platform.runLater(() -> {
@@ -316,7 +316,7 @@ public class EditEmployeeController implements Initializable {
                 }
 
                 @Override
-                public void onFailure(Call<Customer> call, Throwable throwable) {
+                public void onFailure(Call<Employee> call, Throwable throwable) {
 
                 }
             });
