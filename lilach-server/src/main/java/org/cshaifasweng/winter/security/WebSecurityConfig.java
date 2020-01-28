@@ -94,6 +94,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .hasAuthority(SecurityConstants.PRIVILEGE_ORDERS_MARK_AS_DELIVERED)
                 .antMatchers(HttpMethod.DELETE, "/catalog/**")
                 .hasAuthority(SecurityConstants.PRIVILEGE_CATALOG_EDIT)
+                .antMatchers(HttpMethod.GET, "/user")
+                .hasAuthority(SecurityConstants.PRIVILEGE_USERS_EDIT)
                 .anyRequest().authenticated()
                 .and()
                 .addFilter(new AuthenticationFilter(authenticationManager(), userRepository, userService))

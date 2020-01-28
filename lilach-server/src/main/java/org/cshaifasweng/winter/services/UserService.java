@@ -1,9 +1,6 @@
 package org.cshaifasweng.winter.services;
 
-import org.cshaifasweng.winter.da.CustomerRepository;
-import org.cshaifasweng.winter.da.EmployeeRepository;
-import org.cshaifasweng.winter.da.RoleRepository;
-import org.cshaifasweng.winter.da.UserRepository;
+import org.cshaifasweng.winter.da.*;
 import org.cshaifasweng.winter.exceptions.LogicalException;
 import org.cshaifasweng.winter.models.Customer;
 import org.cshaifasweng.winter.models.Employee;
@@ -15,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -23,13 +21,15 @@ public class UserService {
     private final CustomerRepository customerRepository;
     private final EmployeeRepository employeeRepository;
     private final RoleRepository roleRepository;
+    private final StoreRepository storeRepository;
 
     @Autowired
-    public UserService(UserRepository userRepository, CustomerRepository customerRepository, EmployeeRepository employeeRepository, RoleRepository roleRepository) {
+    public UserService(UserRepository userRepository, CustomerRepository customerRepository, EmployeeRepository employeeRepository, RoleRepository roleRepository, StoreRepository storeRepository) {
         this.userRepository = userRepository;
         this.customerRepository = customerRepository;
         this.employeeRepository = employeeRepository;
         this.roleRepository = roleRepository;
+        this.storeRepository = storeRepository;
     }
 
     @Transactional
@@ -128,7 +128,8 @@ public class UserService {
         if (dbObject.getId() != id)
             throw new LogicalException("Id does not match");
         // Mispar Zehut should not be changed
-        dbObject.setPassword(customer.getPassword());
+        if (customer.getPassword() != null)
+            dbObject.setPassword(new BCryptPasswordEncoder().encode(customer.getPassword()));
         dbObject.setFirstName(customer.getFirstName());
         dbObject.setLastName(customer.getLastName());
         dbObject.setSubscriberType(customer.getSubscriberType());
@@ -136,6 +137,9 @@ public class UserService {
         dbObject.setCreditCard(customer.getCreditCard());
         dbObject.setCvv(customer.getCvv());
         dbObject.setPhone(customer.getPhone());
+        dbObject.setDateOfBirth(customer.getDateOfBirth());
+        dbObject.setExpireDate(customer.getExpireDate());
+        dbObject.setMisparZehut(customer.getMisparZehut());
 
         Calendar yearFromNow = Calendar.getInstance();
         yearFromNow.add(Calendar.YEAR, 1);
@@ -151,5 +155,45 @@ public class UserService {
     @Transactional
     public Employee updateEmployee(long id, Employee employee) {
         return employeeRepository.save(employee);
+    }
+
+    @Transactional
+    public List<User> getEmployeesByStore(long id) {
+        return employeeRepository.findAllByAssignedStore(storeRepository.getOne(id))
+                .stream().map(employee -> (User) employee).collect(Collectors.toList());
+    }
+
+    @Transactional
+    public List<User> getCustomersByStore(long id) {
+        return customerRepository.findAllByStoresContains(storeRepository.getOne(id))
+                .stream().map(customer -> (User) customer).collect(Collectors.toList());
+    }
+
+    @Transactional
+    public List<User> getUsersByStore(long id) {
+        List<User> employees = getEmployeesByStore(id);
+        List<User> customers = getCustomersByStore(id);
+        List<User> ret = new ArrayList<>();
+        ret.addAll(employees);
+        ret.addAll(customers);
+
+        return ret;
+    }
+
+    @Transactional
+    public List<User> getAllEmployees() {
+        return employeeRepository.findAll().stream()
+                .map(employee -> (User) employee).collect(Collectors.toList());
+    }
+
+    @Transactional
+    public List<User> getAllCustomers() {
+        return customerRepository.findAll().stream()
+                .map(customer -> (User) customer).collect(Collectors.toList());
+    }
+
+    @Transactional
+    public List<User> getAllUsers() {
+        return userRepository.findAll();
     }
 }

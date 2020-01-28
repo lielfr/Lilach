@@ -160,4 +160,8 @@ public class DashboardController implements Initializable {
         EventBus.getDefault().post(new DashboardSwitchEvent("edit_catalog_list"));
     }
 
+    @FXML
+    public void listUsers(ActionEvent event) {
+        EventBus.getDefault().post(new DashboardSwitchEvent("user_display"));
+    }
 }

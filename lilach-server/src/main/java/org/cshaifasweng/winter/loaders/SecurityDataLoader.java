@@ -128,38 +128,38 @@ public class SecurityDataLoader implements ApplicationListener<ContextRefreshedE
                 11, customerCreditCardExpire.getTime(), 222, customerBirth.getTime(), Arrays.asList(haifaUniBranch));
 
         Customer customerBob = createOrReturnCustomer("000000001", "bob@lilach.com", "a",
-                Collections.singletonList(customerRole), "Bob", "Marley", "0509999999",
-                11, customerCreditCardExpire.getTime(), 123, customerBirth.getTime(), Arrays.asList(haifaUniBranch));
+                Collections.singletonList(customerRole), "Bob", "Marley", "0509949999",
+                12, customerCreditCardExpire.getTime(), 123, customerBirth.getTime(), Arrays.asList(haifaUniBranch));
 
         Customer customerNoah = createOrReturnCustomer("022200001", "noah@lilach.com", "Noah",
-                Collections.singletonList(customerRole), "Noah", "Johnson", "0509999111",
-                11, customerCreditCardExpire.getTime(), 123, customerBirth.getTime(), Arrays.asList(qiryatYamBranch));
+                Collections.singletonList(customerRole), "Noah", "Johnson", "0509929111",
+                13, customerCreditCardExpire.getTime(), 123, customerBirth.getTime(), Arrays.asList(qiryatYamBranch));
 
-        Customer customerLiam = createOrReturnCustomer("022200001", "liam@lilach.com", "Liam",
+        Customer customerLiam = createOrReturnCustomer("022200101", "liam@lilach.com", "Liam",
                 Collections.singletonList(customerRole), "Liam", "Smith", "0509999111",
-                11, customerCreditCardExpire.getTime(), 123, customerBirth.getTime(), Arrays.asList(haifaUniBranch));
+                14, customerCreditCardExpire.getTime(), 123, customerBirth.getTime(), Arrays.asList(haifaUniBranch));
 
         Customer customerWilliam = createOrReturnCustomer("022330001", "william@lilach.com", "William",
-                Collections.singletonList(customerRole), "William", "Williams", "0529999111",
-                11, customerCreditCardExpire.getTime(), 123, customerBirth.getTime(), Arrays.asList(haifaUniBranch));
+                Collections.singletonList(customerRole), "William", "Williams", "0529799111",
+                15, customerCreditCardExpire.getTime(), 123, customerBirth.getTime(), Arrays.asList(haifaUniBranch));
 
         Employee admin = createOrReturnEmployee("000000998", "lielft@gmail.com", "AdminBaby!",
                 "Liel", "Fridman", "0509999999",
                 Collections.singletonList(adminRole));
 
-        Employee admin2 = createOrReturnEmployee("000000998", "lielft@gmail.com", "ETPhoneHome",
+        Employee admin2 = createOrReturnEmployee("000000224", "amitft@gmail.com", "ETPhoneHome",
                 "Amit", "Fridman", "0508888888",
                 Collections.singletonList(adminRole));
 
         Employee haifaUniManager = createOrReturnEmployee("000000997", "haifa.uni.manager@lilach.com", "haifarocks",
-                "Aharon", "Cohen", "0500009000",
+                "Aharon", "Cohen", "0500119000",
                 Collections.singletonList(storeManagerEmployeeRole));
         haifaUniManager.setManagedStore(haifaUniBranch);
         haifaUniManager.setAssignedStore(haifaUniBranch);
         haifaUniBranch.setManager(haifaUniManager);
 
         Employee qiryatYamManager = createOrReturnEmployee("000000996", "qy.manager@lilach.com", "iloveky",
-                "Lilach", "Schwartzman", "0509811999",
+                "Lilach", "Schwartzman", "0509811009",
                 Collections.singletonList(storeManagerEmployeeRole));
         qiryatYamBranch.setManager(qiryatYamManager);
         qiryatYamManager.setManagedStore(qiryatYamBranch);

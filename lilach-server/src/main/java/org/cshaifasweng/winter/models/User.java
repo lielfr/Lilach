@@ -1,6 +1,5 @@
 package org.cshaifasweng.winter.models;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import org.hibernate.annotations.Type;
@@ -81,7 +80,6 @@ public abstract class User {
         this.email = email;
     }
 
-    @JsonIgnore
     public String getPassword() {
         return password;
     }

@@ -81,4 +81,10 @@ public interface LilachService {
     @PUT("/employee/{id}")
     Call<Employee> updateEmployee(@Path("id") long id, @Body Employee employee);
 
+    @GET("/user")
+    Call<List<User>> getUsers(@Query("store") long storeId, @Query("type") UserType type);
+
+    @GET("/user")
+    Call<List<User>> getUsers(@Query("type") UserType type);
+
 }
