@@ -127,19 +127,19 @@ public class SecurityDataLoader implements ApplicationListener<ContextRefreshedE
                 Collections.singletonList(customerRole), "Lilach", "Customer", "0509999999",
                 11, customerCreditCardExpire.getTime(), 222, customerBirth.getTime(), Arrays.asList(haifaUniBranch));
 
-        Customer customerBob = createOrReturnCustomer("000000001", "customer@lilach.com", "a",
+        Customer customerBob = createOrReturnCustomer("000000001", "Bob@lilach.com", "a",
                 Collections.singletonList(customerRole), "Bob", "Marley", "0509999999",
                 11, customerCreditCardExpire.getTime(), 123, customerBirth.getTime(), Arrays.asList(haifaUniBranch));
 
-        Customer customerNoah = createOrReturnCustomer("022200001", "customer@lilach.com", "Noah",
+        Customer customerNoah = createOrReturnCustomer("022200001", "Noah@lilach.com", "Noah",
                 Collections.singletonList(customerRole), "Noah", "Johnson", "0509999111",
                 11, customerCreditCardExpire.getTime(), 123, customerBirth.getTime(), Arrays.asList(qiryatYamBranch));
 
-        Customer customerLiam = createOrReturnCustomer("022200001", "customer@lilach.com", "Liam",
+        Customer customerLiam = createOrReturnCustomer("022200001", "Liam@lilach.com", "Liam",
                 Collections.singletonList(customerRole), "Liam", "Smith", "0509999111",
                 11, customerCreditCardExpire.getTime(), 123, customerBirth.getTime(), Arrays.asList(haifaUniBranch));
 
-        Customer customerWilliam = createOrReturnCustomer("022330001", "customer@lilach.com", "William",
+        Customer customerWilliam = createOrReturnCustomer("022330001", "William@lilach.com", "William",
                 Collections.singletonList(customerRole), "William", "Williams", "0529999111",
                 11, customerCreditCardExpire.getTime(), 123, customerBirth.getTime(), Arrays.asList(haifaUniBranch));
 
