@@ -365,13 +365,11 @@ public class EditCustomerController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         EventBus.getDefault().register(this);
-
-
+        customerIdLabel.setText(Long.toString(customer.getId()));
     }
 
     @Subscribe
     public void handleEvent(CustomerSendEvent event) {
         customer = event.getCustomer();
-        customerIdLabel.setText(Long.toString(customer.getId()));
     }
 }
