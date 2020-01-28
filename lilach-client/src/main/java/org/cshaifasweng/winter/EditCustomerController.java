@@ -14,6 +14,9 @@ import org.cshaifasweng.winter.models.User;
 import org.cshaifasweng.winter.web.APIAccess;
 
 import java.net.URL;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.Locale;
 import java.util.ResourceBundle;
 
 public class EditCustomerController implements Initializable {
@@ -125,24 +128,25 @@ public class EditCustomerController implements Initializable {
         expirationPicker.setDisable(false);
         subscriptionEndPicker.setDisable(false);
     }
-    private void turnOnFieldsManger(){
-        firsNameField.setDisable(false);
-        lastNameField.setDisable(false);
-        idNumField.setDisable(false);
-        phoneField.setDisable(false);
-        emailField.setDisable(false);
-        passwordField.setDisable(false);
-        addressField.setDisable(false);
-        creditcardField.setDisable(false);
-        cvvField.setDisable(false);
-        dateOfBirthPicker.setDisable(false);
-        expirationPicker.setDisable(false);
-        subscriptionEndPicker.setDisable(false);
-        subscriptionChoice.setDisable(false);
-    }
+//    private void turnOnFieldsManger(){
+//        firsNameField.setDisable(false);
+//        lastNameField.setDisable(false);
+//        idNumField.setDisable(false);
+//        phoneField.setDisable(false);
+//        emailField.setDisable(false);
+//        passwordField.setDisable(false);
+//        addressField.setDisable(false);
+//        creditcardField.setDisable(false);
+//        cvvField.setDisable(false);
+//        dateOfBirthPicker.setDisable(false);
+//        expirationPicker.setDisable(false);
+//        subscriptionEndPicker.setDisable(false);
+//        subscriptionChoice.setDisable(false);
+//    }
 
     private boolean emptyCheck(){
         boolean val =true;
+
         if(firsNameField.getText().isEmpty()){
             firstNameLabel.setVisible(true);
             firstNameLabel.setText(empty);
@@ -196,6 +200,43 @@ public class EditCustomerController implements Initializable {
         return val;
     }
 
+    private boolean isPast(LocalDate localDate) {
+        boolean flag = true;
+//        Calendar now = Calendar.getInstance();
+//        LocalDate localDate = datePicker.getValue();
+//        boolean a = localDate.isBefore(LocalDate.now());
+//        LocalTime localTime = LocalTime.of(Integer.parseInt(hourChooseBox.getValue()), Integer.parseInt(minuteChooseBox.getValue()), 0);
+//
+//        LocalDateTime localDateTime = LocalDateTime.of(localDate, localTime);
+        return localDate.isBefore(LocalDate.now());
+
+      /*  Instant instant = Instant.from(localDate.atStartOfDay(ZoneId.systemDefault()));
+        Date date = Date.from(instant);
+        now.set(Calendar.HOUR_OF_DAY, Integer.parseInt(hourChooseBox.getValue()));
+        now.set(Calendar.MINUTE, Integer.parseInt((minuteChooseBox.getValue())));
+
+        return (now.getTime().before(new Date()));*/
+    }
+
+    private boolean checkDates(){
+        boolean val = true;
+        LocalDate dateOfBirth = dateOfBirthPicker.getValue();
+        LocalDate expDate = expirationPicker.getValue();
+
+        if(!(isPast(expDate))){
+            dateOfBirthLabel.setVisible(true);
+            dateOfBirthLabel.setText(invalid);
+            val = false;
+        }
+
+        if(isPast(expDate)){
+            expirationLabel.setVisible(true);
+            expirationLabel.setText(invalid);
+            val = false;
+        }
+        return val;
+    }
+
 
     @FXML
     void edit(ActionEvent event) {
@@ -203,7 +244,7 @@ public class EditCustomerController implements Initializable {
 
         }
 
-        turnOnFieldsManger();
+//        turnOnFieldsManger();
     }
 
     @FXML
