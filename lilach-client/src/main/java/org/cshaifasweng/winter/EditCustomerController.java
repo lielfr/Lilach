@@ -110,11 +110,12 @@ public class EditCustomerController implements Initializable {
 
     String empty = "Can't stay empty";
     String invalid = "Invalid entry";
+    boolean editPressed = false;
     private User user = APIAccess.getCurrentUser();
     private Customer customer = (Customer)user;
 
 
-    private void turnOnFieldsCustomer(){
+    private void turnOnFields(){
         firsNameField.setDisable(false);
         lastNameField.setDisable(false);
         idNumField.setDisable(false);
@@ -218,6 +219,10 @@ public class EditCustomerController implements Initializable {
         return (now.getTime().before(new Date()));*/
     }
 
+    private boolean inputCheck(){
+
+    }
+
     private boolean checkDates(){
         boolean val = true;
         LocalDate dateOfBirth = dateOfBirthPicker.getValue();
@@ -240,11 +245,8 @@ public class EditCustomerController implements Initializable {
 
     @FXML
     void edit(ActionEvent event) {
-        if(user instanceof Employee){
-
-        }
-
-//        turnOnFieldsManger();
+        editPressed = true;
+        turnOnFields();
     }
 
     @FXML
