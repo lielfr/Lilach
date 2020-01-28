@@ -3,7 +3,12 @@ package org.cshaifasweng.winter.models;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonTypeName;
+import org.apache.lucene.analysis.core.LowerCaseFilterFactory;
+import org.apache.lucene.analysis.core.WhitespaceTokenizerFactory;
+import org.apache.lucene.analysis.miscellaneous.ASCIIFoldingFilterFactory;
+import org.apache.lucene.analysis.ngram.EdgeNGramFilterFactory;
 import org.hibernate.annotations.Type;
+import org.hibernate.search.annotations.*;
 
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -12,15 +17,37 @@ import javax.persistence.ManyToOne;
 import java.util.ArrayList;
 import java.util.List;
 
+@Indexed
 @Entity
 @JsonTypeName("catalog_item")
 @JsonIgnoreProperties({"hibernateLazyInitializer"})
+@AnalyzerDefs({
+        @AnalyzerDef(name = "ngram",
+                tokenizer = @TokenizerDef(factory = WhitespaceTokenizerFactory.class),
+                filters = {
+                        @TokenFilterDef(factory = ASCIIFoldingFilterFactory.class),
+                        @TokenFilterDef(factory = LowerCaseFilterFactory.class),
+                        @TokenFilterDef(factory = EdgeNGramFilterFactory.class,
+                                params = {
+                                        @Parameter(name = "minGramSize", value = "1"),
+                                        @Parameter(name = "maxGramSize", value = "4")})
+                }
+        ),
+        @AnalyzerDef(name = "ngram_query",
+                tokenizer = @TokenizerDef(factory = WhitespaceTokenizerFactory.class),
+                filters = {
+                        @TokenFilterDef(factory = ASCIIFoldingFilterFactory.class),
+                        @TokenFilterDef(factory = LowerCaseFilterFactory.class)
+                }
+        )
+})
 public class CatalogItem extends Item {
 
     public CatalogItem() {
         super();
     }
 
+    @Field
     private String description;
 
     private String picture;
@@ -44,6 +71,8 @@ public class CatalogItem extends Item {
 
     private double discountPercent;
 
+    @Field(index = Index.YES, analyze = Analyze.YES, store = org.hibernate.search.annotations.Store.NO)
+    @Analyzer(definition = "ngram")
     private CatalogItemType itemType;
 
     public CatalogItem(double price, String description,

@@ -5,6 +5,7 @@ import org.cshaifasweng.winter.da.StoreRepository;
 import org.cshaifasweng.winter.models.CatalogItem;
 import org.cshaifasweng.winter.models.CatalogItemType;
 import org.cshaifasweng.winter.services.CatalogService;
+import org.cshaifasweng.winter.services.SearchService;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -16,11 +17,13 @@ public class CatalogItemController {
     private final CatalogItemsRepository repository;
     private final StoreRepository storeRepository;
     private final CatalogService catalogService;
+    private final SearchService searchService;
 
-    public CatalogItemController(CatalogItemsRepository repository, StoreRepository storeRepository, CatalogService catalogService) {
+    public CatalogItemController(CatalogItemsRepository repository, StoreRepository storeRepository, CatalogService catalogService, SearchService searchService) {
         this.repository = repository;
         this.storeRepository = storeRepository;
         this.catalogService = catalogService;
+        this.searchService = searchService;
     }
 
     @GetMapping("/catalog")
@@ -31,9 +34,14 @@ public class CatalogItemController {
     @GetMapping("/store/{id}/catalog")
     public List<CatalogItem> getItemsByStore(@PathVariable("id") long id,
                                              @RequestParam(required = false, name = "singleItems")
-                                                     Optional<Boolean> singleItems) {
+                                                     Optional<Boolean> singleItems,
+                                             @RequestParam(required = false, name = "search")
+                                             Optional<String> query) {
         if (singleItems.isPresent() && singleItems.get())
             return catalogService.findByStoreAndType(id, CatalogItemType.ONE_FLOWER);
+        if (query.isPresent()) {
+            return searchService.searchItems(query.get(), id);
+        }
         return catalogService.findByStore(id);
     }
 
