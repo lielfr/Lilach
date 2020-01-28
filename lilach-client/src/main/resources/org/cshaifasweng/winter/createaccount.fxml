@@ -19,7 +19,7 @@
    <children>
       <BorderPane layoutX="37.0" layoutY="14.0" prefHeight="737.0" prefWidth="620.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <top>
-            <Label fx:id="Lheadline" prefHeight="41.0" prefWidth="179.0" text="create account" textAlignment="JUSTIFY" BorderPane.alignment="CENTER">
+            <Label fx:id="Lheadline" prefHeight="41.0" prefWidth="179.0" text="Create Account" textAlignment="JUSTIFY" BorderPane.alignment="CENTER">
                <font>
                   <Font size="23.0" />
                </font>
@@ -54,14 +54,14 @@
                               <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                           </rowConstraints>
                            <children>
-                              <Label fx:id="LFname" prefHeight="30.0" prefWidth="83.0" text="First Name:" />
+                              <Label fx:id="LFname" prefHeight="30.0" prefWidth="83.0" text="First Nname:" />
                               <TextField fx:id="TFname" promptText="First name" GridPane.columnIndex="1" />
                               <Label fx:id="LEFName" textFill="RED" wrapText="true" GridPane.columnIndex="2">
                                  <padding>
                                     <Insets left="10.0" />
                                  </padding>
                               </Label>
-                              <Label fx:id="LLname" prefHeight="17.0" prefWidth="99.0" text="Last Name:" GridPane.rowIndex="1" />
+                              <Label fx:id="LLname" prefHeight="17.0" prefWidth="99.0" text="Last name:" GridPane.rowIndex="1" />
                               <TextField fx:id="TLname" promptText="Last name" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                               <Label fx:id="LELName" textFill="RED" wrapText="true" GridPane.columnIndex="2" GridPane.rowIndex="1">
                                  <padding>
@@ -75,14 +75,14 @@
                                     <Insets left="10.0" />
                                  </padding>
                               </Label>
-                              <Label fx:id="Lid" prefHeight="30.0" prefWidth="50.0" text="Id:" GridPane.rowIndex="3" />
-                              <TextField fx:id="Tid" prefHeight="25.0" prefWidth="149.0" promptText="ID numner" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                              <Label fx:id="Lid" prefHeight="30.0" prefWidth="50.0" text="I.D.:" GridPane.rowIndex="3" />
+                              <TextField fx:id="Tid" prefHeight="25.0" prefWidth="149.0" promptText="I.D." GridPane.columnIndex="1" GridPane.rowIndex="3" />
                               <Label fx:id="LEId" textFill="RED" wrapText="true" GridPane.columnIndex="2" GridPane.rowIndex="3">
                                  <padding>
                                     <Insets left="10.0" />
                                  </padding>
                               </Label>
-                              <Label fx:id="Ldateofbirth" text="Date Of Birth:" GridPane.rowIndex="4" />
+                              <Label fx:id="Ldateofbirth" text="Date of birth:" GridPane.rowIndex="4" />
                               <HBox prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="4">
                                  <children>
                                     <TextField fx:id="Tbirthd" prefHeight="26.0" prefWidth="42.0" promptText="DD" />
@@ -118,14 +118,14 @@
                                     <Insets left="10.0" />
                                  </padding>
                               </Label>
-                              <Label fx:id="Lcredit" prefHeight="30.0" prefWidth="83.0" text="Credit Card:" GridPane.rowIndex="6" />
+                              <Label fx:id="Lcredit" prefHeight="30.0" prefWidth="124.0" text="Credit card number:" GridPane.rowIndex="6" />
                               <TextField fx:id="Tcredit" prefHeight="25.0" prefWidth="149.0" promptText="Creditcard number" GridPane.columnIndex="1" GridPane.rowIndex="6" />
                               <Label fx:id="LECredit" textFill="RED" wrapText="true" GridPane.columnIndex="2" GridPane.rowIndex="6">
                                  <padding>
                                     <Insets left="10.0" />
                                  </padding>
                               </Label>
-                              <Label fx:id="Lvaild" prefHeight="30.0" prefWidth="143.0" text="Expiry Month / Year" GridPane.rowIndex="7" />
+                              <Label fx:id="Lvaild" prefHeight="30.0" prefWidth="143.0" text="Expiry month / year" GridPane.rowIndex="7" />
                               <HBox prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="7">
                                  <children>
                                     <TextField fx:id="TvaildM" prefHeight="25.0" prefWidth="42.0" promptText="MM" />
@@ -148,8 +148,8 @@
                                     <Insets left="10.0" />
                                  </padding>
                               </Label>
-                              <Label fx:id="Lcvv" prefHeight="30.0" prefWidth="50.0" text="Cvv:" GridPane.rowIndex="8" />
-                              <TextField fx:id="Tcvv" promptText="Cvv" GridPane.columnIndex="1" GridPane.rowIndex="8" />
+                              <Label fx:id="Lcvv" prefHeight="30.0" prefWidth="50.0" text="CVV:" GridPane.rowIndex="8" />
+                              <TextField fx:id="Tcvv" promptText="CVV" GridPane.columnIndex="1" GridPane.rowIndex="8" />
                               <Label fx:id="LECvv" textFill="RED" wrapText="true" GridPane.columnIndex="2" GridPane.rowIndex="8">
                                  <padding>
                                     <Insets left="10.0" />
@@ -163,7 +163,7 @@
                                  </padding>
                               </Label>
                               <Label fx:id="Lmembership" prefHeight="17.0" prefWidth="94.0" text="Membership:" GridPane.rowIndex="10" />
-                              <ChoiceBox fx:id="Cmembership" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="10" />
+                              <ChoiceBox fx:id="Cmembership" prefHeight="27.0" prefWidth="224.0" GridPane.columnIndex="1" GridPane.rowIndex="10" />
                               <Label fx:id="LEMembership" textFill="#f80000" wrapText="true" GridPane.columnIndex="2" GridPane.rowIndex="10">
                                  <padding>
                                     <Insets left="10.0" />
@@ -185,7 +185,7 @@
                   </HBox>
                   <HBox alignment="CENTER" prefHeight="113.0" prefWidth="609.0">
                      <children>
-                        <Button fx:id="finishcreate" mnemonicParsing="false" onAction="#Fcreate" prefHeight="50.0" prefWidth="125.0" text="Finish:" />
+                        <Button fx:id="finishcreate" mnemonicParsing="false" onAction="#Fcreate" prefHeight="50.0" prefWidth="125.0" text="Join us" />
                      </children>
                   </HBox>
                   <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
