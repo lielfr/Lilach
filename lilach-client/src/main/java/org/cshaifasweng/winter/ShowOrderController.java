@@ -64,6 +64,7 @@ public class ShowOrderController implements Refreshable, Initializable {
 
 
     private Order currentOrder;
+    private Stage stage;
 
     private Stage popupStage;
 
