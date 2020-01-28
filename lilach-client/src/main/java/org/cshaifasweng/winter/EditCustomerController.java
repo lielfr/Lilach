@@ -1,5 +1,6 @@
 package org.cshaifasweng.winter;
 
+import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -8,10 +9,12 @@ import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.util.StringConverter;
 import org.cshaifasweng.winter.events.ComplaintHandleEvent;
 import org.cshaifasweng.winter.events.CustomerSendEvent;
 import org.cshaifasweng.winter.models.Customer;
 import org.cshaifasweng.winter.models.Employee;
+import org.cshaifasweng.winter.models.SubscriberType;
 import org.cshaifasweng.winter.models.User;
 import org.cshaifasweng.winter.web.APIAccess;
 import org.greenrobot.eventbus.EventBus;
@@ -21,6 +24,7 @@ import java.net.URL;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.Locale;
 import java.util.ResourceBundle;
@@ -74,7 +78,7 @@ public class EditCustomerController implements Initializable {
     private DatePicker subscriptionEndPicker;
 
     @FXML
-    private ChoiceBox<?> subscriptionChoice;
+    private ChoiceBox<SubscriberType> subscriptionChoice;
 
     @FXML
     private Label firstNameLabel;
@@ -386,6 +390,18 @@ public class EditCustomerController implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
         EventBus.getDefault().register(this);
         customerIdLabel.setText(Long.toString(customer.getId()));
+        subscriptionChoice.setConverter(new StringConverter<SubscriberType>() {
+            @Override
+            public String toString(SubscriberType subscriberType) {
+                return subscriberType.toString();
+            }
+
+            @Override
+            public SubscriberType fromString(String s) {
+                return null;
+            }
+        });
+        subscriptionChoice.setItems(FXCollections.observableArrayList(Arrays.asList(SubscriberType.values())));
     }
 
     @Subscribe
