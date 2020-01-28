@@ -342,6 +342,32 @@ public class EditCustomerController implements Initializable {
     }
 
     private void updateFields(Customer customer){
+        firsNameField;
+
+        lastNameField;
+
+        idNumField;
+
+        phoneField;
+
+        emailField;
+
+        passwordField;
+
+        addressField;
+
+        creditcardField;
+
+        cvvField;
+
+        dateOfBirthPicker;
+
+        expirationPicker;
+
+        subscriptionEndPicker;
+
+        subscriptionChoice;
+
 
     }
 
