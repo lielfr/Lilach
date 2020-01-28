@@ -89,6 +89,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .permitAll()
                 .antMatchers(HttpMethod.GET, "/image/**")
                 .permitAll()
+                .antMatchers(HttpMethod.PUT, "/order/**/delivered")
+                .hasAuthority(SecurityConstants.PRIVILEGE_ORDERS_MARK_AS_DELIVERED)
                 .anyRequest().authenticated()
                 .and()
                 .addFilter(new AuthenticationFilter(authenticationManager(), userRepository, userService))

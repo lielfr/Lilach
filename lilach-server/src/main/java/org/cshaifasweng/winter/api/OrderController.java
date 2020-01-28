@@ -52,4 +52,9 @@ public class OrderController {
 
         return orderService.cancelOrderEmployee(id);
     }
+
+    @PutMapping("/order/{id}/delivered")
+    public Order markOrderAsDelivered(@PathVariable("id") long id) {
+        return orderService.markAsDelivered(id);
+    }
 }

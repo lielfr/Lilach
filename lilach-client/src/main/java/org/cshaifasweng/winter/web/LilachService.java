@@ -72,4 +72,7 @@ public interface LilachService {
     @DELETE("/custom/{id}")
     Call<Void> deleteCustomItem(@Path("id") long id);
 
+    @PUT("/order/{id}/delivered")
+    Call<Void> markOrderAsDelivered(@Path("id") long id);
+
 }
