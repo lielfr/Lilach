@@ -20,6 +20,7 @@ import org.cshaifasweng.winter.web.APIAccess;
 import org.cshaifasweng.winter.web.LilachService;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -103,13 +104,17 @@ public class CatalogController implements Refreshable, Initializable {
         }
     }
 
-    @Subscribe
+    @Subscribe(threadMode = ThreadMode.MAIN)
     public void handleLogin(LoginChangeEvent changeEvent) {
         User user = APIAccess.getCurrentUser();
         if (user == null || user instanceof Employee)
             return;
         Customer customer = (Customer) APIAccess.getCurrentUser();
-        if (customer.getStores() == null) return;
+        if (customer.getStores() == null)
+            return;
+        // The following two lines are CRITICAL. These were the reason for that annoying catalog bug.
+        stores.clear();
+        stores.addAll(customer.getStores());
         storeChoiceBox.getItems().clear();
         storeChoiceBox.getItems().addAll(
                 customer
@@ -126,9 +131,10 @@ public class CatalogController implements Refreshable, Initializable {
                 @Override
                 public void onResponse(Call<List<Store>> call, Response<List<Store>> response) {
                     if (response.code() != 200 || response.body() == null) return;
+                    if (stores == null) return;
                     stores.clear();
                     stores.addAll(response.body());
-                    if (stores == null) return;
+
                     List<String> storeNames = stores
                             .stream()
                             .map(Store::getName)
@@ -180,11 +186,9 @@ public class CatalogController implements Refreshable, Initializable {
                     discountedPrice -= item.getDiscountAmount();
                     if (discountedPrice < item.getPrice())
                         controller.setDiscount(discountedPrice);
-                    System.out.println("ADDED AT (" + j + ", " + i + ")");
                     catalogGrid.add(itemCell, j, i);
                 }
             }
-            System.out.println("GRID POPULATED");
             updatePages();
         });
 
@@ -229,7 +233,7 @@ public class CatalogController implements Refreshable, Initializable {
         quantities = new HashMap<>();
         EventBus.getDefault().register(this);
         service = APIAccess.getService();
-        updateStoresList();
+
         storeChoiceBox.getSelectionModel().selectedIndexProperty().addListener(
                 (observableValue, number, t1) -> {
                     int selectedIndex = storeChoiceBox.getSelectionModel().getSelectedIndex();
@@ -239,6 +243,7 @@ public class CatalogController implements Refreshable, Initializable {
                             (selectedIndex).getId());
                     updateCartButton();
                 });
+        updateStoresList();
     }
 
     @Override
