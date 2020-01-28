@@ -131,8 +131,24 @@ public class SecurityDataLoader implements ApplicationListener<ContextRefreshedE
                 Collections.singletonList(customerRole), "Bob", "Marley", "0509999999",
                 11, customerCreditCardExpire.getTime(), 123, customerBirth.getTime(), Arrays.asList(haifaUniBranch));
 
+        Customer customerNoah = createOrReturnCustomer("022200001", "Noah@gmail.com", "Noah",
+                Collections.singletonList(customerRole), "Noah", "Johnson", "0509999111",
+                11, customerCreditCardExpire.getTime(), 123, customerBirth.getTime(), Arrays.asList(qiryatYamBranch));
+
+        Customer customerLiam = createOrReturnCustomer("022200001", "Liam@gmail.com", "Liam",
+                Collections.singletonList(customerRole), "Liam", "Smith", "0509999111",
+                11, customerCreditCardExpire.getTime(), 123, customerBirth.getTime(), Arrays.asList(haifaUniBranch));
+
+        Customer customerWilliam = createOrReturnCustomer("022330001", "William@gmail.com", "William",
+                Collections.singletonList(customerRole), "William", "Williams", "0529999111",
+                11, customerCreditCardExpire.getTime(), 123, customerBirth.getTime(), Arrays.asList(haifaUniBranch));
+
         Employee admin = createOrReturnEmployee("000000998", "lielft@gmail.com", "AdminBaby!",
                 "Liel", "Fridman", "0509999999",
+                Collections.singletonList(adminRole));
+
+        Employee admin2 = createOrReturnEmployee("000000998", "lielft@gmail.com", "ETPhoneHome",
+                "Amit", "Fridman", "0508888888",
                 Collections.singletonList(adminRole));
 
         Employee haifaUniManager = createOrReturnEmployee("000000997", "haifa.uni.manager@lilach.com", "haifarocks",
