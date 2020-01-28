@@ -147,7 +147,7 @@ public class SecurityDataLoader implements ApplicationListener<ContextRefreshedE
                 "Liel", "Fridman", "0509999999",
                 Collections.singletonList(adminRole));
 
-        Employee admin2 = createOrReturnEmployee("000000998", "lielft@gmail.com", "ETPhoneHome",
+        Employee admin2 = createOrReturnEmployee("000000998", "amitft@gmail.com", "ETPhoneHome",
                 "Amit", "Fridman", "0508888888",
                 Collections.singletonList(adminRole));
 
