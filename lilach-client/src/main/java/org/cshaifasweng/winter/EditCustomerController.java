@@ -100,7 +100,21 @@ public class EditCustomerController {
     String canNotBeEmpty = "Can't stay empty";
     String invalidVal = "Invalid entry";
 
-    private void turnOnFields(){
+    private void turnOnFieldsCustomer(){
+        firsNameField.setDisable(false);
+        lastNameField.setDisable(false);
+        idNumField.setDisable(false);
+        phoneField.setDisable(false);
+        emailField.setDisable(false);
+        passwordField.setDisable(false);
+        addressField.setDisable(false);
+        creditcardField.setDisable(false);
+        cvvField.setDisable(false);
+        dateOfBirthPicker.setDisable(false);
+        expirationPicker.setDisable(false);
+        subscriptionEndPicker.setDisable(false);
+    }
+    private void turnOnFieldsManger(){
         firsNameField.setDisable(false);
         lastNameField.setDisable(false);
         idNumField.setDisable(false);
@@ -118,7 +132,8 @@ public class EditCustomerController {
 
     @FXML
     void edit(ActionEvent event) {
-        turnOnFields();
+//        if()
+        turnOnFieldsManger();
     }
 
     @FXML
