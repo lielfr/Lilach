@@ -4,8 +4,10 @@ import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -15,6 +17,7 @@ import javafx.util.StringConverter;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
+import org.cshaifasweng.winter.events.CatalogItemEditEvent;
 import org.cshaifasweng.winter.events.DashboardSwitchEvent;
 import org.cshaifasweng.winter.models.CatalogItem;
 import org.cshaifasweng.winter.models.CatalogItemType;
@@ -22,6 +25,7 @@ import org.cshaifasweng.winter.models.Store;
 import org.cshaifasweng.winter.web.APIAccess;
 import org.cshaifasweng.winter.web.LilachService;
 import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -30,12 +34,17 @@ import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.net.URL;
 import java.util.Arrays;
 import java.util.List;
+import java.util.ResourceBundle;
 import java.util.logging.Logger;
 
-public class AddItemController implements Refreshable {
+public class AddItemController implements Refreshable, Initializable {
     private static final Logger log = Logger.getLogger(String.valueOf(AddItemController.class));
+
+    @FXML
+    private Label titleLabel;
 
     @FXML
     private TextField itemNameField;
@@ -75,6 +84,9 @@ public class AddItemController implements Refreshable {
 
     byte[] imageAsBytes;
 
+    private boolean isEdit = false;
+    private boolean imageChanged = false;
+
     /**
      * Choosing the Item Image you want to upload to the catalog.
      * @param event
@@ -87,6 +99,7 @@ public class AddItemController implements Refreshable {
         if (file == null) return;
         imageAsBytes = new FileInputStream(file).readAllBytes();
         imageViewer.setImage(new Image(new ByteArrayInputStream(imageAsBytes)));
+        imageChanged = true;
     }
 
     @FXML
@@ -100,49 +113,58 @@ public class AddItemController implements Refreshable {
         System.out.println("MOO: " + storeChoiceBox.getValue().getName());
         createdItem.setStore(storeChoiceBox.getValue());
         createdItem.setItemType(typeChoiceBox.getValue());
-        RequestBody reqFileBody = RequestBody.create(MediaType.parse("multipart/form-data"), imageAsBytes);
-        lilachService.uploadImage(MultipartBody.Part.createFormData("file", "name", reqFileBody)).enqueue(new Callback<String>() {
+
+        Callback<CatalogItem> createEditItemCB = new Callback<>() {
             @Override
-            public void onResponse(Call<String> call, Response<String> response) {
-                log.severe("Got response code " + response.code());
-                if (response.code() != 200) return;
-                createdItem.setPicture(response.body());
-                lilachService.newCatalogItem(storeChoiceBox.getValue().getId(), createdItem).enqueue(new Callback<CatalogItem>() {
-                    @Override
-                    public void onResponse(Call<CatalogItem> call, Response<CatalogItem> response) {
-                        if (response.code() != 200) {
-                            // TODO: Add code when there is an error
-                            log.severe("Got response code " + response.code());
-                            return;
-                        }
+            public void onResponse(Call<CatalogItem> call, Response<CatalogItem> response) {
+                if (response.code() != 200) {
+                    log.severe("Got response code " + response.code());
+                    return;
+                }
+                log.info("Successfully created item");
 
-                        // TODO: Add code when successful
-                        log.info("Successfully created item");
-
-                        Platform.runLater(() -> {
-                            EventBus.getDefault().post(new DashboardSwitchEvent("catalog"));
-                        });
-
-                    }
-
-                    @Override
-                    public void onFailure(Call<CatalogItem> call, Throwable throwable) {
-                        throwable.printStackTrace();
-                    }
+                Platform.runLater(() -> {
+                    EventBus.getDefault().post(new DashboardSwitchEvent("edit_catalog_list"));
                 });
+
             }
 
             @Override
-            public void onFailure(Call<String> call, Throwable throwable) {
+            public void onFailure(Call<CatalogItem> call, Throwable throwable) {
                 throwable.printStackTrace();
             }
-        });
+        };
+
+        if (imageChanged) {
+            RequestBody reqFileBody = RequestBody.create(MediaType.parse("multipart/form-data"), imageAsBytes);
+            lilachService.uploadImage(MultipartBody.Part.createFormData("file", "name", reqFileBody)).enqueue(new Callback<String>() {
+                @Override
+                public void onResponse(Call<String> call, Response<String> response) {
+                    log.severe("Got response code " + response.code());
+                    if (response.code() != 200) return;
+                    createdItem.setPicture(response.body());
+                    if (isEdit) {
+                        lilachService.updateItem(createdItem.getId(), createdItem).enqueue(createEditItemCB);
+                    } else {
+                        lilachService.newCatalogItem(storeChoiceBox.getValue().getId(), createdItem).enqueue(createEditItemCB);
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<String> call, Throwable throwable) {
+                    throwable.printStackTrace();
+                }
+            });
+        } else {
+            lilachService.updateItem(createdItem.getId(), createdItem).enqueue(createEditItemCB);
+        }
+
 
     }
 
     @FXML
     void cancelItemAddition(ActionEvent event) {
-
+        EventBus.getDefault().post(new DashboardSwitchEvent("edit_catalog_list"));
 
     }
 
@@ -218,6 +240,27 @@ public class AddItemController implements Refreshable {
 
     @Override
     public void onSwitch() {
+    }
 
+    @Subscribe
+    public void handleEdit(CatalogItemEditEvent event) {
+        createdItem = event.getCatalogItem();
+        titleLabel.setText("Edit Item");
+        addItemButton.setText("Save Changes");
+        addImageButton.setText("Change Image");
+
+        itemNameField.setText(createdItem.getDescription());
+        itemPriceField.setText(String.valueOf(createdItem.getPrice()));
+        discountSumField.setText(String.valueOf(createdItem.getDiscountAmount()));
+        discountPercentageField.setText(String.valueOf(createdItem.getDiscountPercent()));
+        typeChoiceBox.setValue(createdItem.getItemType());
+        storeChoiceBox.setValue(createdItem.getStore());
+
+        imageViewer.setImage(new Image(APIAccess.getImageUrl(createdItem.getPicture())));
+    }
+
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+        EventBus.getDefault().register(this);
     }
 }

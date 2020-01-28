@@ -12,7 +12,7 @@ public interface LilachService {
     Call<List<CatalogItem>> getAllItems();
 
     @PUT("catalog/{id}")
-    Call<Void> updateItem(@Path("id") long id, @Body CatalogItem item);
+    Call<CatalogItem> updateItem(@Path("id") long id, @Body CatalogItem item);
 
     @POST("/customer")
     Call<Customer> newCustomer(@Body Customer customer);

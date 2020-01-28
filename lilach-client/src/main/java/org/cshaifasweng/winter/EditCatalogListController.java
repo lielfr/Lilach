@@ -9,9 +9,12 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.util.StringConverter;
+import org.cshaifasweng.winter.events.CatalogItemEditEvent;
 import org.cshaifasweng.winter.events.DashboardSwitchEvent;
-import org.cshaifasweng.winter.events.SendEvent;
 import org.cshaifasweng.winter.models.CatalogItem;
+import org.cshaifasweng.winter.models.Employee;
+import org.cshaifasweng.winter.models.Store;
 import org.cshaifasweng.winter.web.APIAccess;
 import org.cshaifasweng.winter.web.LilachService;
 import org.greenrobot.eventbus.EventBus;
@@ -27,14 +30,16 @@ public class EditCatalogListController implements Refreshable {
     @FXML
     private TableView<CatalogItem> dataTable;
 
+    @FXML
+    private ChoiceBox<Store> storeChoiceBox;
+
     public static CatalogItem selectedItem;
 
-    @Override
-    public void refresh() {
-        dataTable.getItems().clear();
+    private LilachService service;
+
+    private void populateTable(long storeId) {
         dataTable.getColumns().clear();
-        LilachService service = APIAccess.getService();
-        service.getAllItems().enqueue(new Callback<List<CatalogItem>>() {
+        service.getCatalogByStore(storeId).enqueue(new Callback<List<CatalogItem>>() {
             @Override
             public void onResponse(Call<List<CatalogItem>> call, Response<List<CatalogItem>> response) {
                 if (response.code() != 200) return;
@@ -44,12 +49,12 @@ public class EditCatalogListController implements Refreshable {
                 // All the UI updating should be done in the UI thread. Here we enforce that.
                 Platform.runLater(() -> {
                     TableColumn<CatalogItem, Long> idColumn = new TableColumn<>("Catalog Number");
-                    TableColumn<CatalogItem, String> pictureColumn = new TableColumn("Picture");
+                    TableColumn<CatalogItem, String> pictureColumn = new TableColumn<>("Picture");
                     TableColumn<CatalogItem, String> descriptionColumn = new TableColumn<CatalogItem, String>("Description");
                     TableColumn<CatalogItem, Double> priceColumn = new TableColumn<>("Price");
 
 
-                    idColumn.setCellValueFactory(new PropertyValueFactory<CatalogItem, Long>("id"));
+                    idColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
                     pictureColumn.setCellFactory(tableColumn -> {
                         final ImageView imageView = new ImageView();
 
@@ -67,9 +72,9 @@ public class EditCatalogListController implements Refreshable {
                         tableCell.setGraphic(imageView);
                         return tableCell;
                     });
-                    pictureColumn.setCellValueFactory(new PropertyValueFactory<CatalogItem, String>("picture"));
-                    descriptionColumn.setCellValueFactory(new PropertyValueFactory<CatalogItem, String>("description"));
-                    priceColumn.setCellValueFactory(new PropertyValueFactory<CatalogItem, Double>("price"));
+                    pictureColumn.setCellValueFactory(new PropertyValueFactory<>("picture"));
+                    descriptionColumn.setCellValueFactory(new PropertyValueFactory<>("description"));
+                    priceColumn.setCellValueFactory(new PropertyValueFactory<>("price"));
 
                     dataTable.getColumns().addAll(idColumn, descriptionColumn,
                             priceColumn, pictureColumn);
@@ -77,7 +82,7 @@ public class EditCatalogListController implements Refreshable {
                     dataTable.setItems(FXCollections.observableList(items));
 
                     ContextMenu menu = new ContextMenu();
-                    MenuItem item = new MenuItem("Change price");
+                    MenuItem item = new MenuItem("Edit item");
 
                     menu.getItems().add(item);
 
@@ -86,8 +91,8 @@ public class EditCatalogListController implements Refreshable {
                         public void handle(ActionEvent actionEvent) {
                             int selectedIndex = dataTable.getSelectionModel().getSelectedIndex();
                             selectedItem = items.get(selectedIndex);
-                            EventBus.getDefault().post(new DashboardSwitchEvent("secondary"));
-                            EventBus.getDefault().post(new SendEvent(selectedItem));
+                            EventBus.getDefault().post(new DashboardSwitchEvent("add_item"));
+                            EventBus.getDefault().post(new CatalogItemEditEvent(selectedItem));
                         }
                     });
 
@@ -113,7 +118,58 @@ public class EditCatalogListController implements Refreshable {
     }
 
     @Override
+    public void refresh() {
+        dataTable.getItems().clear();
+        dataTable.getColumns().clear();
+        service = APIAccess.getService();
+        storeChoiceBox.setConverter(new StringConverter<Store>() {
+            @Override
+            public String toString(Store store) {
+                return store.getName();
+            }
+
+            @Override
+            public Store fromString(String s) {
+                return null;
+            }
+        });
+
+        storeChoiceBox.getSelectionModel().selectedItemProperty()
+                .addListener((observableValue, store, t1) -> populateTable(storeChoiceBox.getValue().getId()));
+
+        Employee employee = (Employee) APIAccess.getCurrentUser();
+        if (employee.getAssignedStore() != null) {
+            storeChoiceBox.setItems(FXCollections.observableArrayList(employee.getAssignedStore()));
+            storeChoiceBox.getSelectionModel().select(0);
+        } else {
+            service.getAllStores().enqueue(new Callback<>() {
+                @Override
+                public void onResponse(Call<List<Store>> call, Response<List<Store>> response) {
+                    if (response.code() != 200) return;
+
+                    Platform.runLater(() -> {
+                        storeChoiceBox.setItems(FXCollections.observableArrayList(response.body()));
+                        storeChoiceBox.getSelectionModel().select(0);
+                    });
+                }
+
+                @Override
+                public void onFailure(Call<List<Store>> call, Throwable throwable) {
+
+                }
+            });
+        }
+
+
+    }
+
+    @Override
     public void onSwitch() {
 
+    }
+
+    @FXML
+    public void addItem() {
+        EventBus.getDefault().post(new DashboardSwitchEvent("add_item"));
     }
 }

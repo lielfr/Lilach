@@ -3,7 +3,7 @@ package org.cshaifasweng.winter;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
 import org.cshaifasweng.winter.events.DashboardSwitchEvent;
-import org.cshaifasweng.winter.events.SendEvent;
+import org.cshaifasweng.winter.events.CatalogItemEditEvent;
 import org.cshaifasweng.winter.models.CatalogItem;
 import org.cshaifasweng.winter.web.APIAccess;
 import org.greenrobot.eventbus.EventBus;
@@ -26,8 +26,8 @@ public class SecondaryController implements Refreshable {
     }
 
     @Subscribe
-    public void handleEvent(SendEvent event) {
-        selectedItem = event.message;
+    public void handleEvent(CatalogItemEditEvent event) {
+        selectedItem = event.getCatalogItem();
     }
 
     @FXML

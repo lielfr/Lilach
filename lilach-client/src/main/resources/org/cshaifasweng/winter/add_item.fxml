@@ -16,7 +16,7 @@
 
 <VBox xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.cshaifasweng.winter.AddItemController">
    <children>
-      <Label alignment="CENTER" maxWidth="1.7976931348623157E308" text="Add Item" textAlignment="CENTER" VBox.vgrow="ALWAYS">
+      <Label fx:id="titleLabel" alignment="CENTER" maxWidth="1.7976931348623157E308" text="Add Item" textAlignment="CENTER" VBox.vgrow="ALWAYS">
          <font>
             <Font size="36.0" />
          </font>
