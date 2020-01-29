@@ -75,6 +75,7 @@ public class LoginScreenController implements Refreshable, Initializable {
                         public void onFailure(Call<User> call, Throwable throwable) {
                             log.finest("getCurrentUser failed.");
                             throwable.printStackTrace();
+                            Utils.showError("Connection failure");
                         }
                     });
 
@@ -84,7 +85,7 @@ public class LoginScreenController implements Refreshable, Initializable {
 
             @Override
             public void onFailure(Call<Void> call, Throwable throwable) {
-
+                Utils.showError("Connection failure");
             }
         });
     }

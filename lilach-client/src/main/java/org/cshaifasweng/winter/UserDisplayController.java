@@ -139,12 +139,7 @@ public class UserDisplayController implements Refreshable, Initializable {
             @Override
             public void onResponse(Call<List<User>> call, Response<List<User>> response) {
                 if (response.code() != 200) {
-                    try {
-                        System.out.println("STATUS CODE: " + response.code() + ", error: " + response.errorBody().string());
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                    return;
+                    Utils.showError("Error code: " + response.code());
                 }
 
                 Platform.runLater(() -> {
@@ -163,6 +158,7 @@ public class UserDisplayController implements Refreshable, Initializable {
             @Override
             public void onFailure(Call<List<User>> call, Throwable throwable) {
                 throwable.printStackTrace();
+                Utils.showError("Network failure");
             }
         };
 
@@ -211,13 +207,8 @@ public class UserDisplayController implements Refreshable, Initializable {
         service.getAllStores().enqueue(new Callback<>() {
             @Override
             public void onResponse(Call<List<Store>> call, Response<List<Store>> response) {
-                if (response.code() != 200 || response.body() == null) {
-                    try {
-                        System.out.println("STATUS CODE: " + response.code() + ", error: " + response.errorBody().string());
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                    return;
+                if (response.code() != 200) {
+                    Utils.showError("Error code: " + response.code());
                 }
 
                 Platform.runLater(() -> {
@@ -246,6 +237,7 @@ public class UserDisplayController implements Refreshable, Initializable {
             @Override
             public void onFailure(Call<List<Store>> call, Throwable throwable) {
                 throwable.printStackTrace();
+                Utils.showError("Network failure");
             }
         });
     }

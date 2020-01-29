@@ -90,17 +90,17 @@ public class CatalogController implements Refreshable, Initializable {
     }
 
     @FXML
-    public void backPage() {
+    public void backPage() throws IOException {
         if (page == 1) return;
         page--;
-        updatePages();
+        populateGrid();
     }
 
     @FXML
-    public void nextPage() {
+    public void nextPage() throws IOException {
         if (page == pages) return;
         page++;
-        updatePages();
+        populateGrid();
     }
 
     @FXML
@@ -150,7 +150,7 @@ public class CatalogController implements Refreshable, Initializable {
 
             @Override
             public void onFailure(Call<List<Store>> call, Throwable throwable) {
-
+                Utils.showError("Network failure");
             }
         });
 
@@ -183,7 +183,7 @@ public class CatalogController implements Refreshable, Initializable {
 
                 @Override
                 public void onFailure(Call<List<Store>> call, Throwable throwable) {
-
+                    Utils.showError("Network failure");
                 }
             });
         } else {
@@ -205,7 +205,7 @@ public class CatalogController implements Refreshable, Initializable {
                     Node itemCell = viewData.getKey();
                     CatalogItemViewController controller =
                             (CatalogItemViewController) viewData.getValue();
-                    int index = (page - 1) + i * NUM_COLS + j;
+                    int index = (page - 1) * NUM_COLS * NUM_ROWS + i * NUM_COLS + j;
                     if (index >= items.size())
                         break;
                     CatalogItem item = items.get(index);
@@ -239,7 +239,9 @@ public class CatalogController implements Refreshable, Initializable {
         service.searchCatalogByStore(id, keywords).enqueue(new Callback<List<CatalogItem>>() {
             @Override
             public void onResponse(Call<List<CatalogItem>> call, Response<List<CatalogItem>> response) {
-                if (response.code() != 200) return;
+                if (response.code() != 200) {
+                    Utils.showError("Error code: " + response.code());
+                }
 
                 items = response.body();
 
@@ -254,7 +256,7 @@ public class CatalogController implements Refreshable, Initializable {
 
             @Override
             public void onFailure(Call<List<CatalogItem>> call, Throwable throwable) {
-
+                Utils.showError("Network failure");
             }
         });
     }
@@ -263,7 +265,9 @@ public class CatalogController implements Refreshable, Initializable {
         service.getCatalogByStore(id).enqueue(new Callback<>() {
             @Override
             public void onResponse(Call<List<CatalogItem>> call, Response<List<CatalogItem>> response) {
-                if (response.code() != 200) return;
+                if (response.code() != 200) {
+                    Utils.showError("Error code: " + response.code());
+                }
 
                 items = response.body();
 
@@ -279,6 +283,7 @@ public class CatalogController implements Refreshable, Initializable {
             @Override
             public void onFailure(Call<List<CatalogItem>> call, Throwable throwable) {
                 throwable.printStackTrace();
+                Utils.showError("Network failure");
             }
         });
     }

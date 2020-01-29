@@ -784,7 +784,8 @@ public class OrderController implements Refreshable {
                 System.out.println("CODE: " + response.code());
                 if (response.code() == 200) {
                     Platform.runLater(() -> {
-                        EventBus.getDefault().post(new DashboardSwitchEvent("catalog"));
+                        Utils.showInfo("Thank you for your order.");
+                        EventBus.getDefault().post(new DashboardSwitchEvent("order_list_view"));
                     });
                 }
             }
@@ -792,6 +793,7 @@ public class OrderController implements Refreshable {
             @Override
             public void onFailure(Call<Order> call, Throwable throwable) {
                 throwable.printStackTrace();
+                Utils.showError("Network failure");
             }
         }));
     }
@@ -837,7 +839,9 @@ public class OrderController implements Refreshable {
         service.getStoresByCustomer(currentOrder.getOrderedBy().getId()).enqueue(new Callback<List<Store>>() {
             @Override
             public void onResponse(Call<List<Store>> call, Response<List<Store>> response) {
-                if (response.code() != 200) return;
+                if (response.code() != 200) {
+                    Utils.showError("Error code: " + response.code());
+                }
 
                 List<Store> stores = response.body();
                 currentOrder.setStore(stores.get(0));
@@ -845,7 +849,7 @@ public class OrderController implements Refreshable {
 
             @Override
             public void onFailure(Call<List<Store>> call, Throwable throwable) {
-
+                Utils.showError("Network failure");
             }
         });
 

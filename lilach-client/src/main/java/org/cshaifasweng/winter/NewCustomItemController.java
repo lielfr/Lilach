@@ -80,6 +80,9 @@ public class NewCustomItemController implements Refreshable {
         service.newCustomItem(createdItem).enqueue(new Callback<CustomItem>() {
             @Override
             public void onResponse(Call<CustomItem> call, Response<CustomItem> response) {
+                if (response.code() != 200) {
+                    Utils.showError("Error code: " + response.code());
+                }
                 if (response.code() == 200) {
                     createdItem = response.body();
                     System.out.println("New custom item, id: " + createdItem.getId());
@@ -87,13 +90,12 @@ public class NewCustomItemController implements Refreshable {
                         EventBus.getDefault().post(new CustomItemFinishEvent(createdItem, cart, quantities));
                     });
                 }
-                // TODO: Add error message here
 
             }
 
             @Override
             public void onFailure(Call<CustomItem> call, Throwable throwable) {
-                // TODO: Add on failure
+                Utils.showError("Network failure");
             }
         });
 

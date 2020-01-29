@@ -173,7 +173,9 @@ public class EditCatalogListController implements Refreshable, Initializable {
             service.getAllStores().enqueue(new Callback<>() {
                 @Override
                 public void onResponse(Call<List<Store>> call, Response<List<Store>> response) {
-                    if (response.code() != 200) return;
+                    if (response.code() != 200) {
+                        Utils.showError("Error code: " + response.code());
+                    }
 
                     Platform.runLater(() -> {
                         storeChoiceBox.setItems(FXCollections.observableArrayList(response.body()));
@@ -183,7 +185,7 @@ public class EditCatalogListController implements Refreshable, Initializable {
 
                 @Override
                 public void onFailure(Call<List<Store>> call, Throwable throwable) {
-
+                    Utils.showError("Network failure");
                 }
             });
         }

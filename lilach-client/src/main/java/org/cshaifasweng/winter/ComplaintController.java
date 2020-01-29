@@ -4,10 +4,8 @@ import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
-import javafx.stage.Stage;
 import javafx.util.StringConverter;
 import org.cshaifasweng.winter.events.DashboardSwitchEvent;
 import org.cshaifasweng.winter.models.Complaint;
@@ -22,6 +20,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class ComplaintController implements Refreshable {
@@ -74,7 +73,7 @@ public class ComplaintController implements Refreshable {
 
     @FXML
     void cancelComplaint(MouseEvent event) {
-        EventBus.getDefault().post(new DashboardSwitchEvent("primary"));
+        EventBus.getDefault().post(new DashboardSwitchEvent("catalog"));
     }
 
     @FXML
@@ -166,23 +165,24 @@ public class ComplaintController implements Refreshable {
             @Override
             public void onResponse(Call<Complaint> call, Response<Complaint> response) {
 //                Complaint received = response.body();
+                if (response.code() != 200) {
+                    Utils.showError("Error code: " + response.code());
+                }
                 if (response.code() == 200) {
                     Platform.runLater(() -> {
-                        Stage stage = new Stage();
-                        Scene scene = new Scene(new Label("Thank you."));
-                        stage.setScene(scene);
-                        stage.show();
+                        Alert alert = new Alert(Alert.AlertType.INFORMATION, "Thank you.");
+                        alert.show();
                         EventBus.getDefault().post(new DashboardSwitchEvent("catalog"));
                     });
                 }
 
-                // TODO: Replace with something meaningful
-                Platform.runLater(() -> complaintBox.setText("DONE"));
+//                // TODO: Replace with something meaningful
+//                Platform.runLater(() -> complaintBox.setText("DONE"));
             }
 
             @Override
             public void onFailure(Call<Complaint> call, Throwable throwable) {
-
+                Utils.showError("Network failure");
             }
         });
     }
@@ -207,12 +207,18 @@ public class ComplaintController implements Refreshable {
             @Override
             public void onResponse(Call<List<Store>> call, Response<List<Store>> response) {
                 Platform.runLater(() -> {
-                    if (response.code() != 200 || response.body() == null) return;
-                    storeComboBox.setItems(FXCollections.observableList(response.body()));
+                    if (response.code() != 200 || response.body() == null) {
+                        Utils.showError("Error code: " + response.code() + " or body is null");
+                    }
+                    List<Store> serverList = response.body();
+                    storeComboBox.setItems(FXCollections.observableList(serverList));
+                    customer.setStores(new ArrayList<>());
+                    customer.getStores().addAll(serverList);
                     storeComboBox.getSelectionModel().selectedItemProperty()
-                            .addListener((observableValue, store, t1) ->
+                            .addListener((observableValue, store, t1) -> {
                                     complaint.setStore(customer.getStores()
-                                            .get(storeComboBox.getSelectionModel().getSelectedIndex())));
+                                            .get(storeComboBox.getSelectionModel().getSelectedIndex()));
+                            });
                     storeComboBox.getSelectionModel().select(0);
                 });
             }
@@ -220,6 +226,7 @@ public class ComplaintController implements Refreshable {
             @Override
             public void onFailure(Call<List<Store>> call, Throwable throwable) {
                 throwable.printStackTrace();
+                Utils.showError("Network failure");
             }
         });
 

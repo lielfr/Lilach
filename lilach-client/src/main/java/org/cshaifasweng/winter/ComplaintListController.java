@@ -138,8 +138,9 @@ public class ComplaintListController implements Refreshable {
         service.getAllComplaints().enqueue(new Callback<List<Complaint>>() {
             @Override
             public void onResponse(Call<List<Complaint>> call, Response<List<Complaint>> response) {
-                if (response.code() != 200)
-                    return;
+                if (response.code() != 200) {
+                    Utils.showError("Error code: " + response.code());
+                }
 
                 complaints = response.body();
 
@@ -155,7 +156,7 @@ public class ComplaintListController implements Refreshable {
 
             @Override
             public void onFailure(Call<List<Complaint>> call, Throwable throwable) {
-
+                Utils.showError("Network failure");
             }
         });
     }

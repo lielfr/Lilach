@@ -1,5 +1,6 @@
 package org.cshaifasweng.winter;
 
+import javafx.application.Platform;
 import javafx.event.EventHandler;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseButton;
@@ -47,6 +48,21 @@ public class Utils<T> {
             return false;
         }
         return true;
+    }
+
+    public static void showError(String error) {
+        Platform.runLater(() -> {
+            Alert alert = new Alert(Alert.AlertType.ERROR, error);
+            alert.show();
+        });
+
+    }
+
+    public static void showInfo(String info) {
+        Platform.runLater(() -> {
+            Alert alert = new Alert(Alert.AlertType.INFORMATION, info);
+            alert.show();
+        });
     }
 
 }
