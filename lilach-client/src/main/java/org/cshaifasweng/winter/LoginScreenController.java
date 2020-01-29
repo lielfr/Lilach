@@ -6,8 +6,10 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import org.cshaifasweng.winter.events.DashboardSwitchEvent;
+import org.cshaifasweng.winter.events.EditCatalogListForceRefreshEvent;
 import org.cshaifasweng.winter.events.LoginChangeEvent;
 import org.cshaifasweng.winter.events.TokenSetEvent;
+import org.cshaifasweng.winter.models.Customer;
 import org.cshaifasweng.winter.models.User;
 import org.cshaifasweng.winter.web.APIAccess;
 import org.cshaifasweng.winter.web.LilachService;
@@ -58,7 +60,14 @@ public class LoginScreenController implements Refreshable, Initializable {
                             // Notify the dashboard
                             Platform.runLater(() -> {
                                 EventBus.getDefault().post(new LoginChangeEvent());
+                                if (APIAccess.getCurrentUser() instanceof Customer)
+                                    EventBus.getDefault().post(new DashboardSwitchEvent("catalog"));
+                                else {
+                                    EventBus.getDefault().post(new DashboardSwitchEvent("edit_catalog_list"));
+                                    EventBus.getDefault().post(new EditCatalogListForceRefreshEvent());
+                                }
                             });
+
 
                         }
 
@@ -68,9 +77,7 @@ public class LoginScreenController implements Refreshable, Initializable {
                             throwable.printStackTrace();
                         }
                     });
-                    Platform.runLater(() -> {
-                        EventBus.getDefault().post(new DashboardSwitchEvent("catalog"));
-                    });
+
 
                 }
             }

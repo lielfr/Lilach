@@ -19,6 +19,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 import java.net.URL;
+import java.text.SimpleDateFormat;
 import java.util.ResourceBundle;
 
 public class ShowOrderController implements Refreshable, Initializable {
@@ -62,6 +63,9 @@ public class ShowOrderController implements Refreshable, Initializable {
     @FXML
     private Label priceLabel;
 
+    @FXML
+    private Label orderNumLabel;
+
 
     private Order currentOrder;
     private Stage stage;
@@ -71,6 +75,8 @@ public class ShowOrderController implements Refreshable, Initializable {
     @Subscribe
     public void handleEvent(OrderShowEvent event){
     currentOrder = event.getOrder();
+    if (currentOrder.getId() != null)
+        orderNumLabel.setText(currentOrder.getId().toString());
     firstNameLabel.setText(currentOrder.getOrderedBy().getFirstName());
     lastNameLabel.setText(currentOrder.getOrderedBy().getLastName());
     idLabel.setText(currentOrder.getOrderedBy().getMisparZehut());
@@ -81,6 +87,8 @@ public class ShowOrderController implements Refreshable, Initializable {
     deliveryAddressLabel.setText(currentOrder.getDeliveryAddress());
     recipientLabel.setText(currentOrder.getRecipientMail());
     priceLabel.setText(Double.toString(currentOrder.getPrice()));
+    SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+    deliveryDateLabel.setText(format.format(currentOrder.getSupplyDate()));
     popupStage = event.getPopupStage();
     }
 
