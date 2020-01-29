@@ -144,7 +144,7 @@ public class AddItemController implements Refreshable, Initializable {
                     if (response.code() != 200) return;
                     createdItem.setPicture(response.body());
                     if (isEdit) {
-                        lilachService.updateItem(createdItem.getId(), createdItem).enqueue(createEditItemCB);
+                        lilachService.updateItem(createdItem.getId(), storeChoiceBox.getValue().getId(), createdItem).enqueue(createEditItemCB);
                     } else {
                         lilachService.newCatalogItem(storeChoiceBox.getValue().getId(), createdItem).enqueue(createEditItemCB);
                     }
@@ -156,7 +156,7 @@ public class AddItemController implements Refreshable, Initializable {
                 }
             });
         } else {
-            lilachService.updateItem(createdItem.getId(), createdItem).enqueue(createEditItemCB);
+            lilachService.updateItem(createdItem.getId(), storeChoiceBox.getValue().getId(), createdItem).enqueue(createEditItemCB);
         }
 
 

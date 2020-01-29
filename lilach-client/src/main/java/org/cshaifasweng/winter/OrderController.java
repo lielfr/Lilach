@@ -833,8 +833,22 @@ public class OrderController implements Refreshable {
 
         updateButtons();
 
-        List<Store> stores = currentOrder.getOrderedBy().getStores();
-        currentOrder.setStore(stores.get(0));
+        LilachService service = APIAccess.getService();
+        service.getStoresByCustomer(currentOrder.getOrderedBy().getId()).enqueue(new Callback<List<Store>>() {
+            @Override
+            public void onResponse(Call<List<Store>> call, Response<List<Store>> response) {
+                if (response.code() != 200) return;
+
+                List<Store> stores = response.body();
+                currentOrder.setStore(stores.get(0));
+            }
+
+            @Override
+            public void onFailure(Call<List<Store>> call, Throwable throwable) {
+
+            }
+        });
+
     }
 
     @Override

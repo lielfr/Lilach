@@ -34,7 +34,7 @@ public class SecondaryController implements Refreshable {
     private void updatePrice() throws IOException {
         if (selectedItem != null) {
             selectedItem.setPrice(Double.parseDouble(priceField.getText()));
-            APIAccess.getService().updateItem(selectedItem.getId(), selectedItem).execute();
+            APIAccess.getService().updateItem(selectedItem.getId(), selectedItem.getStore().getId(), selectedItem).execute();
         }
         switchToPrimary();
     }

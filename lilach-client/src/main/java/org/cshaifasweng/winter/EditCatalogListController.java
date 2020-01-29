@@ -86,9 +86,10 @@ public class EditCatalogListController implements Refreshable {
 
                     ContextMenu menu = new ContextMenu();
                     MenuItem item = new MenuItem("Edit item");
+                    Menu item3 = new Menu("----");
                     MenuItem item2 = new MenuItem("Delete item");
 
-                    menu.getItems().addAll(item, item2);
+                    menu.getItems().addAll(item, item3, item2);
 
                     menu.setOnAction(actionEvent -> {
                         EventTarget target = actionEvent.getTarget();
@@ -98,6 +99,7 @@ public class EditCatalogListController implements Refreshable {
                             EventBus.getDefault().post(new DashboardSwitchEvent("add_item"));
                             EventBus.getDefault().post(new CatalogItemEditEvent(selectedItem));
                         } else if (item2.equals(target)) {
+                            System.out.println("Deleting item");
                             service.deleteItem(selectedItem.getId()).enqueue(new Callback<Void>() {
                                 @Override
                                 public void onResponse(Call<Void> call1, Response<Void> response1) {

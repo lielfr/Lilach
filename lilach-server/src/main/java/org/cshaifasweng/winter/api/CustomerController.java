@@ -2,13 +2,11 @@ package org.cshaifasweng.winter.api;
 
 import org.cshaifasweng.winter.da.PrivilegeRepository;
 import org.cshaifasweng.winter.exceptions.LogicalException;
-import org.cshaifasweng.winter.models.Complaint;
-import org.cshaifasweng.winter.models.Customer;
-import org.cshaifasweng.winter.models.Order;
-import org.cshaifasweng.winter.models.User;
+import org.cshaifasweng.winter.models.*;
 import org.cshaifasweng.winter.security.SecurityConstants;
 import org.cshaifasweng.winter.services.ComplaintService;
 import org.cshaifasweng.winter.services.OrderService;
+import org.cshaifasweng.winter.services.StoreService;
 import org.cshaifasweng.winter.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -23,13 +21,15 @@ public class CustomerController {
     private final PrivilegeRepository privilegeRepository;
     private final OrderService orderService;
     private final ComplaintService complaintService;
+    private final StoreService storeService;
 
     @Autowired
-    public CustomerController(UserService userService, PrivilegeRepository privilegeRepository, OrderService orderService, ComplaintService complaintService) {
+    public CustomerController(UserService userService, PrivilegeRepository privilegeRepository, OrderService orderService, ComplaintService complaintService, StoreService storeService) {
         this.userService = userService;
         this.privilegeRepository = privilegeRepository;
         this.orderService = orderService;
         this.complaintService = complaintService;
+        this.storeService = storeService;
     }
 
     @PostMapping("/customer")
@@ -64,5 +64,10 @@ public class CustomerController {
     public List<Complaint> getComplaintsByCustomer(@PathVariable("id") long id,
                                                    Authentication authentication) throws LogicalException {
         return complaintService.getComplaintsByCustomer(id, authentication);
+    }
+
+    @GetMapping("/customer/{id}/stores")
+    public List<Store> getStoresByCustomer(@PathVariable("id") long id, Authentication authentication) throws LogicalException {
+        return storeService.getStoresByCustomer(id, authentication);
     }
 }
