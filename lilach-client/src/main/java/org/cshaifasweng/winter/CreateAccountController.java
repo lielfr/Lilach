@@ -1,4 +1,5 @@
 package org.cshaifasweng.winter;
+
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -7,6 +8,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.util.StringConverter;
 import org.cshaifasweng.winter.events.DashboardSwitchEvent;
+import org.cshaifasweng.winter.events.LoginChangeEvent;
 import org.cshaifasweng.winter.models.Customer;
 import org.cshaifasweng.winter.models.Store;
 import org.cshaifasweng.winter.models.SubscriberType;
@@ -237,7 +239,12 @@ public class CreateAccountController implements Refreshable{
                         Platform.runLater(() -> {
                             Alert alert = new Alert(Alert.AlertType.INFORMATION, "Account created successfully.");
                             alert.show();
-                            EventBus.getDefault().post(new DashboardSwitchEvent("login_screen"));
+                            Customer createdUser = (Customer) response.body();
+                            createdUser.getStores().add(selectedStore);
+                            APIAccess.setCurrentUser(createdUser);
+                            EventBus.getDefault().post(new LoginChangeEvent());
+                            EventBus.getDefault().post(new DashboardSwitchEvent("catalog"));
+
                         });
 
                     } else {
