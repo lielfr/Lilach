@@ -191,13 +191,13 @@ public class CreateAccountController implements Refreshable{
         LEMembership.setText("");
         if((MissField()!=0) ){
             Cmembership.setValue("");
-            Tmessage.setText("Cant create account");
-            Tmessage.setVisible(true);
+            Alert alert = new Alert(Alert.AlertType.ERROR, "Missing field(s)");
+            alert.show();
         }
         if(MistakeField()!=0){
             Cmembership.setValue("");
-            Tmessage.setText("Cant create account");
-            Tmessage.setVisible(true);
+            Alert alert = new Alert(Alert.AlertType.ERROR, "Invalid field(s)");
+            alert.show();
         }
         else if(MissField()==0 && MistakeField()==0){
             int choice = Cmembership.getSelectionModel().getSelectedIndex();
@@ -211,42 +211,6 @@ public class CreateAccountController implements Refreshable{
             else
                 choice1= SubscriberType.YEARLY;
             Cmembership.setValue("");
-            //clean all the page only message on the page
-            TFname.setVisible(false);
-            LFname.setVisible(false);
-            TLname.setVisible(false);
-            LLname.setVisible(false);
-            Temail.setVisible(false);
-            Lemail.setVisible(false);
-            Tid.setVisible(false);
-            Lid.setVisible(false);
-            Tbirthd.setVisible(false);
-            Tbirthm.setVisible(false);
-            Tbirthy.setVisible(false);
-            Ldateofbirth.setVisible(false);
-            Tphone.setVisible(false);
-            Lphone.setVisible(false);
-            Tcredit.setVisible(false);
-            Lcredit.setVisible(false);
-            TvaildY.setVisible(false);
-            Lvaild.setVisible(false);
-            TvaildM.setVisible(false);
-            Tcvv.setVisible(false);
-            Lcvv.setVisible(false);
-            Tpassword.setVisible(false);
-            Lpassword.setVisible(false);
-            Cmembership.setVisible(false);
-            Tmessage.setText("Create account completed");
-            Tmessage.setVisible(true);
-            finishcreate.setVisible(false);
-            Lseprate.setVisible(false);
-            Lseprate1.setVisible(false);
-            Lseprate2.setVisible(false);
-            Lmembership.setVisible(false);
-            Lheadline.setVisible(false);
-            addressEmpty.setVisible(false);
-            addressField.setVisible(false);
-            addressLabel.setVisible(false);
 
             Calendar calendar = Calendar.getInstance();
             calendar.set(calendar.MONTH,Integer.parseInt(TvaildM.getText()));
@@ -271,11 +235,14 @@ public class CreateAccountController implements Refreshable{
                 public void onResponse(Call<Customer> call, Response<Customer> response) {
                     if (response.code() == 200) {
                         Platform.runLater(() -> {
+                            Alert alert = new Alert(Alert.AlertType.INFORMATION, "Account created successfully.");
+                            alert.show();
                             EventBus.getDefault().post(new DashboardSwitchEvent("login_screen"));
                         });
 
                     } else {
-                        Tmessage.setText("User already exists");
+                        Alert alert = new Alert(Alert.AlertType.ERROR, "User already exists");
+                        alert.show();
                     }
                 }
 
