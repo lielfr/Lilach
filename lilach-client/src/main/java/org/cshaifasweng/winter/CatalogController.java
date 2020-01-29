@@ -90,17 +90,17 @@ public class CatalogController implements Refreshable, Initializable {
     }
 
     @FXML
-    public void backPage() {
+    public void backPage() throws IOException {
         if (page == 1) return;
         page--;
-        updatePages();
+        populateGrid();
     }
 
     @FXML
-    public void nextPage() {
+    public void nextPage() throws IOException {
         if (page == pages) return;
         page++;
-        updatePages();
+        populateGrid();
     }
 
     @FXML
@@ -205,7 +205,7 @@ public class CatalogController implements Refreshable, Initializable {
                     Node itemCell = viewData.getKey();
                     CatalogItemViewController controller =
                             (CatalogItemViewController) viewData.getValue();
-                    int index = (page - 1) + i * NUM_COLS + j;
+                    int index = (page - 1) * NUM_COLS * NUM_ROWS + i * NUM_COLS + j;
                     if (index >= items.size())
                         break;
                     CatalogItem item = items.get(index);
