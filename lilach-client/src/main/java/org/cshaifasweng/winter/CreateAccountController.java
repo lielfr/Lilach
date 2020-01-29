@@ -274,6 +274,8 @@ public class CreateAccountController implements Refreshable{
                             EventBus.getDefault().post(new DashboardSwitchEvent("login_screen"));
                         });
 
+                    } else {
+                        Tmessage.setText("User already exists");
                     }
                 }
 
@@ -581,6 +583,7 @@ public class CreateAccountController implements Refreshable{
             check = TvaildY.getText();
             if ((check.length() != 4) && (check.isEmpty() == false)) {
                 LEVaild.setText("Expiry date of credit card is incorrect");
+                countMistake++;
             } else if (check.length() == 4) {
                 for (int i = 0; i < check.length(); i++) {
                     if ((Integer.parseInt(check)) < (YearMonth.now().getYear())) {
