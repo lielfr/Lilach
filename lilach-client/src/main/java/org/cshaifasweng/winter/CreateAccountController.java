@@ -9,6 +9,7 @@ import javafx.scene.control.*;
 import javafx.util.StringConverter;
 import org.cshaifasweng.winter.events.DashboardSwitchEvent;
 import org.cshaifasweng.winter.events.LoginChangeEvent;
+import org.cshaifasweng.winter.events.TokenSetEvent;
 import org.cshaifasweng.winter.models.Customer;
 import org.cshaifasweng.winter.models.Store;
 import org.cshaifasweng.winter.models.SubscriberType;
@@ -23,6 +24,7 @@ import java.time.YearMonth;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 import java.util.regex.Pattern;
 
 
@@ -236,14 +238,32 @@ public class CreateAccountController implements Refreshable{
                 @Override
                 public void onResponse(Call<Customer> call, Response<Customer> response) {
                     if (response.code() == 200) {
+
                         Platform.runLater(() -> {
                             Alert alert = new Alert(Alert.AlertType.INFORMATION, "Account created successfully.");
                             alert.show();
                             Customer createdUser = (Customer) response.body();
-                            createdUser.getStores().add(selectedStore);
+                            System.out.println("CREATED USER: " + createdUser.getId());
                             APIAccess.setCurrentUser(createdUser);
-                            EventBus.getDefault().post(new LoginChangeEvent());
-                            EventBus.getDefault().post(new DashboardSwitchEvent("catalog"));
+                            service.login(newCustomer.getEmail(), newCustomer.getPassword()).enqueue(new Callback<Void>() {
+                                @Override
+                                public void onResponse(Call<Void> call, Response<Void> response) {
+                                    if (response.code() != 200) return;
+                                    Platform.runLater(() -> {
+                                        String token = Objects.requireNonNull(response.headers().get("Authorization"))
+                                                .replace("Bearer ", "");
+                                        EventBus.getDefault().post(new TokenSetEvent(token));
+                                        EventBus.getDefault().post(new DashboardSwitchEvent("catalog"));
+                                        EventBus.getDefault().post(new LoginChangeEvent());
+                                    });
+
+                                }
+
+                                @Override
+                                public void onFailure(Call<Void> call, Throwable throwable) {
+
+                                }
+                            });
 
                         });
 
