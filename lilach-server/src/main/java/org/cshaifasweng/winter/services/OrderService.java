@@ -139,6 +139,8 @@ public class OrderService {
                 new Transaction(new Date(), "Order #" + order.getId() + " " +
                         percentage + "% refunded", refund)
         );
+        mailService.sendMail(customer.getEmail(), "Order #" + order.getId() + " has been cancelled",
+                "According to our policy, your refund is: " + refund + ".<br>Sincerely,<br>The Lilach team.");
         customerRepository.save(customer);
         return new OrderCompensation(refund);
     }
