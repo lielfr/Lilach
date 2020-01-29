@@ -11,8 +11,8 @@ public interface LilachService {
     @GET("catalog")
     Call<List<CatalogItem>> getAllItems();
 
-    @PUT("catalog/{id}")
-    Call<CatalogItem> updateItem(@Path("id") long id, @Body CatalogItem item);
+    @PUT("/store/{sid}/catalog/{id}")
+    Call<CatalogItem> updateItem(@Path("id") long id, @Path("sid") long storeId, @Body CatalogItem item);
 
     @DELETE("catalog/{id}")
     Call<Void> deleteItem(@Path("id") long id);
@@ -87,4 +87,9 @@ public interface LilachService {
     @GET("/user")
     Call<List<User>> getUsers(@Query("type") UserType type);
 
+    @GET("/customer/{id}/stores")
+    Call<List<Store>> getStoresByCustomer(@Path("id") long id);
+
+    @GET("/complaint")
+    Call<List<Complaint>> getAllComplaints();
 }

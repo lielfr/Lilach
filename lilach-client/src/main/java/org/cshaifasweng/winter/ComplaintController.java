@@ -1,13 +1,13 @@
 package org.cshaifasweng.winter;
 
 import javafx.application.Platform;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
+import javafx.stage.Stage;
 import javafx.util.StringConverter;
 import org.cshaifasweng.winter.events.DashboardSwitchEvent;
 import org.cshaifasweng.winter.models.Complaint;
@@ -22,6 +22,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 import java.io.IOException;
+import java.util.List;
 
 public class ComplaintController implements Refreshable {
 
@@ -167,7 +168,11 @@ public class ComplaintController implements Refreshable {
 //                Complaint received = response.body();
                 if (response.code() == 200) {
                     Platform.runLater(() -> {
-                        EventBus.getDefault().post(new DashboardSwitchEvent("complaint_list"));
+                        Stage stage = new Stage();
+                        Scene scene = new Scene(new Label("Thank you."));
+                        stage.setScene(scene);
+                        stage.show();
+                        EventBus.getDefault().post(new DashboardSwitchEvent("catalog"));
                     });
                 }
 
@@ -197,14 +202,27 @@ public class ComplaintController implements Refreshable {
             }
         });
         Customer customer = (Customer) currentUser;
-        storeComboBox.setItems(FXCollections.observableList(customer.getStores()));
-        storeComboBox.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Store>() {
+        LilachService service = APIAccess.getService();
+        service.getStoresByCustomer(customer.getId()).enqueue(new Callback<List<Store>>() {
             @Override
-            public void changed(ObservableValue<? extends Store> observableValue, Store store, Store t1) {
-                complaint.setStore(customer.getStores().get(storeComboBox.getSelectionModel().getSelectedIndex()));
+            public void onResponse(Call<List<Store>> call, Response<List<Store>> response) {
+                Platform.runLater(() -> {
+                    if (response.code() != 200 || response.body() == null) return;
+                    storeComboBox.setItems(FXCollections.observableList(response.body()));
+                    storeComboBox.getSelectionModel().selectedItemProperty()
+                            .addListener((observableValue, store, t1) ->
+                                    complaint.setStore(customer.getStores()
+                                            .get(storeComboBox.getSelectionModel().getSelectedIndex())));
+                    storeComboBox.getSelectionModel().select(0);
+                });
+            }
+
+            @Override
+            public void onFailure(Call<List<Store>> call, Throwable throwable) {
+                throwable.printStackTrace();
             }
         });
-        storeComboBox.getSelectionModel().select(0);
+
     }
 
     @Override

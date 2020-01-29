@@ -3,6 +3,7 @@ package org.cshaifasweng.winter;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
@@ -19,7 +20,10 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class HandleComplaintController implements Refreshable {
+import java.net.URL;
+import java.util.ResourceBundle;
+
+public class HandleComplaintController implements Refreshable, Initializable {
 
 
     @FXML
@@ -157,7 +161,7 @@ public class HandleComplaintController implements Refreshable {
                 if (response.code() == 200) {
                     System.out.println("adding the handling success");
                     Platform.runLater(() -> {
-                        EventBus.getDefault().post(new DashboardSwitchEvent("catalog"));
+                        EventBus.getDefault().post(new DashboardSwitchEvent("complaint_list"));
                     });
                 }
             }
@@ -187,11 +191,15 @@ public class HandleComplaintController implements Refreshable {
 
     @Override
     public void refresh() {
-
     }
 
     @Override
     public void onSwitch() {
 
+    }
+
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+        EventBus.getDefault().register(this);
     }
 }

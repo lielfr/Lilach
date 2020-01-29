@@ -2,6 +2,7 @@ package org.cshaifasweng.winter.models;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 
 import javax.persistence.*;
@@ -10,12 +11,13 @@ import java.util.Date;
 
 @Entity
 @JsonTypeName("employee")
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Employee extends User {
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd@HH:mm:ss.SSSZ")
     private Date employedSince;
 
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "manager")
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "manager")
     @JsonIgnore
     private Store managedStore;
 
@@ -30,7 +32,8 @@ public class Employee extends User {
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Employee reportsTo;
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "handledBy")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "handledBy")
+    @JsonIgnore
     private Collection<Complaint> handledComplaints;
 
     public Employee() {}

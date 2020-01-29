@@ -5,10 +5,7 @@ import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.TableCell;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import org.cshaifasweng.winter.events.ComplaintHandleEvent;
@@ -122,13 +119,23 @@ public class ComplaintListController implements Refreshable {
         );
         complaintListTable.setItems(FXCollections.observableList(complaints));
 
+        ContextMenu contextMenu = new ContextMenu();
+        MenuItem handleComplaintItem = new MenuItem("Handle complaint");
+        handleComplaintItem.setOnAction(actionEvent -> {
+            EventBus.getDefault().post(new DashboardSwitchEvent("complaint_handling"));
+            EventBus.getDefault().post(new ComplaintHandleEvent(complaintListTable.getSelectionModel().getSelectedItem()));
+        });
+
+        contextMenu.getItems().add(handleComplaintItem);
+
+        Utils.addContextMenu(complaintListTable, contextMenu);
+
     }
 
     @Override
     public void refresh() {
         LilachService service = APIAccess.getService();
-        Customer customer = (Customer) APIAccess.getCurrentUser();
-        service.getComplaintsByCustomer(customer.getId()).enqueue(new Callback<List<Complaint>>() {
+        service.getAllComplaints().enqueue(new Callback<List<Complaint>>() {
             @Override
             public void onResponse(Call<List<Complaint>> call, Response<List<Complaint>> response) {
                 if (response.code() != 200)

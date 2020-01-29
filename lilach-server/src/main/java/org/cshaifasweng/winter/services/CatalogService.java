@@ -35,7 +35,7 @@ public class CatalogService {
     }
 
     @Transactional
-    public CatalogItem updateItem(long id, CatalogItem item) {
+    public CatalogItem updateItem(long id, long storeId, CatalogItem item) {
         // TODO: add validation
         CatalogItem dbItem = repository.getOne(id);
         dbItem.setDescription(item.getDescription());
@@ -46,7 +46,7 @@ public class CatalogService {
         dbItem.setDiscountPercent(item.getDiscountPercent());
         dbItem.setDiscountAmount(item.getDiscountAmount());
         dbItem.setItemType(item.getItemType());
-        dbItem.setStore(item.getStore());
+        dbItem.setStore(storeRepository.getOne(storeId));
         repository.save(dbItem);
         return dbItem;
     }

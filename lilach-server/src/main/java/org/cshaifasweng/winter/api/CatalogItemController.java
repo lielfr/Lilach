@@ -45,9 +45,9 @@ public class CatalogItemController {
         return catalogService.findByStore(id);
     }
 
-    @PutMapping("/catalog/{id}")
-    public CatalogItem updateItem(@PathVariable("id") long id, @RequestBody CatalogItem item) {
-        return catalogService.updateItem(id, item);
+    @PutMapping("/store/{sid}/catalog/{id}")
+    public CatalogItem updateItem(@PathVariable("id") long id, @PathVariable("sid") long storeId, @RequestBody CatalogItem item) {
+        return catalogService.updateItem(id, storeId, item);
     }
 
     @PostMapping("/store/{id}/catalog")

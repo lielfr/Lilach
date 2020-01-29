@@ -24,6 +24,7 @@ public class Employee extends User {
 
     private Employee reportsTo;
 
+    @JsonIgnore
     private Collection<Complaint> handledComplaints;
 
     public Employee() {}

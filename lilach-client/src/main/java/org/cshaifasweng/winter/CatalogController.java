@@ -120,18 +120,33 @@ public class CatalogController implements Refreshable, Initializable {
         if (user == null || user instanceof Employee)
             return;
         Customer customer = (Customer) APIAccess.getCurrentUser();
-        if (customer.getStores() == null)
-            return;
-        // The following two lines are CRITICAL. These were the reason for that annoying catalog bug.
-        stores.clear();
-        stores.addAll(customer.getStores());
-        storeChoiceBox.getItems().clear();
-        storeChoiceBox.getItems().addAll(
-                customer
-                        .getStores()
-                        .stream()
-                        .map(Store::getName).collect(Collectors.toList()));
-        storeChoiceBox.getSelectionModel().select(0);
+        service.getStoresByCustomer(customer.getId()).enqueue(new Callback<List<Store>>() {
+            @Override
+            public void onResponse(Call<List<Store>> call, Response<List<Store>> response) {
+                // The following two lines are CRITICAL. These were the reason for that annoying catalog bug.
+                List<Store> responseStores = response.body();
+                responseStores.forEach((store -> System.out.println("STORE: " + store.getName())));
+                if (responseStores == null) return;
+
+                Platform.runLater(() -> {
+                    stores.clear();
+                    stores.addAll(responseStores);
+                    storeChoiceBox.getItems().clear();
+                    storeChoiceBox.getItems().addAll(
+                            responseStores
+                                    .stream()
+                                    .map(Store::getName).collect(Collectors.toList()));
+                    storeChoiceBox.getSelectionModel().select(0);
+                });
+
+            }
+
+            @Override
+            public void onFailure(Call<List<Store>> call, Throwable throwable) {
+
+            }
+        });
+
     }
 
     private void updateStoresList() {
