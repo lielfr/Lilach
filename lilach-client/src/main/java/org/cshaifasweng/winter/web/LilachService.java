@@ -18,7 +18,7 @@ public interface LilachService {
     Call<Void> deleteItem(@Path("id") long id);
 
     @POST("/customer")
-    Call<Customer> newCustomer(@Body Customer customer);
+    Call<Customer> newCustomer(@Body Customer customer, @Query("store") long storeId);
 
     @GET("/login")
     Call<Void> login(@Query("email") String email, @Query("password") String password);

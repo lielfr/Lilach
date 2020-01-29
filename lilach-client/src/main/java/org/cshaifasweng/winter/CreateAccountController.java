@@ -5,8 +5,10 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.util.StringConverter;
 import org.cshaifasweng.winter.events.DashboardSwitchEvent;
 import org.cshaifasweng.winter.models.Customer;
+import org.cshaifasweng.winter.models.Store;
 import org.cshaifasweng.winter.models.SubscriberType;
 import org.cshaifasweng.winter.web.APIAccess;
 import org.cshaifasweng.winter.web.LilachService;
@@ -18,6 +20,7 @@ import retrofit2.Response;
 import java.time.YearMonth;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.regex.Pattern;
 
 
@@ -163,7 +166,13 @@ public class CreateAccountController implements Refreshable{
     private Label addressEmpty;
 
     @FXML
+    private ChoiceBox<Store> storeChoiceBox;
+
+    private Store selectedStore;
+
+    @FXML
     void Fcreate(ActionEvent event) {
+
         Tmessage.setVisible(false);
         LEFName.setText("");
         LELName.setText("");
@@ -257,7 +266,7 @@ public class CreateAccountController implements Refreshable{
             newCustomer.setAddress(addressField.getText());
             newCustomer.setSubscriberType(choice1);
             LilachService service = APIAccess.getService();
-            service.newCustomer(newCustomer).enqueue(new Callback<Customer>() {
+            service.newCustomer(newCustomer, selectedStore.getId()).enqueue(new Callback<Customer>() {
                 @Override
                 public void onResponse(Call<Customer> call, Response<Customer> response) {
                     if (response.code() == 200) {
@@ -608,6 +617,35 @@ public class CreateAccountController implements Refreshable{
     public void refresh() {
         Cmembership.setItems(dbTypeList);
         Cmembership.setValue("None");
+
+        storeChoiceBox.setConverter(new StringConverter<Store>() {
+            @Override
+            public String toString(Store store) {
+                return store.getName();
+            }
+
+            @Override
+            public Store fromString(String s) {
+                return null;
+            }
+        });
+        LilachService service = APIAccess.getService();
+        service.getAllStores().enqueue(new Callback<List<Store>>() {
+            @Override
+            public void onResponse(Call<List<Store>> call, Response<List<Store>> response) {
+                if (response.code() != 200) return;
+                storeChoiceBox.setItems(FXCollections.observableArrayList(response.body()));
+                storeChoiceBox.getSelectionModel().selectedItemProperty().addListener((observableValue, store, t1) -> {
+                    selectedStore = storeChoiceBox.getValue();
+                });
+                storeChoiceBox.getSelectionModel().select(0);
+            }
+
+            @Override
+            public void onFailure(Call<List<Store>> call, Throwable throwable) {
+
+            }
+        });
     }
 
     @Override
