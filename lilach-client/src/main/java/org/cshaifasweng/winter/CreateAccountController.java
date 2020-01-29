@@ -1,4 +1,5 @@
 package org.cshaifasweng.winter;
+
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -7,6 +8,8 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.util.StringConverter;
 import org.cshaifasweng.winter.events.DashboardSwitchEvent;
+import org.cshaifasweng.winter.events.LoginChangeEvent;
+import org.cshaifasweng.winter.events.TokenSetEvent;
 import org.cshaifasweng.winter.models.Customer;
 import org.cshaifasweng.winter.models.Store;
 import org.cshaifasweng.winter.models.SubscriberType;
@@ -21,6 +24,7 @@ import java.time.YearMonth;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 import java.util.regex.Pattern;
 
 
@@ -234,15 +238,41 @@ public class CreateAccountController implements Refreshable{
                 @Override
                 public void onResponse(Call<Customer> call, Response<Customer> response) {
                     if (response.code() == 200) {
+
                         Platform.runLater(() -> {
                             Alert alert = new Alert(Alert.AlertType.INFORMATION, "Account created successfully.");
                             alert.show();
-                            EventBus.getDefault().post(new DashboardSwitchEvent("login_screen"));
+                            Customer createdUser = (Customer) response.body();
+                            System.out.println("CREATED USER: " + createdUser.getId());
+                            APIAccess.setCurrentUser(createdUser);
+                            service.login(newCustomer.getEmail(), newCustomer.getPassword()).enqueue(new Callback<Void>() {
+                                @Override
+                                public void onResponse(Call<Void> call, Response<Void> response) {
+                                    if (response.code() != 200) return;
+                                    Platform.runLater(() -> {
+                                        String token = Objects.requireNonNull(response.headers().get("Authorization"))
+                                                .replace("Bearer ", "");
+                                        EventBus.getDefault().post(new TokenSetEvent(token));
+                                        EventBus.getDefault().post(new DashboardSwitchEvent("catalog"));
+                                        EventBus.getDefault().post(new LoginChangeEvent());
+                                    });
+
+                                }
+
+                                @Override
+                                public void onFailure(Call<Void> call, Throwable throwable) {
+
+                                }
+                            });
+
                         });
 
                     } else {
-                        Alert alert = new Alert(Alert.AlertType.ERROR, "User already exists");
-                        alert.show();
+                        Platform.runLater(() -> {
+                            Alert alert = new Alert(Alert.AlertType.ERROR, "User already exists");
+                            alert.show();
+                        });
+
                     }
                 }
 
@@ -604,11 +634,14 @@ public class CreateAccountController implements Refreshable{
             @Override
             public void onResponse(Call<List<Store>> call, Response<List<Store>> response) {
                 if (response.code() != 200) return;
-                storeChoiceBox.setItems(FXCollections.observableArrayList(response.body()));
-                storeChoiceBox.getSelectionModel().selectedItemProperty().addListener((observableValue, store, t1) -> {
-                    selectedStore = storeChoiceBox.getValue();
+                Platform.runLater(() -> {
+                    storeChoiceBox.setItems(FXCollections.observableArrayList(response.body()));
+                    storeChoiceBox.getSelectionModel().selectedItemProperty().addListener((observableValue, store, t1) -> {
+                        selectedStore = storeChoiceBox.getValue();
+                    });
+                    storeChoiceBox.getSelectionModel().select(0);
                 });
-                storeChoiceBox.getSelectionModel().select(0);
+
             }
 
             @Override
