@@ -118,11 +118,10 @@ public class AddItemController implements Refreshable, Initializable {
             @Override
             public void onResponse(Call<CatalogItem> call, Response<CatalogItem> response) {
                 if (response.code() != 200) {
-                    log.severe("Got response code " + response.code());
-                    return;
+                    Utils.showError("Error code: " + response.code());
                 }
                 log.info("Successfully created item");
-
+                Utils.showInfo("Successfully created item");
                 Platform.runLater(() -> {
                     EventBus.getDefault().post(new DashboardSwitchEvent("edit_catalog_list"));
                 });
@@ -132,6 +131,7 @@ public class AddItemController implements Refreshable, Initializable {
             @Override
             public void onFailure(Call<CatalogItem> call, Throwable throwable) {
                 throwable.printStackTrace();
+                Utils.showError("Network failure");
             }
         };
 
@@ -141,7 +141,9 @@ public class AddItemController implements Refreshable, Initializable {
                 @Override
                 public void onResponse(Call<String> call, Response<String> response) {
                     log.severe("Got response code " + response.code());
-                    if (response.code() != 200) return;
+                    if (response.code() != 200) {
+                        Utils.showError("Error code: " + response.code());
+                    }
                     createdItem.setPicture(response.body());
                     if (isEdit) {
                         lilachService.updateItem(createdItem.getId(), storeChoiceBox.getValue().getId(), createdItem).enqueue(createEditItemCB);
@@ -153,6 +155,7 @@ public class AddItemController implements Refreshable, Initializable {
                 @Override
                 public void onFailure(Call<String> call, Throwable throwable) {
                     throwable.printStackTrace();
+                    Utils.showError("Network failure");
                 }
             });
         } else {
@@ -213,7 +216,9 @@ public class AddItemController implements Refreshable, Initializable {
         lilachService.getAllStores().enqueue(new Callback<>() {
             @Override
             public void onResponse(Call<List<Store>> call, Response<List<Store>> response) {
-                if (response.code() != 200 || response.body() == null) return;
+                if (response.code() != 200) {
+                    Utils.showError("Error code: " + response.code());
+                }
                 stores = response.body();
 
                 Platform.runLater(() -> {
@@ -225,7 +230,7 @@ public class AddItemController implements Refreshable, Initializable {
 
             @Override
             public void onFailure(Call<List<Store>> call, Throwable throwable) {
-
+                Utils.showError("Network failure");
             }
         });
 

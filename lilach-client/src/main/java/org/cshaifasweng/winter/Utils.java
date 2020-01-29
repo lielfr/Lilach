@@ -49,4 +49,14 @@ public class Utils<T> {
         return true;
     }
 
+    public static void showError(String error) {
+        Alert alert = new Alert(Alert.AlertType.ERROR, error);
+        alert.show();
+    }
+
+    public static void showInfo(String info) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION, info);
+        alert.show();
+    }
+
 }
