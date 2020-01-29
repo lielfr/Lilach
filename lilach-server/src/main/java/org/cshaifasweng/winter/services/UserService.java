@@ -47,7 +47,7 @@ public class UserService {
     }
 
     @Transactional
-    public Customer newCustomer(Customer customer) throws LogicalException {
+    public Customer newCustomer(Customer customer, long storeId) throws LogicalException {
         if (customer == null) {
             throw new LogicalException("Cannot register empty user");
         }
@@ -82,7 +82,7 @@ public class UserService {
                 customer.getFirstName(), customer.getLastName(), customer.getPhone(),
                 Arrays.asList(roleRepository.findByName(SecurityConstants.ROLE_CUSTOMER)),
                 customer.getCreditCard(), customer.getExpireDate(), customer.getCvv(), customer.getDateOfBirth());
-
+        customerInDB.getStores().add(storeRepository.getOne(storeId));
         Calendar yearFromNow = Calendar.getInstance();
         yearFromNow.add(Calendar.YEAR, 1);
 

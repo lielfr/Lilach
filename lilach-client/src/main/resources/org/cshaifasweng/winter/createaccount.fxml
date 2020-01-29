@@ -52,6 +52,7 @@
                               <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                               <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                               <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                           </rowConstraints>
                            <children>
                               <Label fx:id="LFname" prefHeight="30.0" prefWidth="83.0" text="First Nname:" />
@@ -176,6 +177,8 @@
                                     <Insets left="10.0" />
                                  </padding>
                               </Label>
+                              <Label text="Store:" GridPane.rowIndex="12" />
+                              <ChoiceBox fx:id="storeChoiceBox" prefHeight="27.0" prefWidth="220.0" GridPane.columnIndex="1" GridPane.rowIndex="12" />
                            </children>
                         </GridPane>
                      </children>

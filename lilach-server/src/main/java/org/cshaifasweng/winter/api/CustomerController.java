@@ -33,8 +33,8 @@ public class CustomerController {
     }
 
     @PostMapping("/customer")
-    public Customer newCustomer(@RequestBody Customer customer) throws LogicalException {
-        return userService.newCustomer(customer);
+    public Customer newCustomer(@RequestBody Customer customer, @RequestParam("store") long storeId) throws LogicalException {
+        return userService.newCustomer(customer, storeId);
     }
 
     @PutMapping("/customer/{id}")
