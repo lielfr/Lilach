@@ -241,8 +241,11 @@ public class CreateAccountController implements Refreshable{
                         });
 
                     } else {
-                        Alert alert = new Alert(Alert.AlertType.ERROR, "User already exists");
-                        alert.show();
+                        Platform.runLater(() -> {
+                            Alert alert = new Alert(Alert.AlertType.ERROR, "User already exists");
+                            alert.show();
+                        });
+
                     }
                 }
 
@@ -604,11 +607,14 @@ public class CreateAccountController implements Refreshable{
             @Override
             public void onResponse(Call<List<Store>> call, Response<List<Store>> response) {
                 if (response.code() != 200) return;
-                storeChoiceBox.setItems(FXCollections.observableArrayList(response.body()));
-                storeChoiceBox.getSelectionModel().selectedItemProperty().addListener((observableValue, store, t1) -> {
-                    selectedStore = storeChoiceBox.getValue();
+                Platform.runLater(() -> {
+                    storeChoiceBox.setItems(FXCollections.observableArrayList(response.body()));
+                    storeChoiceBox.getSelectionModel().selectedItemProperty().addListener((observableValue, store, t1) -> {
+                        selectedStore = storeChoiceBox.getValue();
+                    });
+                    storeChoiceBox.getSelectionModel().select(0);
                 });
-                storeChoiceBox.getSelectionModel().select(0);
+
             }
 
             @Override
