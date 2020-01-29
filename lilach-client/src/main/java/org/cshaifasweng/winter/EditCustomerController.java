@@ -342,7 +342,7 @@ public class EditCustomerController implements Initializable {
         customer.setMisparZehut(idNumField.getText());
         customer.setPhone(phoneField.getText());
         customer.setEmail(emailField.getText());
-        if (passwordField.getText() != null && !passwordField.getText().isEmpty())
+        if (passwordField.getText() != null || !passwordField.getText().isEmpty())
             customer.setPassword(passwordField.getText());
         customer.setAddress(addressField.getText());
         customer.setCreditCard(Long.parseLong(creditcardField.getText()));

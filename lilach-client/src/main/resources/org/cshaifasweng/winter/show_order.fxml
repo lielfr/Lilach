@@ -46,7 +46,7 @@
                         <Font size="23.0" />
                      </font>
                   </Label>
-                  <Label text="Label">
+                  <Label fx:id="orderNumLabel">
                      <font>
                         <Font size="23.0" />
                      </font>

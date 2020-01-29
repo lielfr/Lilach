@@ -128,8 +128,10 @@ public class UserService {
         if (dbObject.getId() != id)
             throw new LogicalException("Id does not match");
         // Mispar Zehut should not be changed
-        if (customer.getPassword() != null)
+        if (customer.getPassword() != null && !customer.getPassword().isEmpty()) {
+            System.out.println("Set password to: " + customer.getPassword());
             dbObject.setPassword(new BCryptPasswordEncoder().encode(customer.getPassword()));
+        }
         dbObject.setFirstName(customer.getFirstName());
         dbObject.setLastName(customer.getLastName());
         dbObject.setSubscriberType(customer.getSubscriberType());

@@ -26,7 +26,7 @@
             <Insets bottom="20.0" />
          </VBox.margin>
       </Label>
-      <Label fx:id="itemPriceLabelDiscount" layoutX="95.0" layoutY="160.0" maxWidth="1.7976931348623157E308" text="Label" visible="false">
+      <Label fx:id="itemPriceLabelDiscount" alignment="CENTER" layoutX="95.0" layoutY="160.0" maxWidth="1.7976931348623157E308" text="Label" visible="false">
          <VBox.margin>
             <Insets bottom="20.0" />
          </VBox.margin>
@@ -36,12 +36,12 @@
       </Label>
       <HBox prefWidth="200.0">
          <children>
-            <Label maxHeight="1.7976931348623157E308" text="Qt.:">
+            <Label fx:id="quantityLabel" maxHeight="1.7976931348623157E308" text="Qt.:">
                <HBox.margin>
                   <Insets left="33.0" />
                </HBox.margin>
             </Label>
-            <Button mnemonicParsing="false" onAction="#subtractAmount" text="-">
+            <Button fx:id="minusButton" mnemonicParsing="false" onAction="#subtractAmount" text="-">
                <HBox.margin>
                   <Insets right="5.0" />
                </HBox.margin>
@@ -51,7 +51,7 @@
                   <Insets />
                </HBox.margin>
             </TextField>
-            <Button layoutX="54.0" layoutY="10.0" mnemonicParsing="false" onAction="#addAmount" text="+">
+            <Button fx:id="plusButton" layoutX="54.0" layoutY="10.0" mnemonicParsing="false" onAction="#addAmount" text="+">
                <HBox.margin>
                   <Insets left="5.0" />
                </HBox.margin>
@@ -65,6 +65,6 @@
             <Insets bottom="5.0" />
          </padding>
       </HBox>
-      <Button mnemonicParsing="false" onAction="#buyItem" text="Buy" />
+      <Button fx:id="buyButton" mnemonicParsing="false" onAction="#buyItem" text="Buy" />
    </children>
 </VBox>

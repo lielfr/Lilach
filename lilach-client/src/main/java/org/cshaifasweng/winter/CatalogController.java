@@ -114,12 +114,19 @@ public class CatalogController implements Refreshable, Initializable {
         }
     }
 
+    private void updateBuyButtons() {
+        boolean isLoggedIn = APIAccess.getCurrentUser() != null;
+        customItemButton.setVisible(isLoggedIn);
+        cartButton.setVisible(isLoggedIn);
+    }
+
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void handleLogin(LoginChangeEvent changeEvent) {
         User user = APIAccess.getCurrentUser();
         if (user == null || user instanceof Employee)
             return;
         Customer customer = (Customer) APIAccess.getCurrentUser();
+        updateBuyButtons();
         service.getStoresByCustomer(customer.getId()).enqueue(new Callback<List<Store>>() {
             @Override
             public void onResponse(Call<List<Store>> call, Response<List<Store>> response) {
@@ -278,6 +285,7 @@ public class CatalogController implements Refreshable, Initializable {
 
     @Override
     public void refresh() {
+        updateBuyButtons();
         cart = new ArrayList<>();
 
         EventBus.getDefault().register(this);

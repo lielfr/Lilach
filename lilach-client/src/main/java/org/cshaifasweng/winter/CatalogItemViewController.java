@@ -3,12 +3,14 @@ package org.cshaifasweng.winter;
 import javafx.css.PseudoClass;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import org.cshaifasweng.winter.events.CatalogItemBuyEvent;
 import org.cshaifasweng.winter.models.CatalogItem;
+import org.cshaifasweng.winter.web.APIAccess;
 import org.greenrobot.eventbus.EventBus;
 
 import java.net.URL;
@@ -29,6 +31,18 @@ public class CatalogItemViewController implements Initializable {
 
     @FXML
     private TextField quantityField;
+
+    @FXML
+    private Label quantityLabel;
+
+    @FXML
+    private Button minusButton;
+
+    @FXML
+    private Button plusButton;
+
+    @FXML
+    private Button buyButton;
 
     private int quantity = 1;
 
@@ -61,6 +75,14 @@ public class CatalogItemViewController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         strikethrough = PseudoClass.getPseudoClass("strikethrough");
+
+        boolean showBuyFields = APIAccess.getCurrentUser() != null;
+
+        quantityField.setVisible(showBuyFields);
+        minusButton.setVisible(showBuyFields);
+        quantityLabel.setVisible(showBuyFields);
+        plusButton.setVisible(showBuyFields);
+        buyButton.setVisible(showBuyFields);
     }
 
     public void setItemLabel(String itemLabel) {

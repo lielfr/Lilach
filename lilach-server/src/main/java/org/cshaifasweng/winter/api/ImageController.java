@@ -19,6 +19,7 @@ public class ImageController {
     @GetMapping("/image/{id}")
     public ResponseEntity<byte[]> getImage(@PathVariable("id") String id) throws IOException, URISyntaxException {
         System.out.println("ID: " + id);
+        id = id.replace("@2x", "");
         File file = new File(SpringServer.class.getResource("uploads/" + id).toURI());
         MimetypesFileTypeMap fileTypeMap = new MimetypesFileTypeMap();
         String mimeType = fileTypeMap.getContentType(file);

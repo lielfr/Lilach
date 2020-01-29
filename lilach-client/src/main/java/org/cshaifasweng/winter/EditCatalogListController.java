@@ -4,6 +4,7 @@ import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.event.EventTarget;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
@@ -11,20 +12,24 @@ import javafx.scene.image.ImageView;
 import javafx.util.StringConverter;
 import org.cshaifasweng.winter.events.CatalogItemEditEvent;
 import org.cshaifasweng.winter.events.DashboardSwitchEvent;
+import org.cshaifasweng.winter.events.EditCatalogListForceRefreshEvent;
 import org.cshaifasweng.winter.models.CatalogItem;
 import org.cshaifasweng.winter.models.Employee;
 import org.cshaifasweng.winter.models.Store;
 import org.cshaifasweng.winter.web.APIAccess;
 import org.cshaifasweng.winter.web.LilachService;
 import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
 import java.io.IOException;
+import java.net.URL;
 import java.util.List;
+import java.util.ResourceBundle;
 
-public class EditCatalogListController implements Refreshable {
+public class EditCatalogListController implements Refreshable, Initializable {
 
     @FXML
     private TableView<CatalogItem> dataTable;
@@ -78,7 +83,7 @@ public class EditCatalogListController implements Refreshable {
                     priceColumn.setCellValueFactory(new PropertyValueFactory<>("price"));
                     discountAmountColumn.setCellValueFactory(new PropertyValueFactory<>("discountAmount"));
                     discountPercentColumn.setCellValueFactory(new PropertyValueFactory<>("discountPercent"));
-
+                    dataTable.getColumns().clear();
                     dataTable.getColumns().addAll(idColumn, descriptionColumn,
                             priceColumn, discountAmountColumn, discountPercentColumn, pictureColumn);
 
@@ -141,6 +146,7 @@ public class EditCatalogListController implements Refreshable {
 
     @Override
     public void refresh() {
+        if (APIAccess.getCurrentUser() == null) return;
         dataTable.getItems().clear();
         dataTable.getColumns().clear();
         service = APIAccess.getService();
@@ -193,5 +199,16 @@ public class EditCatalogListController implements Refreshable {
     @FXML
     public void addItem() {
         EventBus.getDefault().post(new DashboardSwitchEvent("add_item"));
+    }
+
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+        EventBus.getDefault().register(this);
+    }
+
+    @Subscribe
+    public void onForceRefresh(EditCatalogListForceRefreshEvent event) {
+        dataTable.getItems().clear();
+        refresh();
     }
 }
