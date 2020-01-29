@@ -161,6 +161,7 @@ public class DashboardController implements Initializable {
             controller.refresh();
             currentWindow = dataPair;
         } catch (IOException e) {
+            Utils.showError(e.getLocalizedMessage());
             e.printStackTrace();
         }
     }
@@ -213,8 +214,7 @@ public class DashboardController implements Initializable {
                 @Override
                 public void onResponse(Call<Void> call, Response<Void> response) {
                     if (response.code() != 200) {
-                        log.severe("Something really weird happened: could not log out.");
-                        return;
+                        Utils.showError("Error code: " + response.code());
                     }
 
                     Platform.runLater(() -> {
@@ -227,7 +227,7 @@ public class DashboardController implements Initializable {
 
                 @Override
                 public void onFailure(Call<Void> call, Throwable throwable) {
-
+                    Utils.showError("Network failure");
                 }
             });
         }

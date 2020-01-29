@@ -285,18 +285,22 @@ public class EditEmployeeController implements Initializable {
             service.updateEmployee(employee.getId(),employee).enqueue(new Callback<Employee>() {
                 @Override
                 public void onResponse(Call<Employee> call, Response<Employee> response) {
+                    if (response.code() != 200) {
+                        Utils.showError("Error code: " + response.code());
+                    }
                     if (response.code() == 200) {
                         System.out.println("adding the handling success");
                         Platform.runLater(() -> {
                             stage.close();
                             EventBus.getDefault().post(new UserEditedEvent());
                         });
+                        Utils.showInfo("Employee edited successfully");
                     }
                 }
 
                 @Override
                 public void onFailure(Call<Employee> call, Throwable throwable) {
-
+                    Utils.showError("Network failure");
                 }
             });
 

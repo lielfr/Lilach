@@ -158,6 +158,9 @@ public class HandleComplaintController implements Refreshable, Initializable {
         service.handleComplaint(openedComplaint.getId(),openedComplaint).enqueue(new Callback<Complaint>() {
             @Override
             public void onResponse(Call<Complaint> call, Response<Complaint> response) {
+                if (response.code() != 200) {
+                    Utils.showError("Error code: " + response.code());
+                }
                 if (response.code() == 200) {
                     System.out.println("adding the handling success");
                     Platform.runLater(() -> {
@@ -168,7 +171,7 @@ public class HandleComplaintController implements Refreshable, Initializable {
 
             @Override
             public void onFailure(Call<Complaint> call, Throwable throwable) {
-
+                Utils.showError("Network failure");
             }
         });
     }

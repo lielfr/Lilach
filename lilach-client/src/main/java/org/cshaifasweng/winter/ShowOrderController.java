@@ -98,18 +98,22 @@ public class ShowOrderController implements Refreshable, Initializable {
         service.cancelOrder(currentOrder.getId()).enqueue(new Callback<Void>() {
             @Override
             public void onResponse(Call<Void> call, Response<Void> response) {
+                if (response.code() != 200) {
+                    Utils.showError("Error code: " + response.code());
+                }
                 if (response.code() == 200) {
                     Platform.runLater(() -> {
                         popupStage.close();
                         // Force refresh
                         EventBus.getDefault().post(new DashboardSwitchEvent("order_list_view"));
+                        Utils.showInfo("Order cancelled. You will also receive a mail shortly.");
                     });
                 }
             }
 
             @Override
             public void onFailure(Call<Void> call, Throwable throwable) {
-
+                Utils.showError("Network failure");
             }
         });
 

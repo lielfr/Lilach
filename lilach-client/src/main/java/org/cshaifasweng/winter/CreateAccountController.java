@@ -237,6 +237,9 @@ public class CreateAccountController implements Refreshable{
             service.newCustomer(newCustomer, selectedStore.getId()).enqueue(new Callback<Customer>() {
                 @Override
                 public void onResponse(Call<Customer> call, Response<Customer> response) {
+                    if (response.code() != 200) {
+                        Utils.showError("Error code: " + response.code());
+                    }
                     if (response.code() == 200) {
 
                         Platform.runLater(() -> {
@@ -269,8 +272,7 @@ public class CreateAccountController implements Refreshable{
 
                     } else {
                         Platform.runLater(() -> {
-                            Alert alert = new Alert(Alert.AlertType.ERROR, "User already exists");
-                            alert.show();
+                            Utils.showError("User already exists.");
                         });
 
                     }
@@ -278,7 +280,7 @@ public class CreateAccountController implements Refreshable{
 
                 @Override
                 public void onFailure(Call<Customer> call, Throwable t) {
-
+                    Utils.showError("Network failure");
                 }
             });
         }
@@ -633,7 +635,9 @@ public class CreateAccountController implements Refreshable{
         service.getAllStores().enqueue(new Callback<List<Store>>() {
             @Override
             public void onResponse(Call<List<Store>> call, Response<List<Store>> response) {
-                if (response.code() != 200) return;
+                if (response.code() != 200) {
+                    Utils.showError("Error code: " + response.code());
+                }
                 Platform.runLater(() -> {
                     storeChoiceBox.setItems(FXCollections.observableArrayList(response.body()));
                     storeChoiceBox.getSelectionModel().selectedItemProperty().addListener((observableValue, store, t1) -> {
@@ -646,7 +650,7 @@ public class CreateAccountController implements Refreshable{
 
             @Override
             public void onFailure(Call<List<Store>> call, Throwable throwable) {
-
+                Utils.showError("Network failure");
             }
         });
     }

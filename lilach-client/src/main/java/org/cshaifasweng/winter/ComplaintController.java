@@ -20,6 +20,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class ComplaintController implements Refreshable {
@@ -72,7 +73,7 @@ public class ComplaintController implements Refreshable {
 
     @FXML
     void cancelComplaint(MouseEvent event) {
-        EventBus.getDefault().post(new DashboardSwitchEvent("primary"));
+        EventBus.getDefault().post(new DashboardSwitchEvent("catalog"));
     }
 
     @FXML
@@ -206,15 +207,18 @@ public class ComplaintController implements Refreshable {
             @Override
             public void onResponse(Call<List<Store>> call, Response<List<Store>> response) {
                 Platform.runLater(() -> {
-                    if (response.code() != 200) {
-                        Utils.showError("Error code: " + response.code());
+                    if (response.code() != 200 || response.body() == null) {
+                        Utils.showError("Error code: " + response.code() + " or body is null");
                     }
-                    if (response.code() != 200 || response.body() == null) return;
-                    storeComboBox.setItems(FXCollections.observableList(response.body()));
+                    List<Store> serverList = response.body();
+                    storeComboBox.setItems(FXCollections.observableList(serverList));
+                    customer.setStores(new ArrayList<>());
+                    customer.getStores().addAll(serverList);
                     storeComboBox.getSelectionModel().selectedItemProperty()
-                            .addListener((observableValue, store, t1) ->
+                            .addListener((observableValue, store, t1) -> {
                                     complaint.setStore(customer.getStores()
-                                            .get(storeComboBox.getSelectionModel().getSelectedIndex())));
+                                            .get(storeComboBox.getSelectionModel().getSelectedIndex()));
+                            });
                     storeComboBox.getSelectionModel().select(0);
                 });
             }

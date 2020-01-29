@@ -386,18 +386,22 @@ public class EditCustomerController implements Initializable {
             service.updateCustomer(customer.getId(),customer).enqueue(new Callback<Customer>() {
                 @Override
                 public void onResponse(Call<Customer> call, Response<Customer> response) {
+                    if (response.code() != 200) {
+                        Utils.showError("Error code: " + response.code());
+                    }
                     if (response.code() == 200) {
                         System.out.println("adding the handling success");
                         Platform.runLater(() -> {
                            stage.close();
                            EventBus.getDefault().post(new UserEditedEvent());
                         });
+                        Utils.showInfo("Customer updated successfully");
                     }
                 }
 
                 @Override
                 public void onFailure(Call<Customer> call, Throwable throwable) {
-
+                    Utils.showError("Network failure");
                 }
             });
 

@@ -103,7 +103,9 @@ public class OrderListViewController implements Refreshable {
         service.getOrdersByCustomer(customer.getId()).enqueue(new Callback<>() {
             @Override
             public void onResponse(Call<List<Order>> call, Response<List<Order>> response) {
-                if (response.code() != 200) return;
+                if (response.code() != 200) {
+                    Utils.showError("Error code: " + response.code());
+                }
 
                 orders = response.body();
 
@@ -115,7 +117,7 @@ public class OrderListViewController implements Refreshable {
 
             @Override
             public void onFailure(Call<List<Order>> call, Throwable throwable) {
-
+                Utils.showError("Network failure");
             }
         });
     }

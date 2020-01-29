@@ -1,5 +1,6 @@
 package org.cshaifasweng.winter;
 
+import javafx.application.Platform;
 import javafx.event.EventHandler;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseButton;
@@ -50,13 +51,18 @@ public class Utils<T> {
     }
 
     public static void showError(String error) {
-        Alert alert = new Alert(Alert.AlertType.ERROR, error);
-        alert.show();
+        Platform.runLater(() -> {
+            Alert alert = new Alert(Alert.AlertType.ERROR, error);
+            alert.show();
+        });
+
     }
 
     public static void showInfo(String info) {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION, info);
-        alert.show();
+        Platform.runLater(() -> {
+            Alert alert = new Alert(Alert.AlertType.INFORMATION, info);
+            alert.show();
+        });
     }
 
 }
